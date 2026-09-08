@@ -1,0 +1,38 @@
+# Project Decisions
+
+- Domain: Education
+- Project title: Fair and Explainable Student Dropout Risk Prediction for Early Academic Support
+- Companion application: Student Success Navigator
+- Dataset: Predict Students’ Dropout and Academic Success
+- Dataset source: UCI Machine Learning Repository
+- Dataset URL: https://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success
+- Dataset nature: De-identified real-world historical data from a specific higher-education institution. It must not be represented as data from a Philippine university or as representative of all universities.
+- Dataset license/usage terms: Verify and record the applicable UCI terms and source citation before publication.
+- Unit of analysis: One student enrollment record.
+- Original target: Target, with classes Dropout, Enrolled, and Graduate.
+- Deployed-model target: Binary is_dropout, where Dropout = 1 and Enrolled/Graduate = 0.
+- Task type: Binary classification for the deployed decision-support workflow.
+- Prediction point: End of the first semester.
+- Feature-availability rule: Use only enrollment-time and first-semester features. Exclude all second-semester features and any post-outcome information to prevent temporal leakage.
+- Prediction objective: Estimate a support-priority score to help advisers prioritize voluntary, supportive outreach.
+- Intended use: Decision support for academic advisers and student-support teams.
+- Explicit non-use: No automated denial of admission, enrollment, scholarships, financial aid, grading, discipline, housing, or other high-impact student decision.
+- Primary technical metric: PR-AUC for dropout versus non-dropout.
+- Intervention-sensitive metric: Recall at top K, where K is a documented illustrative weekly adviser outreach capacity.
+- Secondary metrics: Precision@K, recall, precision, F1, ROC-AUC, confusion matrix, precision-recall curve, calibration curve, and group-level metrics.
+- Business KPI: Illustrative share of eventual dropout cases reached within a fixed voluntary-support outreach capacity. Any value/ROI claim must be explicitly labeled as illustrative.
+- Sensitive/protected-group analysis: Verify source encodings and dataset availability before use. Assess gender and age bands; assess other fields only when ethically justified and documented.
+- Fairness metrics: Selection-rate comparison, demographic parity difference, disparate-impact ratio, true-positive-rate and false-positive-rate comparison, equal-opportunity difference, equalized-odds discussion, and group calibration where sample sizes permit.
+- Fairness safeguard: Sensitive attributes are used for aggregate audit only, not as adviser-facing reasons to act. Never claim that a model is fair solely because metrics appear acceptable.
+- Feature engineering: First-semester approval rate, evaluation participation rate, non-evaluation rate, grade difference relative to admission grade, age band for fairness/EDA, and academically meaningful workload/progression measures.
+- Feature selection: At least one filter method plus one embedded method where feasible, both fitted on training data or inside cross-validation only.
+- Dimensionality reduction: PCA fitted only on training data after appropriate encoding/scaling; compare its effect and use it primarily for required analysis/visualization unless it improves validated performance.
+- Model candidates: DummyClassifier, class-weighted Logistic Regression, Random Forest, Gradient Boosting/XGBoost, and optional SVM if runtime is reasonable.
+- Explainability: SHAP global and local explanations, with permutation importance or model-native explanations as documented fallback; PDP/ICE for suitable continuous variables.
+- Application: Dash web application named Student Success Navigator.
+- App data: A de-identified held-out demonstration cohort populates the support queue. Actual outcomes remain evaluation-only and must never appear in adviser-facing pages.
+- App capabilities: Overview/model card, support queue with top-K capacity, individual record review, hypothetical new-record scoring, group-level performance/fairness dashboard, and a human-review acknowledgement before recording a suggested support action.
+- App actions: Store local demonstration action logs in a Git-ignored SQLite database or CSV. Do not feed actions back into the current model.
+- Deployment: Optional local Dash deployment, documented in docs/DEPLOYMENT.md.
+- Generative AI use: Optional. If used, document tool, purpose, prompts/examples where appropriate, human review, and limitations.
+- Key limitations: Dataset derives from one institutional context; historic outcomes may encode institutional inequities; it may not generalize to Philippine institutions; predicted risk is not causal; all outreach decisions require qualified human review.
