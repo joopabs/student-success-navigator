@@ -251,7 +251,9 @@ maps to the rubric criteria it evidences.
 - A hypothetical record contains values outside documented valid ranges: scoring is refused with
   a field-specific message.
 - The selected threshold yields zero predicted positives on the test set: the evaluation MUST
-  report this and threshold selection MUST be revisited and documented.
+  report this in the test metrics table and the final report. Any revision of the threshold
+  rule MUST use OOF training scores only, and any subsequent test evaluation MUST increment the
+  manifest's test-evaluation counter and be disclosed in the model card.
 - The saved model artifact and the app configuration report different versions: the app MUST
   refuse to serve scores and display a version-mismatch message.
 - An adviser attempts to acknowledge the same record twice: the second acknowledgement is recorded

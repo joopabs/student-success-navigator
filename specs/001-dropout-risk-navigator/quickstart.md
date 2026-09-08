@@ -49,13 +49,15 @@ Expected: all pass. Manually confirm the negative case:
 ```bash
 python - <<'PY'
 import pandas as pd
-from ssn.features.allowlist import assert_frame_allowed, LeakageError
+from ssn.features.allowlist import project_features, assert_frame_allowed, LeakageError
 df = pd.read_parquet('data/processed/train.parquet')
+assert_frame_allowed(project_features(df))   # projected matrix passes
+print("OK projected feature matrix accepted")
 try:
-    assert_frame_allowed(df)          # train still carries is_dropout -> must raise
+    assert_frame_allowed(df)          # full frame still carries is_dropout -> must raise
     raise SystemExit("FAIL: label column accepted")
 except LeakageError as e:
-    print("OK leakage guard raised:", e)
+    print("OK leakage guard raised on full frame:", e)
 PY
 ```
 
@@ -160,7 +162,9 @@ KPI value read from `reports/tables/test_recall_precision_at_k.csv` with an "ill
 
 ```bash
 git ls-files | grep -Ei 'data/(raw|processed|demo|evaluation|local)/|\.env$|\.sqlite|Pillar5' && echo "STOP: private file tracked" || echo "clean"
+detect-secrets scan --all-files          # or: gitleaks detect --source . --no-git-banner
 pytest -q && ruff check .
 ```
 
-Expected: `clean`, all tests pass, lint clean. Only then make the repository public.
+Expected: `clean`, the secrets scanner reports no findings, all tests pass, lint clean. Only
+then make the repository public.

@@ -32,9 +32,12 @@ engineered:
 4. `role: sensitive` columns are never model features and never `adviser_visible: true`. They are
    passed through to the evaluation cohort for aggregate auditing only.
 5. `role: target` is exactly one column (`Target`); `is_dropout` is derived, not listed.
-6. `ssn.features.allowlist.assert_frame_allowed(df)` raises `LeakageError` naming any column in
-   `df` that is not allow-listed. It is called at the entry of every training and inference
-   path, including the app's scoring service.
+6. `ssn.features.allowlist.project_features(df)` returns only allow-listed columns, and
+   `assert_frame_allowed(X)` raises `LeakageError` naming any column in `X` that is not
+   allow-listed. Every training and inference path, including the app's scoring service, MUST
+   call `project_features` and then `assert_frame_allowed` on the result before fitting or
+   predicting. Full frames carrying `is_dropout` or sensitive columns are permitted upstream of
+   projection only.
 
 ## Expected availability families (to confirm in PV-03)
 

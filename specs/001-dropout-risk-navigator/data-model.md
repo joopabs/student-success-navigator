@@ -52,11 +52,10 @@ Adviser-facing view of the test split.
 | Field | Type | Notes |
 |-------|------|-------|
 | `record_id` | string | Synthetic key |
-| allow-listed feature columns | as source | Only `availability in {enrollment, first_semester}` |
-| sensitive columns | as source | Present for aggregate equity computations offline only; never rendered (`adviser_visible: false`) |
+| allow-listed feature columns | as source | Only `availability in {enrollment, first_semester}` and `role: feature` |
 
-Forbidden fields: `Target`, `is_dropout`, any `second_semester` or `outcome` column. Enforced by
-`tests/unit/test_split.py`.
+Forbidden fields: `Target`, `is_dropout`, any `second_semester` or `outcome` column, and any
+`role: sensitive` column. Enforced by `tests/unit/test_split.py`.
 
 ### EvaluatorLabels (data/evaluation/demo_cohort_labels.parquet)
 
@@ -65,6 +64,7 @@ Forbidden fields: `Target`, `is_dropout`, any `second_semester` or `outcome` col
 | `record_id` | string | Joins to DemoCohort |
 | `is_dropout` | int | Evaluation-only |
 | `Target` | categorical | Evaluation-only |
+| sensitive columns (`role: sensitive`) | as source | Aggregate fairness auditing only; never rendered |
 
 Access rule: never imported or read by any module under `src/ssn/app/` (AST/path test).
 
