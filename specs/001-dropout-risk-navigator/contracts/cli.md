@@ -29,7 +29,7 @@ else is a defect.
 | `model-card` | manifest, reports | `reports/model_card.md` | Rendered, never hand-edited numbers |
 | `rubric-map` | reports tree | `reports/rubric_map.md` | Skeleton with links |
 | `scan-language --paths ...` | files | stdout, exit 1 on findings | Prohibited terms, unlabeled business figures, bare "the model is fair" |
-| `reproduce-check` | two run outputs | `docs/REPRODUCIBILITY.md` table | Records per-metric deltas |
+| `reproduce-check --runs-a DIR --runs-b DIR` | two `reports/` trees and their manifests | `docs/REPRODUCIBILITY.md` table | Records per-metric absolute deltas; exit 1 if any exceeds the tolerance recorded in that file |
 | `app` | manifest, pipeline, demo cohort, language, fairness json | `data/local/actions.sqlite` | Serves Dash on configured host/port; no writes elsewhere |
 | `actions export` | actions.sqlite | `data/local/actions_export.csv` | Local review only |
 

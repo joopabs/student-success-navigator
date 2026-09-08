@@ -58,6 +58,9 @@ interactions respond in under 2 seconds.
 identifiers or outcome labels in adviser-facing pages. Deterministic outputs given seed and config.
 No secrets in repo. Course PDF remains Git-ignored.
 
+**Capacity framing**: K = illustrative students per week times an illustrative outreach window
+(default 10 x 5 weeks = 50); sensitivity over alternative windows. See research R-08.
+
 **Scale/Scope**: 4,424 records and 36 features per UCI page (to be re-verified by PV-01). Roughly
 80/20 split yields a test/demo cohort in the high hundreds. Six app pages. One model in
 production at a time.
@@ -208,7 +211,7 @@ specs/001-dropout-risk-navigator/
 │   └── 90_technical_deck.ipynb   # nbconvert --to slides
 ├── models/
 │   ├── .gitkeep
-│   ├── final_pipeline.joblib     # committed if < 10 MB, else Git-ignored + regenerate step
+│   ├── final_pipeline.joblib     # Git-ignored; regenerate with `make final`; sha256 in manifest
 │   └── manifest.json
 ├── reports/
 │   ├── final_report.md
@@ -260,8 +263,8 @@ Conventions used below:
 
 **Creates/modifies**: `pyproject.toml`, `requirements.txt`, `requirements-dev.txt`,
 `.python-version`, `Makefile`, `.env.example`, `.gitignore` (add `data/raw/*`,
-`data/processed/`, `data/demo/`, `data/evaluation/`, `data/local/`, `reports/figures/*.png`
-only if regenerable policy chosen; see R-11), `README.md` (skeleton with rubric-mapped sections),
+`data/processed/`, `data/demo/`, `data/evaluation/`, `data/local/`, `models/*.joblib`; figures
+under `reports/` are committed per R-11), `README.md` (skeleton with rubric-mapped sections),
 `configs/base.yaml`, `configs/features.yaml` (skeleton, all columns `unclassified` until M2),
 `configs/language.yaml`, `configs/models/*.yaml`, `src/ssn/{__init__,__main__,cli,config,paths}.py`,
 `src/ssn/features/allowlist.py`, `tests/conftest.py`, `tests/unit/test_config.py`,
@@ -489,7 +492,7 @@ python -m ssn fit-final --config configs/base.yaml             # refit on full t
 python -m ssn evaluate-test --config configs/base.yaml         # ONE run; writes test_* artifacts
 pytest -q tests/unit/test_threshold.py tests/unit/test_persist_manifest.py tests/integration/test_reproduce_fixture.py
 # reproduction check (second fresh run, compare)
-python -m ssn reproduce-check --config configs/base.yaml --tolerance-file docs/REPRODUCIBILITY.md
+python -m ssn reproduce-check --runs-a reports --runs-b /tmp/ssn-run2/reports
 ```
 
 **Privacy / leakage checks**: `evaluate-test` is the only command permitted to read

@@ -30,7 +30,12 @@ engineered:
    deployed model. `ambiguous` columns may be promoted only by changing `availability` with a
    `note` citing the documentation that confirms first-semester availability (research R-05).
 4. `role: sensitive` columns are never model features and never `adviser_visible: true`. They are
-   passed through to the evaluation cohort for aggregate auditing only.
+   passed through to the evaluation cohort for aggregate auditing only. Per
+   `PROJECT_DECISIONS.md`, the following MUST be classified `role: sensitive`: gender, age at
+   enrollment, nationality, international status, marital status, educational special needs.
+   The `age_band` engineered feature is derived from age for auditing only and is likewise never a
+   model input. Any proposal to promote one of these to `role: feature` requires a constitution
+   amendment.
 5. `role: target` is exactly one column (`Target`); `is_dropout` is derived, not listed.
 6. `ssn.features.allowlist.project_features(df)` returns only allow-listed columns, and
    `assert_frame_allowed(X)` raises `LeakageError` naming any column in `X` that is not
@@ -54,6 +59,6 @@ names are recorded in M2, not here.
 | `Target` | `outcome` / role target | PV-02 |
 
 Sensitive attributes for auditing: gender (role `sensitive`, after encoding verified) and
-derived `age_band` (from age at enrollment; the raw age column remains a feature candidate, the
-band is audit-only). Any additional sensitive field requires a documented justification in
+derived `age_band` (from age at enrollment). Age at enrollment itself is `role: sensitive` and is
+not a model input; the band exists for EDA and auditing only. Any additional sensitive field requires a documented justification in
 `PROJECT_DECISIONS.md` before its role is set to `sensitive`.

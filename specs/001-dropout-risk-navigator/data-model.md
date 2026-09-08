@@ -78,7 +78,7 @@ Produced by `ssn.features.engineering` transformer; each declares its input colu
 | `sem1_evaluation_participation_rate` | 1st-sem evaluations, 1st-sem enrolled | evaluations / enrolled; same zero rule | Engagement signal |
 | `sem1_non_evaluation_rate` | 1st-sem without evaluations, 1st-sem enrolled | without_eval / enrolled; same zero rule | Disengagement signal |
 | `grade_diff_vs_admission` | 1st-sem grade, admission grade | sem1_grade - admission_grade (scale check in PV-05) | Change relative to entry |
-| `age_band` | age at enrollment | Bands from `configs/base.yaml` (set after PV-06) | EDA and fairness grouping only; `adviser_visible: false` |
+| `age_band` | age at enrollment (`role: sensitive`) | Bands from `configs/base.yaml` (set after PV-06) | EDA and fairness grouping only; never a model input; `adviser_visible: false` |
 | workload / progression measures | 1st-sem enrolled, credited, approved | e.g. credited share, enrolled load | Documented in EDA report |
 
 Exact source column names are filled after PV-01.

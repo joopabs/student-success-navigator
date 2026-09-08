@@ -35,8 +35,10 @@ split:
   cv_folds: 5
 
 capacity:
-  k: 50                              # ILLUSTRATIVE weekly outreach capacity (PV-10)
-  k_sensitivity: [25, 50, 100]
+  per_week: 10                       # ILLUSTRATIVE students an adviser can contact per week (PV-10)
+  window_weeks: 5                    # ILLUSTRATIVE outreach window
+  k: 50                              # derived = per_week * window_weeks; loader validates equality
+  window_sensitivity_weeks: [2, 5, 10]   # K sensitivity = per_week * each window
   illustrative: true                 # must be true; UI and reports read this flag for labels
 
 threshold:

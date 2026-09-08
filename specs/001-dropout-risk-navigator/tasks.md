@@ -57,10 +57,10 @@ guards in place before any data is touched.
   - Deps: none
   - Accept: every directory exists; `git status` shows only `.gitkeep` files and no data files
   - Verify: `find src tests configs data models reports notebooks docs -type d | sort` and `git status --short`
-- [ ] T002 Write `pyproject.toml` (package `ssn`, `src` layout, ruff and pytest config, Python `>=3.11,<3.12`), `.python-version` (`3.11`), `requirements.txt` (pinned: pandas, numpy, scikit-learn, imbalanced-learn, shap, matplotlib, seaborn, joblib, PyYAML, pyarrow, dash, plotly), `requirements-dev.txt` (pytest, pytest-cov, ruff, nbconvert, jupyter, detect-secrets)
+- [ ] T002 Write `pyproject.toml` (package `ssn`, `src` layout, ruff and pytest config, Python `>=3.11,<3.12`), `.python-version` (`3.11`), `requirements.txt` (pinned: pandas, numpy, scikit-learn >= 1.4 for `HistGradientBoostingClassifier(class_weight=...)`, imbalanced-learn, shap >= 0.45 for HistGradientBoosting support in `TreeExplainer`, matplotlib, seaborn, joblib, PyYAML, pyarrow, dash, plotly), `requirements-dev.txt` (pytest, pytest-cov, ruff, nbconvert, jupyter, detect-secrets)
   - Type: config
   - Deps: T001
-  - Accept: fresh venv installs both files without resolver errors; `python -c "import ssn"` fails only because the package has no code yet
+  - Accept: fresh venv installs both files without resolver errors; a smoke check fits `HistGradientBoostingClassifier(class_weight='balanced')` on a toy array and constructs `shap.TreeExplainer` on it without error; `python -c "import ssn"` fails only because the package has no code yet
   - Verify: `python3.11 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt -r requirements-dev.txt && pip check`
 - [ ] T003 [P] Write `Makefile` with targets `setup, data, eda, select, cv, tune, final, explain, fairness, report, app, test, lint, all` that call `python -m ssn ...` exactly as listed in contracts/cli.md
   - Type: config
@@ -77,11 +77,11 @@ guards in place before any data is touched.
   - Deps: T001
   - Accept: headings for Steps 1-7, Bonus, Reproduction, Structure exist; zero numeric claims outside placeholders
   - Verify: `grep -c '^## ' README.md` and `grep -n 'PENDING' README.md`
-- [ ] T006 Write `configs/base.yaml` exactly per contracts/config-schema.md with `seed: 42`, `capacity.k: 50`, `capacity.k_sensitivity: [25, 50, 100]`, `capacity.illustrative: true`, `fairness.min_group_size: 30`, `fairness.age_bands: []`, `data.expected_sha256: ""`, `project.model_version: "1.0.0"`, `app.expected_model_version: "1.0.0"`
+- [ ] T006 Write `configs/base.yaml` exactly per contracts/config-schema.md with `seed: 42`, `capacity.per_week: 10`, `capacity.window_weeks: 5`, `capacity.k: 50`, `capacity.window_sensitivity_weeks: [2, 5, 10]`, `capacity.illustrative: true`, `fairness.min_group_size: 30`, `fairness.age_bands: []`, `data.expected_sha256: ""`, `project.model_version: "1.0.0"`, `app.expected_model_version: "1.0.0"`
   - Type: config
   - Deps: T001
-  - Accept: file parses as YAML; all keys in the contract present; illustrative flag true
-  - Verify: `python -c "import yaml;c=yaml.safe_load(open('configs/base.yaml'));assert c['capacity']['illustrative'] is True;print(sorted(c))"`
+  - Accept: file parses as YAML; all keys in the contract present; illustrative flag true; `k == per_week * window_weeks`
+  - Verify: `python -c "import yaml;c=yaml.safe_load(open('configs/base.yaml'))['capacity'];assert c['illustrative'] is True and c['k']==c['per_week']*c['window_weeks'];print(c)"`
 - [ ] T007 [P] Write `configs/features.yaml` skeleton with empty `columns: []` and `engineered: []` lists, and `configs/language.yaml` with the `prohibited_terms` list from research R-18 and an empty `features:` map
   - Type: config
   - Deps: T001
@@ -158,7 +158,7 @@ and record every empirical fact about the raw data from computed output. BLOCKS 
   - Deps: T016, T017
   - Accept: every number in the README section matches the CSV files; the `validate` exit code and unclassified-column list are recorded for T019
   - Verify: `python -m ssn data download && python -m ssn data profile && python -m ssn data validate; cat reports/tables/profile_target.csv`
-- [ ] T019 Fill `configs/features.yaml` with one entry per observed column (from `validate_report.json`): `availability`, `role`, `dtype`, `adviser_visible`, `encoding_source`, `encoding_verified: false`, `note` citing the UCI variables table or the source article; classify every second-semester column as `second_semester`, `Target` as `outcome`/`target`, gender as `sensitive`, and financial-status columns as `ambiguous` per research R-05 unless documentation confirms first-semester availability
+- [ ] T019 Fill `configs/features.yaml` with one entry per observed column (from `validate_report.json`): `availability`, `role`, `dtype`, `adviser_visible`, `encoding_source`, `encoding_verified: false`, `note` citing the UCI variables table or the source article; classify every second-semester column as `second_semester`, `Target` as `outcome`/`target`, the sensitive set from `PROJECT_DECISIONS.md` (gender, age at enrollment, nationality, international status, marital status, educational special needs) as `role: sensitive`, and financial-status columns as `ambiguous` per research R-05 unless documentation confirms first-semester availability
   - Type: config
   - Deps: T018
   - Accept: `data validate` exits 0; counts of allowed, prohibited, ambiguous, and sensitive columns printed and recorded in `data/README.md` (PV-03)
@@ -218,7 +218,7 @@ cohort has no label columns.
   - Deps: T026
   - Accept: demo cohort lacks label and sensitive columns; train/test disjoint by `record_id`; split summary written
   - Verify: `python -m ssn data split && python -c "import pandas as pd;from ssn.features.allowlist import load;a=load('configs/features.yaml');d=pd.read_parquet('data/demo/demo_cohort.parquet');assert not ({'Target','is_dropout'}|set(a.sensitive))&set(d.columns);print(d.shape)"`
-- [ ] T028 [US1] Implement `src/ssn/features/engineering.py` as a scikit-learn transformer that declares its input columns (`get_input_columns()`), computes `sem1_approval_rate`, `sem1_evaluation_participation_rate`, `sem1_non_evaluation_rate`, `grade_diff_vs_admission`, `age_band` (from `config.fairness.age_bands`; passthrough NaN when bands are empty), and documented workload/progression measures; apply the zero-denominator rule (NaN then impute, count logged to `reports/tables/zero_denominators.csv`); append engineered entries to `configs/features.yaml`
+- [ ] T028 [US1] Implement `src/ssn/features/engineering.py` as a scikit-learn transformer that declares its input columns (`get_input_columns()`), computes `sem1_approval_rate`, `sem1_evaluation_participation_rate`, `sem1_non_evaluation_rate`, `grade_diff_vs_admission`, `age_band` (from `config.fairness.age_bands`; passthrough NaN when bands are empty; produced for EDA and auditing only and excluded from the model feature list because its input is `role: sensitive`), and documented workload/progression measures; apply the zero-denominator rule (NaN then impute, count logged to `reports/tables/zero_denominators.csv`); append engineered entries to `configs/features.yaml`
   - Type: code, config
   - Deps: T027
   - Accept: every engineered feature's inputs are allow-listed; zero-denominator counts written; `features.yaml` `engineered` list populated
@@ -321,22 +321,22 @@ treatment comparison.
   - Deps: T036
   - Accept: every metric tested against a hand-computed value; tie handling deterministic
   - Verify: `pytest -q tests/unit/test_metrics.py`
-- [ ] T043 [US1] Implement `src/ssn/modeling/candidates.py::build_pipeline(name, cfg, allowlist)`: read `configs/models/<name>.yaml`, compose preprocessor, optional selector, optional PCA, optional `imblearn` SMOTE step (when `imbalance.compare_smote`), estimator with seed; write `tests/unit/test_candidates_build.py` (each of four names builds; SMOTE variant uses `imblearn.pipeline.Pipeline`)
+- [ ] T043 [US1] Implement `src/ssn/modeling/candidates.py::build_pipeline(name, cfg, allowlist)`: read `configs/models/<name>.yaml`, compose preprocessor, optional selector, optional PCA, optional `imblearn` SMOTENC step with categorical column indices (when `imbalance.compare_smote`), estimator with seed; write `tests/unit/test_candidates_build.py` (each of four names builds; SMOTENC variant uses `imblearn.pipeline.Pipeline` and receives the correct categorical indices)
   - Type: code, tests
   - Deps: T037, T038
   - Accept: four pipelines build from fixture; `random_state` equals config seed
   - Verify: `pytest -q tests/unit/test_candidates_build.py`
-- [ ] T044 [US1] Wire `train-cv --models ...`: always include `dummy`; for each model and imbalance variant run CV, save OOF to `data/processed/oof_<model>[_smote].parquet`, write `reports/tables/cv_comparison.csv` (mean/std per metric incl. accuracy for transparency, fit_time_s) and `reports/figures/cv_pr_curves.png`; add `--ablation ambiguous` flag that additionally runs the selected models with `ambiguous` columns promoted, writing `reports/tables/ablation_ambiguous.csv`
+- [ ] T044 [US1] Wire `train-cv --models ...`: always include `dummy`; for each model and imbalance variant run CV, save OOF to `data/processed/oof_<model>[_smote].parquet`, write `reports/tables/cv_comparison.csv` (mean/std per metric incl. accuracy for transparency, fit_time_s) and `reports/figures/cv_pr_curves.png`; add `--ablation ambiguous` and `--ablation sensitive` flags that additionally run the models with, respectively, `ambiguous` columns promoted and `role: sensitive` columns temporarily included, writing `reports/tables/ablation_ambiguous.csv` and `reports/tables/ablation_sensitive.csv` (the sensitive ablation is analysis-only and never persisted as a candidate)
   - Type: code
   - Deps: T042, T043
   - Accept: command reads only train parquet; dummy row present; ablation table produced when flag set
-  - Verify: `python -m ssn train-cv --models dummy logreg random_forest hist_gb --ablation ambiguous && cat reports/tables/cv_comparison.csv`
+  - Verify: `python -m ssn train-cv --models dummy logreg random_forest hist_gb --ablation ambiguous --ablation sensitive && cat reports/tables/cv_comparison.csv`
 - [ ] T045 [P] [US1] Write `tests/integration/test_cv_fixture.py`: run `train-cv` logic on the synthetic fixture; assert validation fold sizes unchanged by SMOTE, OOF covers all rows once, output columns present, test path never read (monkeypatch)
   - Type: tests
   - Deps: T044
   - Accept: passes in under 60 seconds
   - Verify: `pytest -q tests/integration/test_cv_fixture.py`
-- [ ] T046 [US1] Run `train-cv` on real train data for all four models with SMOTE comparison and the ambiguous-column ablation; record results in `reports/tables/cv_comparison.csv` and `ablation_ambiguous.csv`; add the ablation conclusion (include or exclude ambiguous columns, with numbers referenced) to `reports/eda_feature_engineering_report.md` and, if promoting any column, update `configs/features.yaml` with a `note` citing the documentation and re-run Phases 3-5
+- [ ] T046 [US1] Run `train-cv` on real train data for all four models with the SMOTENC comparison, the ambiguous-column ablation, and the sensitive-attribute ablation; record results in `reports/tables/cv_comparison.csv`, `ablation_ambiguous.csv`, and `ablation_sensitive.csv`; summarise the performance cost of excluding sensitive attributes (with file reference) in the EDA report and later the Bias & Fairness Analysis; add the ablation conclusion (include or exclude ambiguous columns, with numbers referenced) to `reports/eda_feature_engineering_report.md` and, if promoting any column, update `configs/features.yaml` with a `note` citing the documentation and re-run Phases 3-5
   - Type: run, reports
   - Deps: T045
   - Accept: tables exist; ablation decision recorded with file reference; imbalance-treatment choice recorded per research R-07
@@ -376,7 +376,7 @@ tests/unit/test_persist_manifest.py tests/integration/test_reproduce_fixture.py`
   - Deps: T048, T049
   - Accept: `accuracy` absent from the matrix; decision JSON present
   - Verify: `python -m ssn select-model && python -c "import pandas as pd;m=pd.read_csv('reports/tables/selection_matrix.csv');assert 'accuracy' not in m.columns;print(m.columns.tolist())"`
-- [ ] T051 [US1] Implement `src/ssn/modeling/threshold.py` and wire `threshold`: from the selected model's OOF scores compute the capacity threshold (research R-09), band boundaries, F1-optimal and fixed-precision alternatives, Recall@K/Precision@K for `k_sensitivity`; write `reports/tables/threshold_and_bands.json` and `reports/tables/oof_recall_precision_at_k.csv`; write `tests/unit/test_threshold.py` (monotone bands, selection rate matches K/N, zero-positive edge case reported)
+- [ ] T051 [US1] Implement `src/ssn/modeling/threshold.py` and wire `threshold`: from the selected model's OOF scores compute the capacity threshold (research R-09), band boundaries, F1-optimal and fixed-precision alternatives, Recall@K/Precision@K for the K values derived from `capacity.window_sensitivity_weeks`; write `reports/tables/threshold_and_bands.json` and `reports/tables/oof_recall_precision_at_k.csv`; write `tests/unit/test_threshold.py` (monotone bands, selection rate matches K/N, zero-positive edge case reported)
   - Type: code, tests
   - Deps: T050
   - Accept: JSON has rule, threshold, three bands with supportive names, sensitivity block; tests pass
@@ -391,7 +391,7 @@ tests/unit/test_persist_manifest.py tests/integration/test_reproduce_fixture.py`
   - Deps: T051, T052
   - Accept: manifest validates against the contract key list; sha256 matches
   - Verify: `python -m ssn fit-final && pytest -q tests/unit/test_persist_manifest.py`
-- [ ] T054 [US1] Wire `evaluate-test`: load the final pipeline plus the dummy baseline and every tuned candidate from `models/candidates/`, read `data/processed/test.parquet` (features and `is_dropout`), and in ONE pass compute all FR-012 to FR-015 metrics for each model at its own OOF-derived threshold and for `k_sensitivity`; write `reports/tables/test_metrics_all_models.csv`, `reports/tables/test_metrics.csv` (final model), `test_recall_precision_at_k.csv`, `reports/figures/test_pr_curve.png`, `test_calibration.png`, `test_confusion_matrix.png`; increment `manifest.test_evaluations` once and fill `test_summary`. Selection is already locked by T050; this pass MUST NOT change it. If the final threshold yields zero predicted positives, write the event to `test_metrics.csv` and the manifest (spec edge case)
+- [ ] T054 [US1] Wire `evaluate-test`: load the final pipeline plus the dummy baseline and every tuned candidate from `models/candidates/`, read `data/processed/test.parquet` (features and `is_dropout`), and in ONE pass compute all FR-012 to FR-015 metrics for each model at its own OOF-derived threshold and for the K values derived from `capacity.window_sensitivity_weeks`; write `reports/tables/test_metrics_all_models.csv`, `reports/tables/test_metrics.csv` (final model), `test_recall_precision_at_k.csv`, `reports/figures/test_pr_curve.png`, `test_calibration.png`, `test_confusion_matrix.png`; increment `manifest.test_evaluations` once and fill `test_summary`. Selection is already locked by T050; this pass MUST NOT change it. If the final threshold yields zero predicted positives, write the event to `test_metrics.csv` and the manifest (spec edge case)
   - Type: code
   - Deps: T053
   - Accept: `test_metrics_all_models.csv` has a `dummy` row and one row per tuned candidate; manifest `test_evaluations` equals 1 after the pass; a warning is printed if it exceeds 1
@@ -404,7 +404,7 @@ tests/unit/test_persist_manifest.py tests/integration/test_reproduce_fixture.py`
 - [ ] T056 [US1] Run the final sequence once on real data: `tune`, `select-model`, `threshold`, `calibrate`, `fit-final`, `evaluate-test`; record PV-10 (final K and sensitivity) and PV-11 (all model, threshold, calibration, and test results) as file references in `README.md` and `reports/eda_feature_engineering_report.md` where relevant; commit `models/manifest.json`
   - Type: run, artifacts
   - Deps: T054, T055
-  - Accept: `manifest.test_evaluations == 1`; `models/manifest.json` tracked; joblib tracked only if under 10 MB (else `.gitignore` rule stands and README documents `make final`)
+  - Accept: `manifest.test_evaluations == 1`; `models/manifest.json` tracked; joblib Git-ignored and README documents `make final` as the regeneration step with the manifest sha256 to compare against
   - Verify: `make final && python -c "import json;assert json.load(open('models/manifest.json'))['test_evaluations']==1" && du -h models/final_pipeline.joblib`
 - [ ] T057 [US1] Run a second reproduction in a fresh virtual environment (`rm -rf .venv`, reinstall, `make all` into a copy directory) and `reproduce-check`; set the tolerance in `docs/REPRODUCIBILITY.md` to the observed maximum delta plus margin (PV-13) and document any nondeterminism source
   - Type: run, docs
@@ -426,7 +426,7 @@ with mitigation experiment, limitations, and a rendered model card.
 figures, `group_metrics.json` with `n` and `reliable` per group, and `reports/model_card.md`
 with no placeholders; `pytest -q tests/unit/test_language_no_sensitive_reasons.py` passes.
 
-- [ ] T058 [US3] Implement `src/ssn/explain/shap_explain.py` and wire `explain` (part 1): choose `TreeExplainer` or `LinearExplainer` by estimator type with permutation-importance fallback (recorded in `reports/explainability/method.json`); compute global importances and local values on test features; map transformed names back to source/engineered names; write `shap_global_bar.png`, `shap_beeswarm.png`, `shap_values_test.npz` (record_id-indexed), `shap_global_importance.csv`, `shap_local_examples.md` (three anonymised examples)
+- [ ] T058 [US3] Implement `src/ssn/explain/shap_explain.py` and wire `explain` (part 1): choose `TreeExplainer` or `LinearExplainer` by estimator type with permutation-importance fallback (recorded in `reports/explainability/method.json`); if the final pipeline is calibrated, explain the fitted base estimator inside the wrapper and record this in `method.json`; compute global importances and local values on test features; map transformed names back to source/engineered names and sum SHAP values across the one-hot columns of each source feature so every factor appears once; write `shap_global_bar.png`, `shap_beeswarm.png`, `shap_values_test.npz` (record_id-indexed), `shap_global_importance.csv`, `shap_local_examples.md` (three anonymised examples)
   - Type: code
   - Deps: T056
   - Accept: outputs written; method JSON states which explainer was used and why
@@ -514,7 +514,7 @@ PY`
   - Deps: T070
   - Accept: `reports/decks/technical_deck.slides.html` has 8-12 top-level sections
   - Verify: `jupyter nbconvert notebooks/90_technical_deck.ipynb --to slides --output-dir reports/decks --output technical_deck && python -c "import re;h=open('reports/decks/technical_deck.slides.html').read();n=len(re.findall(r'<section(?![^>]*data-parent)',h));print(n);assert 8<=n<=12"`
-- [ ] T072 [US6] Generate `reports/decks/business_deck_outline.md`: per-slide outline (8-12 slides: problem and stakeholders, what the tool does and does not do, illustrative KPI read from `reports/tables/test_recall_precision_at_k.csv`, risks and safeguards, fairness summary, limitations, rollout strategy, ask) with every figure path and number to paste, all labelled illustrative
+- [ ] T072 [US6] Generate `reports/decks/business_deck_outline.md`: per-slide outline (8-12 slides: problem and stakeholders, what the tool does and does not do, illustrative KPI read from `reports/tables/test_recall_precision_at_k.csv` and phrased as the share of eventual dropout cases reached within the illustrative outreach window (per-week capacity times window weeks), risks and safeguards, fairness summary, limitations, rollout strategy, ask) with every figure path and number to paste, all labelled illustrative
   - Type: reports
   - Deps: T070
   - Accept: outline lists 8-12 slides; KPI cites its CSV path
@@ -568,7 +568,7 @@ quickstart.md section 9 walkthrough succeeds.
   - Deps: T077
   - Accept: page renders with all listed elements; no outcome or identifier strings
   - Verify: `pytest -q tests/app/test_no_labels_rendered.py -k overview` (after T085)
-- [ ] T080 [US2] Implement `src/ssn/app/pages/support_queue.py` (route `/queue`): top-K table (record_id, score 2 dp, band, top-2 neutral factors), K selector limited to `k_sensitivity`, K > n notice, "Record support action" opening the acknowledgement modal per contracts/app-pages.md (Save disabled until checkbox; Dismiss/Override always enabled; all three log via `actions.append_action`), toast on success or unwritable notice
+- [ ] T080 [US2] Implement `src/ssn/app/pages/support_queue.py` (route `/queue`): top-K table (record_id, score 2 dp, band, top-2 neutral factors), K selector limited to the K values derived from `capacity.window_sensitivity_weeks`, K > n notice, "Record support action" opening the acknowledgement modal per contracts/app-pages.md (Save disabled until checkbox; Dismiss/Override always enabled; all three log via `actions.append_action`), toast on success or unwritable notice
   - Type: code
   - Deps: T077, T078
   - Accept: modal flow matches the contract; exactly K rows shown
