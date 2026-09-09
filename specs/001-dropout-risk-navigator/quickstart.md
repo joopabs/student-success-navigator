@@ -162,7 +162,7 @@ KPI value read from `reports/tables/test_recall_precision_at_k.csv` with an "ill
 
 ```bash
 git ls-files | grep -Ei 'data/(raw|processed|demo|evaluation|local)/|\.env$|\.sqlite|Pillar5' && echo "STOP: private file tracked" || echo "clean"
-detect-secrets scan --all-files          # or: gitleaks detect --source . --no-git-banner
+make secrets                             # detect-secrets over tracked files; 64-hex checksums excluded
 pytest -q && ruff check .
 ```
 

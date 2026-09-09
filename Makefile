@@ -3,7 +3,7 @@ PY ?= python
 CFG ?= configs/base.yaml
 SSN = $(PY) -m ssn
 
-.PHONY: setup data eda select cv tune final explain fairness report app test lint all
+.PHONY: setup data eda select cv tune final explain fairness report app test lint secrets all
 
 setup:
 	$(PY) -m pip install -r requirements.txt -r requirements-dev.txt
@@ -56,5 +56,9 @@ test:
 
 lint:
 	ruff check .
+
+secrets:
+	detect-secrets scan --exclude-lines '[0-9a-f]{64}' $$(git ls-files) | $(PY) -c "import sys,json; r=json.load(sys.stdin)['results']; [print(f, [x['type'] for x in v]) for f,v in r.items()]; sys.exit(1 if r else 0)"
+	@echo "secrets scan clean"
 
 all: data eda select cv tune final explain fairness report

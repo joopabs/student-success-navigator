@@ -1,5 +1,7 @@
 # Student Success Navigator
 
+[![CI](https://github.com/joopabs/student-success-navigator/actions/workflows/ci.yml/badge.svg)](https://github.com/joopabs/student-success-navigator/actions/workflows/ci.yml)
+
 Fair and explainable first-semester dropout risk prediction for early academic support, with a
 Dash decision-support companion app.
 

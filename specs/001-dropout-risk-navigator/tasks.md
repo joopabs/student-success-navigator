@@ -621,7 +621,7 @@ listed as not attempted in `README.md` and `reports/final_report.md`.
   - Deps: T057, T064
   - Accept: rollback steps are executable commands; monitoring baselines cite files, not typed numbers
   - Verify: `python -m ssn scan-language --paths docs/MLOPS.md`
-- [ ] T088 [P] [US6] Write `.github/workflows/ci.yml`: Python 3.11, install requirements, `ruff check .`, `detect-secrets scan --all-files` (fail on findings), `pytest -q` excluding tests that need real data (marker `needs_data`), on push and pull request
+- [X] T088 [P] [US6] (pulled forward to 2026-09-10, after Milestone 5, so regressions in Milestones 6-9 are caught on push) Write `.github/workflows/ci.yml`: Python 3.11, install requirements, `ruff check .`, `detect-secrets scan --all-files` (fail on findings), `pytest -q` excluding tests that need real data (marker `needs_data`), on push and pull request
   - Type: config
   - Deps: T085
   - Accept: workflow passes on the remote after push; badge added to README
