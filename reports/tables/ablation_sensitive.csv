@@ -1,0 +1,4 @@
+ablation,model,columns_added,pr_auc_mean_with,pr_auc_std_with,pr_auc_mean_without,delta_pr_auc,recall_at_k_mean_with,recall_at_k_mean_without,delta_recall_at_k,note
+sensitive,logreg,6,0.820101783963277,0.017302655235029732,0.8181533264185121,0.0019484575447649144,0.1723780817682974,0.1706236958033851,0.0017543859649122862,analysis only; promoted columns are NOT allowed for the deployed model
+sensitive,random_forest,6,0.8135815363374881,0.013497096828561723,0.8070401079861258,0.006541428351362288,0.17150861735837392,0.16886930983847287,0.0026393075199010463,analysis only; promoted columns are NOT allowed for the deployed model
+sensitive,hist_gb,6,0.8137945065529664,0.01526234588500673,0.8108781248472464,0.0029163817057199504,0.1732668676095525,0.1732630033232862,3.864286266308525e-06,analysis only; promoted columns are NOT allowed for the deployed model

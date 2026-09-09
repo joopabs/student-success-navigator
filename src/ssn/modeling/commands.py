@@ -67,3 +67,37 @@ def cmd_pca(args: argparse.Namespace) -> int:
     for k, p in out.items():
         print(f"wrote {k}: {p.relative_to(cfg.root)}")
     return EXIT_OK
+
+
+@register(None, "train-cv")
+def cmd_train_cv(args: argparse.Namespace) -> int:
+    from ssn.modeling import traincv as TC
+
+    cfg = load(args.config)
+    allow = al.load(cfg.path_for("features_yaml"))
+    train, _, _ = load_train(cfg, allow)
+    models = args.models or list(TC.CANDIDATES)
+    table, _ = TC.run_train_cv(train, cfg, allow, models)
+    show = [
+        "variant",
+        "pr_auc_mean",
+        "pr_auc_std",
+        "roc_auc_mean",
+        "recall_at_k_mean",
+        "precision_at_k_mean",
+        "brier_mean",
+        "ece_mean",
+        "fit_time_s_mean",
+    ]
+    print(table[show].round(4).to_string(index=False))
+    tables = cfg.path_for("reports_dir") / "tables"
+    for which in args.ablation or []:
+        abl = TC.run_ablation(train, cfg, allow, which, models, table)
+        abl.to_csv(tables / f"ablation_{which}.csv", index=False)
+        print(f"\nablation: {which}")
+        print(abl.round(4).to_string(index=False))
+    print(
+        f"\nwrote {tables / 'cv_comparison.csv'} and OOF parquet files under "
+        f"{cfg.path_for('processed_dir')}"
+    )
+    return EXIT_OK

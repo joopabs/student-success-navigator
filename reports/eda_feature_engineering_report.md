@@ -335,3 +335,20 @@ Candidate pipelines in Milestone 5 therefore use the original (optionally select
   fairness audit and limitations (Milestone 7).
 - The parsimony rule is a project convention (one CV standard deviation); a different tolerance would
   change k. It is recorded in `configs/base.yaml` so the choice is auditable.
+
+## 12. Ablation conclusions and imbalance decision (Milestone 5, computed 2026-09-10)
+
+Full comparison: `reports/model_comparison_cv.md`. Source: `reports/tables/cv_comparison.csv`,
+`ablation_ambiguous.csv`, `ablation_sensitive.csv`.
+
+- **Ambiguous financial columns stay excluded.** Promoting Debtor, Tuition fees up to date, and Scholarship
+  holder raises CV PR-AUC by 0.036 to 0.039 across the three candidates, a gain that would be
+  leakage if the status is recorded after the outcome. Their recording time is unverified (see
+  `data/README.md`), so `configs/features.yaml` keeps them `ambiguous`.
+- **Sensitive attributes stay audit-only.** Promoting the six sensitive columns changes PR-AUC by at most
+  0.0065; the policy costs almost no validated performance.
+- **Imbalance treatment: class weighting.** SMOTENC lowers PR-AUC for both logistic regression and random
+  forest under the research R-07 rule (improve by more than one CV standard deviation), so class weighting is
+  the treatment carried into Milestone 6.
+- **Selection setting.** The k = 30 embedded subset lowers PR-AUC for every candidate (most for the random
+  forest); it is carried as a tuned variant in Milestone 6, not imposed.

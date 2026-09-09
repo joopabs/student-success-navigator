@@ -316,32 +316,32 @@ treatment comparison.
 **Independent Test**: `make cv` writes `cv_comparison.csv` with four model rows and OOF files;
 `pytest -q tests/unit/test_metrics.py tests/integration/test_cv_fixture.py` passes.
 
-- [ ] T042 [US1] Implement `src/ssn/modeling/evaluate.py`: `pr_auc`, `roc_auc`, `recall_at_k`, `precision_at_k`, `brier`, `expected_calibration_error(n_bins=10)`, `confusion_at_threshold`, `metrics_table(y, score, threshold, k)`; write `tests/unit/test_metrics.py` with hand-computed expectations on tiny arrays including ties at the K boundary
+- [X] T042 [US1] Implement `src/ssn/modeling/evaluate.py`: `pr_auc`, `roc_auc`, `recall_at_k`, `precision_at_k`, `brier`, `expected_calibration_error(n_bins=10)`, `confusion_at_threshold`, `metrics_table(y, score, threshold, k)`; write `tests/unit/test_metrics.py` with hand-computed expectations on tiny arrays including ties at the K boundary
   - Type: code, tests
   - Deps: T036
   - Accept: every metric tested against a hand-computed value; tie handling deterministic
   - Verify: `pytest -q tests/unit/test_metrics.py`
-- [ ] T043 [US1] Implement `src/ssn/modeling/candidates.py::build_pipeline(name, cfg, allowlist)`: read `configs/models/<name>.yaml`, compose preprocessor, optional selector, optional PCA, optional `imblearn` SMOTENC step with categorical column indices (when `imbalance.compare_smote`), estimator with seed; write `tests/unit/test_candidates_build.py` (each of four names builds; SMOTENC variant uses `imblearn.pipeline.Pipeline` and receives the correct categorical indices)
+- [X] T043 [US1] Implement `src/ssn/modeling/candidates.py::build_pipeline(name, cfg, allowlist)`: read `configs/models/<name>.yaml`, compose preprocessor, optional selector, optional PCA, optional `imblearn` SMOTENC step with categorical column indices (when `imbalance.compare_smote`), estimator with seed; write `tests/unit/test_candidates_build.py` (each of four names builds; SMOTENC variant uses `imblearn.pipeline.Pipeline` and receives the correct categorical indices)
   - Type: code, tests
   - Deps: T037, T038
   - Accept: four pipelines build from fixture; `random_state` equals config seed
   - Verify: `pytest -q tests/unit/test_candidates_build.py`
-- [ ] T044 [US1] Wire `train-cv --models ...`: always include `dummy`; for each model and imbalance variant run CV, save OOF to `data/processed/oof_<model>[_smote].parquet`, write `reports/tables/cv_comparison.csv` (mean/std per metric incl. accuracy for transparency, fit_time_s) and `reports/figures/cv_pr_curves.png`; add `--ablation ambiguous` and `--ablation sensitive` flags that additionally run the models with, respectively, `ambiguous` columns promoted and `role: sensitive` columns temporarily included, writing `reports/tables/ablation_ambiguous.csv` and `reports/tables/ablation_sensitive.csv` (the sensitive ablation is analysis-only and never persisted as a candidate)
+- [X] T044 [US1] Wire `train-cv --models ...`: always include `dummy`; for each model and imbalance variant run CV, save OOF to `data/processed/oof_<model>[_smote].parquet`, write `reports/tables/cv_comparison.csv` (mean/std per metric incl. accuracy for transparency, fit_time_s) and `reports/figures/cv_pr_curves.png`; add `--ablation ambiguous` and `--ablation sensitive` flags that additionally run the models with, respectively, `ambiguous` columns promoted and `role: sensitive` columns temporarily included, writing `reports/tables/ablation_ambiguous.csv` and `reports/tables/ablation_sensitive.csv` (the sensitive ablation is analysis-only and never persisted as a candidate)
   - Type: code
   - Deps: T042, T043
   - Accept: command reads only train parquet; dummy row present; ablation table produced when flag set
   - Verify: `python -m ssn train-cv --models dummy logreg random_forest hist_gb --ablation ambiguous --ablation sensitive && cat reports/tables/cv_comparison.csv`
-- [ ] T045 [P] [US1] Write `tests/integration/test_cv_fixture.py`: run `train-cv` logic on the synthetic fixture; assert validation fold sizes unchanged by SMOTE, OOF covers all rows once, output columns present, test path never read (monkeypatch)
+- [X] T045 [P] [US1] Write `tests/integration/test_cv_fixture.py`: run `train-cv` logic on the synthetic fixture; assert validation fold sizes unchanged by SMOTE, OOF covers all rows once, output columns present, test path never read (monkeypatch)
   - Type: tests
   - Deps: T044
   - Accept: passes in under 60 seconds
   - Verify: `pytest -q tests/integration/test_cv_fixture.py`
-- [ ] T046 [US1] Run `train-cv` on real train data for all four models with the SMOTENC comparison, the ambiguous-column ablation, and the sensitive-attribute ablation; record results in `reports/tables/cv_comparison.csv`, `ablation_ambiguous.csv`, and `ablation_sensitive.csv`; summarise the performance cost of excluding sensitive attributes (with file reference) in the EDA report and later the Bias & Fairness Analysis; add the ablation conclusion (include or exclude ambiguous columns, with numbers referenced) to `reports/eda_feature_engineering_report.md` and, if promoting any column, update `configs/features.yaml` with a `note` citing the documentation and re-run Phases 3-5
+- [X] T046 [US1] Run `train-cv` on real train data for all four models with the SMOTENC comparison, the ambiguous-column ablation, and the sensitive-attribute ablation; record results in `reports/tables/cv_comparison.csv`, `ablation_ambiguous.csv`, and `ablation_sensitive.csv`; summarise the performance cost of excluding sensitive attributes (with file reference) in the EDA report and later the Bias & Fairness Analysis; add the ablation conclusion (include or exclude ambiguous columns, with numbers referenced) to `reports/eda_feature_engineering_report.md` and, if promoting any column, update `configs/features.yaml` with a `note` citing the documentation and re-run Phases 3-5
   - Type: run, reports
   - Deps: T045
   - Accept: tables exist; ablation decision recorded with file reference; imbalance-treatment choice recorded per research R-07
   - Verify: `make cv && cat reports/tables/ablation_ambiguous.csv`
-- [ ] T047 [P] [US1] Create `notebooks/04_model_comparison.ipynb` displaying `cv_comparison.csv`, PR curves, SMOTE versus class-weight comparison, and ablation table; execute top-to-bottom
+- [X] T047 [P] [US1] Create `notebooks/04_model_comparison.ipynb` displaying `cv_comparison.csv`, PR curves, SMOTE versus class-weight comparison, and ablation table; execute top-to-bottom
   - Type: notebook
   - Deps: T046
   - Accept: executes; no metric typed by hand

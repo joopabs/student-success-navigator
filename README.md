@@ -3,7 +3,8 @@
 Fair and explainable first-semester dropout risk prediction for early academic support, with a
 Dash decision-support companion app.
 
-> **Status: Milestone 4 complete (train-only feature selection and PCA analysis).**
+> **Status: Milestone 5 complete (baseline and candidate-model comparison under cross-validation).**
+> No final model has been selected and the held-out test set has not been evaluated.
 > No model has been trained and no model results exist yet. Every `[PENDING: ...]` marker below names the artifact that will supply
 > the value once the pipeline has actually been run.
 
@@ -42,7 +43,7 @@ Section 5). Evidence links are filled in as milestones complete.
 - Feature selection and PCA: [`reports/eda_feature_engineering_report.md`](reports/eda_feature_engineering_report.md) section 11 · `reports/tables/selection_*.csv`, `pca_*.csv` · `reports/figures/pca_*.png` · notebook `notebooks/03_feature_selection_pca.ipynb`
 
 ### Step 4: Model implementation and comparison (20 pts)
-- Dummy baseline plus logistic regression, random forest, gradient boosting: `[PENDING: reports/tables/cv_comparison.csv]`
+- Dummy baseline plus logistic regression, random forest, gradient boosting under CV: [`reports/model_comparison_cv.md`](reports/model_comparison_cv.md) · `reports/tables/cv_comparison.csv`, `ablation_*.csv` · `reports/figures/cv_pr_curves.png`, `cv_calibration.png` · notebook `notebooks/04_model_comparison.ipynb`
 - Selection matrix and final test evaluation: `[PENDING: reports/tables/selection_matrix.csv, reports/tables/test_metrics.csv]`
 - Saved pipeline and manifest: `[PENDING: models/manifest.json]`
 

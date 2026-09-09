@@ -5,7 +5,9 @@ Fitting happens only inside cross-validation folds or on the training split (Mil
 
 from __future__ import annotations
 
+import numpy as np
 import pandas as pd
+from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
@@ -26,8 +28,45 @@ def feature_groups(allow: Allowlist) -> dict[str, list[str]]:
     }
 
 
-def build_preprocessor(allow: Allowlist, *, scale_numeric: bool = True) -> Pipeline:
+class Preprocessor(BaseEstimator, TransformerMixin):
+    """Single-step wrapper around `engineer -> ColumnTransformer`.
+
+    A single transformer (not a nested Pipeline) so it can sit inside an imbalanced-learn Pipeline,
+    which rejects Pipeline objects as intermediate steps. `named_steps` is exposed for callers that
+    inspect the inner ColumnTransformer (e.g. `named_steps["columns"].get_feature_names_out()`).
+    """
+
+    def __init__(self, allow: Allowlist, scale_numeric: bool = True):
+        self.allow = allow
+        self.scale_numeric = scale_numeric
+
+    def _build(self) -> Pipeline:
+        return _build_pipeline(self.allow, scale_numeric=self.scale_numeric)
+
+    def fit(self, X: pd.DataFrame, y=None):
+        self.pipeline_ = self._build().fit(X, y)
+        return self
+
+    def transform(self, X: pd.DataFrame) -> np.ndarray:
+        return self.pipeline_.transform(X)
+
+    def get_feature_names_out(self, input_features=None):
+        return self.pipeline_.named_steps["columns"].get_feature_names_out()
+
+    @property
+    def named_steps(self):
+        return self.pipeline_.named_steps
+
+    def __sklearn_is_fitted__(self) -> bool:
+        return hasattr(self, "pipeline_")
+
+
+def build_preprocessor(allow: Allowlist, *, scale_numeric: bool = True) -> Preprocessor:
     """engineer -> (impute+scale numeric | passthrough binary | impute+one-hot categorical)."""
+    return Preprocessor(allow, scale_numeric=scale_numeric)
+
+
+def _build_pipeline(allow: Allowlist, *, scale_numeric: bool = True) -> Pipeline:
     groups = feature_groups(allow)
     numeric_steps = [("impute", SimpleImputer(strategy="median"))]
     if scale_numeric:

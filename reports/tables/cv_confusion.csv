@@ -1,0 +1,12 @@
+variant,thr_tn_sum,thr_fp_sum,thr_fn_sum,thr_tp_sum,topk_tn_sum,topk_fp_sum,topk_fn_sum,topk_tp_sum
+dummy__sel-none__imb-none,2402,0,1137,0,2267,135,1072,65
+logreg__sel-none__imb-class_weight,2027,375,284,853,2396,6,943,194
+logreg__sel-none__imb-smotenc,2158,244,373,764,2394,8,945,192
+logreg__sel-decided__imb-class_weight,2000,402,287,850,2396,6,943,194
+logreg__sel-decided__imb-smotenc,2009,393,294,843,2395,7,944,193
+random_forest__sel-none__imb-class_weight,2238,164,467,670,2394,8,945,192
+random_forest__sel-none__imb-smotenc,2129,273,377,760,2397,5,942,195
+random_forest__sel-decided__imb-class_weight,2161,241,435,702,2395,7,944,193
+random_forest__sel-decided__imb-smotenc,2075,327,383,754,2395,7,944,193
+hist_gb__sel-none__imb-class_weight,2065,337,305,832,2399,3,940,197
+hist_gb__sel-decided__imb-class_weight,2016,386,292,845,2400,2,939,198
