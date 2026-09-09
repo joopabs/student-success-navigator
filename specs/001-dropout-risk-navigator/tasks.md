@@ -52,52 +52,52 @@ Single project at repository root: `src/ssn/` (package), `tests/`, `configs/`, `
 **Purpose**: Importable package, validated configuration, quality tooling, leakage and language
 guards in place before any data is touched.
 
-- [ ] T001 Create the directory skeleton with `.gitkeep` files per plan.md: `src/ssn/{data,features,modeling,explain,fairness,reporting,app/{services,components,pages}}`, `tests/{unit,integration,app}`, `configs/models`, `data/{raw,processed,demo,evaluation,local}`, `models`, `reports/{figures,tables,explainability,fairness,decks}`, `notebooks`, `docs`
+- [X] T001 Create the directory skeleton with `.gitkeep` files per plan.md: `src/ssn/{data,features,modeling,explain,fairness,reporting,app/{services,components,pages}}`, `tests/{unit,integration,app}`, `configs/models`, `data/{raw,processed,demo,evaluation,local}`, `models`, `reports/{figures,tables,explainability,fairness,decks}`, `notebooks`, `docs`
   - Type: artifacts
   - Deps: none
   - Accept: every directory exists; `git status` shows only `.gitkeep` files and no data files
   - Verify: `find src tests configs data models reports notebooks docs -type d | sort` and `git status --short`
-- [ ] T002 Write `pyproject.toml` (package `ssn`, `src` layout, ruff and pytest config, Python `>=3.11,<3.12`), `.python-version` (`3.11`), `requirements.txt` (pinned: pandas, numpy, scikit-learn >= 1.4 for `HistGradientBoostingClassifier(class_weight=...)`, imbalanced-learn, shap >= 0.45 for HistGradientBoosting support in `TreeExplainer`, matplotlib, seaborn, joblib, PyYAML, pyarrow, dash, plotly), `requirements-dev.txt` (pytest, pytest-cov, ruff, nbconvert, jupyter, detect-secrets)
+- [X] T002 Write `pyproject.toml` (package `ssn`, `src` layout, ruff and pytest config, Python `>=3.11,<3.12`), `.python-version` (`3.11`), `requirements.txt` (pinned: pandas, numpy, scikit-learn >= 1.4 for `HistGradientBoostingClassifier(class_weight=...)`, imbalanced-learn, shap >= 0.45 for HistGradientBoosting support in `TreeExplainer`, matplotlib, seaborn, joblib, PyYAML, pyarrow, dash, plotly), `requirements-dev.txt` (pytest, pytest-cov, ruff, nbconvert, jupyter, detect-secrets)
   - Type: config
   - Deps: T001
   - Accept: fresh venv installs both files without resolver errors; a smoke check fits `HistGradientBoostingClassifier(class_weight='balanced')` on a toy array and constructs `shap.TreeExplainer` on it without error; `python -c "import ssn"` fails only because the package has no code yet
   - Verify: `python3.11 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt -r requirements-dev.txt && pip check`
-- [ ] T003 [P] Write `Makefile` with targets `setup, data, eda, select, cv, tune, final, explain, fairness, report, app, test, lint, all` that call `python -m ssn ...` exactly as listed in contracts/cli.md
+- [X] T003 [P] Write `Makefile` with targets `setup, data, eda, select, cv, tune, final, explain, fairness, report, app, test, lint, all` that call `python -m ssn ...` exactly as listed in contracts/cli.md
   - Type: config
   - Deps: T001
   - Accept: `make -n <target>` prints the intended commands for every target; no target references a command absent from contracts/cli.md
   - Verify: `for t in setup data eda select cv tune final explain fairness report app test lint all; do make -n $t >/dev/null || echo "missing $t"; done`
-- [ ] T004 [P] Extend `.gitignore` with `data/raw/*`, `!data/raw/.gitkeep`, `data/processed/`, `data/demo/`, `data/evaluation/`, `data/local/`, `models/*.joblib` (policy per research R-11), and write `.env.example` with no real values
+- [X] T004 [P] Extend `.gitignore` with `data/raw/*`, `!data/raw/.gitkeep`, `data/processed/`, `data/demo/`, `data/evaluation/`, `data/local/`, `models/*.joblib` (policy per research R-11), and write `.env.example` with no real values
   - Type: config
   - Deps: T001
   - Accept: `git check-ignore` returns a match for a sample path in each ignored directory; `.env.example` is tracked
   - Verify: `for p in data/raw/data.csv data/processed/x.parquet data/demo/x.parquet data/evaluation/x.parquet data/local/actions.sqlite models/final_pipeline.joblib; do git check-ignore -q $p && echo "ignored $p" || echo "NOT IGNORED $p"; done`
-- [ ] T005 [P] Write `README.md` skeleton with one heading per rubric criterion from `CAPSTONE_BRIEF.md` Section 5, a "Reproduction" section, a "Repository structure" section, and `[PENDING: ...]` placeholders for every number
+- [X] T005 [P] Write `README.md` skeleton with one heading per rubric criterion from `CAPSTONE_BRIEF.md` Section 5, a "Reproduction" section, a "Repository structure" section, and `[PENDING: ...]` placeholders for every number
   - Type: docs
   - Deps: T001
   - Accept: headings for Steps 1-7, Bonus, Reproduction, Structure exist; zero numeric claims outside placeholders
   - Verify: `grep -c '^## ' README.md` and `grep -n 'PENDING' README.md`
-- [ ] T006 Write `configs/base.yaml` exactly per contracts/config-schema.md with `seed: 42`, `capacity.per_week: 10`, `capacity.window_weeks: 5`, `capacity.k: 50`, `capacity.window_sensitivity_weeks: [2, 5, 10]`, `capacity.illustrative: true`, `fairness.min_group_size: 30`, `fairness.age_bands: []`, `data.expected_sha256: ""`, `project.model_version: "1.0.0"`, `app.expected_model_version: "1.0.0"`
+- [X] T006 Write `configs/base.yaml` exactly per contracts/config-schema.md with `seed: 42`, `capacity.per_week: 10`, `capacity.window_weeks: 5`, `capacity.k: 50`, `capacity.window_sensitivity_weeks: [2, 5, 10]`, `capacity.illustrative: true`, `fairness.min_group_size: 30`, `fairness.age_bands: []`, `data.expected_sha256: ""`, `project.model_version: "1.0.0"`, `app.expected_model_version: "1.0.0"`
   - Type: config
   - Deps: T001
   - Accept: file parses as YAML; all keys in the contract present; illustrative flag true; `k == per_week * window_weeks`
   - Verify: `python -c "import yaml;c=yaml.safe_load(open('configs/base.yaml'))['capacity'];assert c['illustrative'] is True and c['k']==c['per_week']*c['window_weeks'];print(c)"`
-- [ ] T007 [P] Write `configs/features.yaml` skeleton with empty `columns: []` and `engineered: []` lists, and `configs/language.yaml` with the `prohibited_terms` list from research R-18 and an empty `features:` map
+- [X] T007 [P] Write `configs/features.yaml` skeleton with empty `columns: []` and `engineered: []` lists, and `configs/language.yaml` with the `prohibited_terms` list from research R-18 and an empty `features:` map
   - Type: config
   - Deps: T001
   - Accept: both parse; prohibited terms include "at risk of failing", "likely to drop out", "problem student", "failing student"
   - Verify: `python -c "import yaml;l=yaml.safe_load(open('configs/language.yaml'));print(l['prohibited_terms'])"`
-- [ ] T008 [P] Write `configs/models/dummy.yaml`, `logreg.yaml`, `random_forest.yaml`, `hist_gb.yaml` per contracts/config-schema.md (estimator class path, `class_weight: balanced` where supported, `random_state: ${seed}`, search spaces, `n_iter`, `use_selection`, `use_pca`)
+- [X] T008 [P] Write `configs/models/dummy.yaml`, `logreg.yaml`, `random_forest.yaml`, `hist_gb.yaml` per contracts/config-schema.md (estimator class path, `class_weight: balanced` where supported, `random_state: ${seed}`, search spaces, `n_iter`, `use_selection`, `use_pca`)
   - Type: config
   - Deps: T001
   - Accept: four files; dummy has no search space; each non-dummy has a non-empty `search_space`
   - Verify: `python -c "import yaml,glob;[print(f, sorted(yaml.safe_load(open(f)))) for f in sorted(glob.glob('configs/models/*.yaml'))]"`
-- [ ] T009 Implement `src/ssn/__init__.py` (version string), `src/ssn/__main__.py`, `src/ssn/paths.py`, and `src/ssn/cli.py` with an argparse subcommand registry, `--config` and `--log-level` global options, and exit codes 0/2/3/4 per contracts/cli.md; register stubs for every command that exit 2 with "not implemented" until wired
+- [X] T009 Implement `src/ssn/__init__.py` (version string), `src/ssn/__main__.py`, `src/ssn/paths.py`, and `src/ssn/cli.py` with an argparse subcommand registry, `--config` and `--log-level` global options, and exit codes 0/2/3/4 per contracts/cli.md; register stubs for every command that exit 2 with "not implemented" until wired
   - Type: code
   - Deps: T002
   - Accept: `python -m ssn --help` lists every command in contracts/cli.md; unknown command exits non-zero
   - Verify: `python -m ssn --help` and `python -m ssn nope; echo "exit=$?"`
-- [ ] T010 Implement `src/ssn/config.py`: load YAML, validate required keys and types against contracts/config-schema.md, raise `ConfigError` naming the key path, substitute `${seed}` in model configs, seed `random` and `numpy`, return a frozen dataclass; wire `config validate`
+- [X] T010 Implement `src/ssn/config.py`: load YAML, validate required keys and types against contracts/config-schema.md, raise `ConfigError` naming the key path, substitute `${seed}` in model configs, seed `random` and `numpy`, return a frozen dataclass; wire `config validate`
   - Type: code
   - Deps: T006, T009
   - Accept: valid config prints resolved seed and illustrative flags; a config missing `capacity.illustrative` exits 2 with the key path in the message
@@ -107,22 +107,22 @@ c=yaml.safe_load(open('configs/base.yaml')); del c['capacity']['illustrative']
 p=tempfile.NamedTemporaryFile('w',suffix='.yaml',delete=False); yaml.safe_dump(c,p); p.close()
 r=subprocess.run(['python','-m','ssn','config','validate','--config',p.name],capture_output=True,text=True); print(r.returncode, r.stderr.strip()[:120]); assert r.returncode==2
 PY`
-- [ ] T011 Write `tests/conftest.py` with a small synthetic fixture DataFrame (about 60 rows, invented column names mirroring the availability classes, both target classes, no real rows) plus a fixture `features.yaml` written to `tmp_path`; write `tests/unit/test_config.py` covering valid load, missing key, wrong type, and seed substitution
+- [X] T011 Write `tests/conftest.py` with a small synthetic fixture DataFrame (about 60 rows, invented column names mirroring the availability classes, both target classes, no real rows) plus a fixture `features.yaml` written to `tmp_path`; write `tests/unit/test_config.py` covering valid load, missing key, wrong type, and seed substitution
   - Type: tests
   - Deps: T010
   - Accept: fixture is deterministic (seeded); tests pass
   - Verify: `pytest -q tests/unit/test_config.py`
-- [ ] T012 Implement `src/ssn/features/allowlist.py`: load `features.yaml`, derive `allowed`, `prohibited`, `sensitive`, `unclassified` sets, `project_features(df)` returning only allow-listed columns, `assert_frame_allowed(X)` raising `LeakageError` naming offending columns, and `assert_all_classified(raw_columns)`; write `tests/unit/test_allowlist.py` for projected frame passes, full frame with label raises, prohibited column raises, unclassified column raises, sensitive column raises
+- [X] T012 Implement `src/ssn/features/allowlist.py`: load `features.yaml`, derive `allowed`, `prohibited`, `sensitive`, `unclassified` sets, `project_features(df)` returning only allow-listed columns, `assert_frame_allowed(X)` raising `LeakageError` naming offending columns, and `assert_all_classified(raw_columns)`; write `tests/unit/test_allowlist.py` for projected frame passes, full frame with label raises, prohibited column raises, unclassified column raises, sensitive column raises
   - Type: code, tests
   - Deps: T007, T011
   - Accept: all five cases tested; error message lists column names; `project_features` drops label and sensitive columns
   - Verify: `pytest -q tests/unit/test_allowlist.py`
-- [ ] T013 Implement `src/ssn/explain/language.py`: load `language.yaml`, `scan_text(text)` returning prohibited-term hits, `scan_paths(paths)` over `.py/.md/.yaml/.ipynb`, detection of a currency or percent figure within a paragraph containing "ROI", "saving", "value", or "capacity" but lacking "illustrative" or "assumption", and the bare phrase "the model is fair"; wire `scan-language` (exit 1 on findings); write `tests/unit/test_language.py`
+- [X] T013 Implement `src/ssn/explain/language.py`: load `language.yaml`, `scan_text(text)` returning prohibited-term hits, `scan_paths(paths)` over `.py/.md/.yaml/.ipynb`, detection of a currency or percent figure within a paragraph containing "ROI", "saving", "value", or "capacity" but lacking "illustrative" or "assumption", and the bare phrase "the model is fair"; wire `scan-language` (exit 1 on findings); write `tests/unit/test_language.py`
   - Type: code, tests
   - Deps: T007, T009
   - Accept: scanner flags each rule on crafted strings and passes on clean text; CLI exits 1 on findings
   - Verify: `pytest -q tests/unit/test_language.py && python -m ssn scan-language --paths README.md; echo "exit=$?"`
-- [ ] T014 Run the quality gate for Phase 1: lint, tests, CLI help, and the tracked-file privacy check
+- [X] T014 Run the quality gate for Phase 1: lint, tests, CLI help, and the tracked-file privacy check
   - Type: run
   - Deps: T003, T004, T005, T008, T012, T013
   - Accept: ruff clean, all tests pass, no private files tracked
@@ -138,57 +138,57 @@ tested. No data has been downloaded.
 **Purpose**: Establish provenance, verify the dataset, classify every column by availability,
 and record every empirical fact about the raw data from computed output. BLOCKS all stories.
 
-- [ ] T015 Implement `src/ssn/data/download.py` and wire `data download`: fetch the UCI dataset 697 archive, extract `data.csv` to `configs.paths.raw_csv`, compute sha256, compare to `data.expected_sha256` (on empty expected value, print the hash and exit 2 with instruction to record it), refuse on mismatch
+- [X] T015 Implement `src/ssn/data/download.py` and wire `data download`: fetch the UCI dataset 697 archive, extract `data.csv` to `configs.paths.raw_csv`, compute sha256, compare to `data.expected_sha256` (on empty expected value, print the hash and exit 2 with instruction to record it), refuse on mismatch
   - Type: code
   - Deps: T010
   - Accept: first run prints the hash; after recording it in `configs/base.yaml`, second run succeeds and is idempotent
   - Verify: `python -m ssn data download; echo "exit=$?"` then record hash, then `python -m ssn data download && shasum -a 256 data/raw/data.csv`
-- [ ] T016 Implement `src/ssn/data/schema.py` and wire `data validate`: load raw CSV, assert every column is classified (via `allowlist.assert_all_classified`), infer and check dtypes, assert observed `Target` values equal `data.target_expected_labels` exactly, write `reports/tables/validate_report.json` (columns, dtypes, target labels observed, row count)
+- [X] T016 Implement `src/ssn/data/schema.py` and wire `data validate`: load raw CSV, assert every column is classified (via `allowlist.assert_all_classified`), infer and check dtypes, assert observed `Target` values equal `data.target_expected_labels` exactly, write `reports/tables/validate_report.json` (columns, dtypes, target labels observed, row count)
   - Type: code
   - Deps: T012, T015
   - Accept: with the empty `features.yaml` skeleton the command exits 2 listing all unclassified columns; the report JSON is still written with observed facts
   - Verify: `python -m ssn data validate; echo "exit=$?"; python -c "import json;print(json.load(open('reports/tables/validate_report.json'))['n_rows'])"`
-- [ ] T017 Implement `src/ssn/data/profile.py` and wire `data profile`: per-column dtype, n_missing, n_unique, min, max, top values for categoricals; `Target` frequencies and derived `is_dropout` balance; exact-duplicate count; write `reports/tables/profile_columns.csv`, `profile_target.csv`, `profile_duplicates.csv`, `profile_categorical_values.csv`, and `configs/ranges.json` (observed min/max per numeric column for later app validation)
+- [X] T017 Implement `src/ssn/data/profile.py` and wire `data profile`: per-column dtype, n_missing, n_unique, min, max, top values for categoricals; `Target` frequencies and derived `is_dropout` balance; exact-duplicate count; write `reports/tables/profile_columns.csv`, `profile_target.csv`, `profile_duplicates.csv`, `profile_categorical_values.csv`, and `configs/ranges.json` (observed min/max per numeric column for later app validation)
   - Type: code
   - Deps: T015
   - Accept: all five outputs written; `ranges.json` keys equal numeric column names
   - Verify: `python -m ssn data profile && ls reports/tables/profile_*.csv configs/ranges.json`
-- [ ] T018 Run `data download`, `data profile`, and `data validate` on the real file and record PV-01 (row and column counts, column names), PV-02 (`Target` values and `is_dropout` balance), and PV-05 (missing, duplicates, ranges) in `data/README.md` under "Profiling results (computed <date>)" by pasting from the CSV outputs
+- [X] T018 Run `data download`, `data profile`, and `data validate` on the real file and record PV-01 (row and column counts, column names), PV-02 (`Target` values and `is_dropout` balance), and PV-05 (missing, duplicates, ranges) in `data/README.md` under "Profiling results (computed <date>)" by pasting from the CSV outputs
   - Type: run, docs
   - Deps: T016, T017
   - Accept: every number in the README section matches the CSV files; the `validate` exit code and unclassified-column list are recorded for T019
   - Verify: `python -m ssn data download && python -m ssn data profile && python -m ssn data validate; cat reports/tables/profile_target.csv`
-- [ ] T019 Fill `configs/features.yaml` with one entry per observed column (from `validate_report.json`): `availability`, `role`, `dtype`, `adviser_visible`, `encoding_source`, `encoding_verified: false`, `note` citing the UCI variables table or the source article; classify every second-semester column as `second_semester`, `Target` as `outcome`/`target`, the sensitive set from `PROJECT_DECISIONS.md` (gender, age at enrollment, nationality, international status, marital status, educational special needs) as `role: sensitive`, and financial-status columns as `ambiguous` per research R-05 unless documentation confirms first-semester availability
+- [X] T019 Fill `configs/features.yaml` with one entry per observed column (from `validate_report.json`): `availability`, `role`, `dtype`, `adviser_visible`, `encoding_source`, `encoding_verified: false`, `note` citing the UCI variables table or the source article; classify every second-semester column as `second_semester`, `Target` as `outcome`/`target`, the sensitive set from `PROJECT_DECISIONS.md` (gender, age at enrollment, nationality, international status, marital status, educational special needs) as `role: sensitive`, and financial-status columns as `ambiguous` per research R-05 unless documentation confirms first-semester availability
   - Type: config
   - Deps: T018
   - Accept: `data validate` exits 0; counts of allowed, prohibited, ambiguous, and sensitive columns printed and recorded in `data/README.md` (PV-03)
   - Verify: `python -m ssn data validate && python -c "from ssn.features.allowlist import load;a=load('configs/features.yaml');print(len(a.allowed),len(a.prohibited),len(a.ambiguous),len(a.sensitive))"`
-- [ ] T020 Verify categorical encodings (PV-04): for each categorical column compare `reports/tables/profile_categorical_values.csv` against the UCI variables table (https://archive.ics.uci.edu/dataset/697) and the source article (Realinho et al., 2022, *Data* 7(11):146); set `encoding_verified: true` only where observed codes match documented codes; record the gender code mapping and any discrepancy in `data/data_dictionary.md` under "Encoding verification". Escalation if gender codes cannot be verified from the UCI variables table: check the source article's variable description; if still unverified, keep `encoding_verified: false`, record the blocker in `data/README.md` under "Open verification items", and open a constitution amendment proposal before Phase 7, because Principle X requires gender to be assessed. Never infer the mapping from class distributions
+- [X] T020 Verify categorical encodings (PV-04): for each categorical column compare `reports/tables/profile_categorical_values.csv` against the UCI variables table (https://archive.ics.uci.edu/dataset/697) and the source article (Realinho et al., 2022, *Data* 7(11):146); set `encoding_verified: true` only where observed codes match documented codes; record the gender code mapping and any discrepancy in `data/data_dictionary.md` under "Encoding verification". Escalation if gender codes cannot be verified from the UCI variables table: check the source article's variable description; if still unverified, keep `encoding_verified: false`, record the blocker in `data/README.md` under "Open verification items", and open a constitution amendment proposal before Phase 7, because Principle X requires gender to be assessed. Never infer the mapping from class distributions
   - Type: docs, config
   - Deps: T019
   - Accept: gender has `encoding_verified: true` or an explicit "unverified, fairness audit blocked" note; every categorical column has a verification status
   - Verify: `python -c "import yaml;c=yaml.safe_load(open('configs/features.yaml'))['columns'];print([(x['name'],x['encoding_verified']) for x in c if x['dtype']=='categorical'])"`
-- [ ] T021 Implement `src/ssn/reporting/tables.py::write_data_dictionary` and wire it into `data profile`: generate `data/data_dictionary.md` with one row per source column (name, type, availability, role, allowed values or observed range, encoding source, verified flag, description) plus a section for engineered features to be appended in Phase 3; preserve a hand-written "Notes" section across regenerations
+- [X] T021 Implement `src/ssn/reporting/tables.py::write_data_dictionary` and wire it into `data profile`: generate `data/data_dictionary.md` with one row per source column (name, type, availability, role, allowed values or observed range, encoding source, verified flag, description) plus a section for engineered features to be appended in Phase 3; preserve a hand-written "Notes" section across regenerations
   - Type: code, docs
   - Deps: T019
   - Accept: dictionary regenerates without losing the Notes section; every column from `validate_report.json` appears
   - Verify: `python -m ssn data profile && grep -c '^|' data/data_dictionary.md`
-- [ ] T022 [P] Write `tests/unit/test_schema.py` (fixture CSV: wrong Target label fails, missing column fails, extra column fails) and `tests/unit/test_features_yaml_complete.py` (every fixture column classified exactly once; `ambiguous`, `second_semester`, `outcome` excluded from allowed; sensitive never allowed)
+- [X] T022 [P] Write `tests/unit/test_schema.py` (fixture CSV: wrong Target label fails, missing column fails, extra column fails) and `tests/unit/test_features_yaml_complete.py` (every fixture column classified exactly once; `ambiguous`, `second_semester`, `outcome` excluded from allowed; sensitive never allowed)
   - Type: tests
   - Deps: T016, T019
   - Accept: tests pass on fixture and on the real `configs/features.yaml`
   - Verify: `pytest -q tests/unit/test_schema.py tests/unit/test_features_yaml_complete.py`
-- [ ] T023 [P] Write `tests/integration/test_profile_fixture.py`: run `profile` functions on the synthetic fixture and assert output tables have expected columns and counts
+- [X] T023 [P] Write `tests/integration/test_profile_fixture.py`: run `profile` functions on the synthetic fixture and assert output tables have expected columns and counts
   - Type: tests
   - Deps: T017
   - Accept: passes without touching `data/raw`
   - Verify: `pytest -q tests/integration/test_profile_fixture.py`
-- [ ] T024 [P] Create `notebooks/01_data_profiling.ipynb` that imports `ssn.data.profile`, displays the profile tables and target balance from files, and shows `head()` of de-identified columns only; execute top-to-bottom
+- [X] T024 [P] Create `notebooks/01_data_profiling.ipynb` that imports `ssn.data.profile`, displays the profile tables and target balance from files, and shows `head()` of de-identified columns only; execute top-to-bottom
   - Type: notebook
   - Deps: T018
   - Accept: executes cleanly from a fresh kernel; no code duplicated from `src/`
   - Verify: `jupyter nbconvert --to notebook --execute notebooks/01_data_profiling.ipynb --output /tmp/01.ipynb`
-- [ ] T025 Complete `data/README.md`: dataset name, UCI URL, DOI 10.24432/C5MC89, recommended citation (verbatim from research R-01), licence CC BY 4.0 with link, access date, sha256, download steps, single-institution and non-generalisation statement, and PV-09 confirmation that licence terms were read
+- [X] T025 Complete `data/README.md`: dataset name, UCI URL, DOI 10.24432/C5MC89, recommended citation (verbatim from research R-01), licence CC BY 4.0 with link, access date, sha256, download steps, single-institution and non-generalisation statement, and PV-09 confirmation that licence terms were read
   - Type: docs
   - Deps: T018
   - Accept: all fields present; citation text matches research R-01; no claim of Philippine or general representativeness

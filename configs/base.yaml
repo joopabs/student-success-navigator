@@ -21,7 +21,7 @@ paths:
   language_yaml: configs/language.yaml
 
 data:
-  expected_sha256: ""                  # filled in Milestone 2 after download (T015/T018)
+  expected_sha256: "3ef126de5cefff26eb11fbb4237f1a1401cb64b488e2f1d598c23cedeb4c45ae"  # data.csv, recorded 2026-09-10 (T015)
   target_column: Target
   target_positive_label: Dropout       # verified in PV-02
   target_expected_labels: [Dropout, Enrolled, Graduate]

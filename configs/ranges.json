@@ -1,0 +1,78 @@
+{
+  "Application order": {
+    "min": 0.0,
+    "max": 9.0
+  },
+  "Previous qualification (grade)": {
+    "min": 95.0,
+    "max": 190.0
+  },
+  "Admission grade": {
+    "min": 95.0,
+    "max": 190.0
+  },
+  "Age at enrollment": {
+    "min": 17.0,
+    "max": 70.0
+  },
+  "Curricular units 1st sem (credited)": {
+    "min": 0.0,
+    "max": 20.0
+  },
+  "Curricular units 1st sem (enrolled)": {
+    "min": 0.0,
+    "max": 26.0
+  },
+  "Curricular units 1st sem (evaluations)": {
+    "min": 0.0,
+    "max": 45.0
+  },
+  "Curricular units 1st sem (approved)": {
+    "min": 0.0,
+    "max": 26.0
+  },
+  "Curricular units 1st sem (grade)": {
+    "min": 0.0,
+    "max": 18.875
+  },
+  "Curricular units 1st sem (without evaluations)": {
+    "min": 0.0,
+    "max": 12.0
+  },
+  "Curricular units 2nd sem (credited)": {
+    "min": 0.0,
+    "max": 19.0
+  },
+  "Curricular units 2nd sem (enrolled)": {
+    "min": 0.0,
+    "max": 23.0
+  },
+  "Curricular units 2nd sem (evaluations)": {
+    "min": 0.0,
+    "max": 33.0
+  },
+  "Curricular units 2nd sem (approved)": {
+    "min": 0.0,
+    "max": 20.0
+  },
+  "Curricular units 2nd sem (grade)": {
+    "min": 0.0,
+    "max": 18.571428571428573
+  },
+  "Curricular units 2nd sem (without evaluations)": {
+    "min": 0.0,
+    "max": 12.0
+  },
+  "Unemployment rate": {
+    "min": 7.6,
+    "max": 16.2
+  },
+  "Inflation rate": {
+    "min": -0.8,
+    "max": 3.7
+  },
+  "GDP": {
+    "min": -4.06,
+    "max": 3.51
+  }
+}

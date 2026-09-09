@@ -1,0 +1,38 @@
+column,availability,role,dtype,pandas_dtype,n_missing,pct_missing,n_unique,min,p50,max,mean,std,n_documented_codes,encoding_verified
+Marital status,enrollment,sensitive,categorical,int64,0,0.0,6,1.0,1.0,6.0,1.1786,0.6057,6.0,True
+Application mode,enrollment,feature,categorical,int64,0,0.0,18,1.0,17.0,57.0,18.6691,17.4847,18.0,True
+Application order,enrollment,feature,numeric,int64,0,0.0,8,0.0,1.0,9.0,1.7278,1.3138,,
+Course,enrollment,feature,categorical,int64,0,0.0,17,33.0,9238.0,9991.0,8856.6426,2063.5664,17.0,True
+Daytime/evening attendance,enrollment,feature,binary,int64,0,0.0,2,0.0,1.0,1.0,0.8908,0.3119,2.0,True
+Previous qualification,enrollment,feature,categorical,int64,0,0.0,17,1.0,1.0,43.0,4.5778,10.2166,17.0,True
+Previous qualification (grade),enrollment,feature,numeric,float64,0,0.0,101,95.0,133.1,190.0,132.6133,13.1883,,
+Nacionality,enrollment,sensitive,categorical,int64,0,0.0,21,1.0,1.0,109.0,1.8732,6.9145,21.0,True
+Mother's qualification,enrollment,feature,categorical,int64,0,0.0,29,1.0,19.0,44.0,19.5619,15.6032,29.0,True
+Father's qualification,enrollment,feature,categorical,int64,0,0.0,34,1.0,19.0,44.0,22.2753,15.3431,34.0,True
+Mother's occupation,enrollment,feature,categorical,int64,0,0.0,32,0.0,5.0,194.0,10.9609,26.4183,32.0,True
+Father's occupation,enrollment,feature,categorical,int64,0,0.0,46,0.0,7.0,195.0,11.0323,25.263,46.0,True
+Admission grade,enrollment,feature,numeric,float64,0,0.0,620,95.0,126.1,190.0,126.9781,14.482,,
+Displaced,enrollment,feature,binary,int64,0,0.0,2,0.0,1.0,1.0,0.5484,0.4977,2.0,True
+Educational special needs,enrollment,sensitive,binary,int64,0,0.0,2,0.0,0.0,1.0,0.0115,0.1068,2.0,True
+Debtor,ambiguous,feature,binary,int64,0,0.0,2,0.0,0.0,1.0,0.1137,0.3175,2.0,True
+Tuition fees up to date,ambiguous,feature,binary,int64,0,0.0,2,0.0,1.0,1.0,0.8807,0.3242,2.0,True
+Gender,enrollment,sensitive,binary,int64,0,0.0,2,0.0,0.0,1.0,0.3517,0.4776,2.0,True
+Scholarship holder,ambiguous,feature,binary,int64,0,0.0,2,0.0,0.0,1.0,0.2484,0.4321,2.0,True
+Age at enrollment,enrollment,sensitive,numeric,int64,0,0.0,46,17.0,20.0,70.0,23.2651,7.5878,,
+International,enrollment,sensitive,binary,int64,0,0.0,2,0.0,0.0,1.0,0.0249,0.1557,2.0,True
+Curricular units 1st sem (credited),first_semester,feature,numeric,int64,0,0.0,21,0.0,0.0,20.0,0.71,2.3605,,
+Curricular units 1st sem (enrolled),first_semester,feature,numeric,int64,0,0.0,23,0.0,6.0,26.0,6.2706,2.4802,,
+Curricular units 1st sem (evaluations),first_semester,feature,numeric,int64,0,0.0,35,0.0,8.0,45.0,8.2991,4.1791,,
+Curricular units 1st sem (approved),first_semester,feature,numeric,int64,0,0.0,23,0.0,5.0,26.0,4.7066,3.0942,,
+Curricular units 1st sem (grade),first_semester,feature,numeric,float64,0,0.0,805,0.0,12.285714285714286,18.875,10.6408,4.8437,,
+Curricular units 1st sem (without evaluations),first_semester,feature,numeric,int64,0,0.0,11,0.0,0.0,12.0,0.1377,0.6909,,
+Curricular units 2nd sem (credited),second_semester,feature,numeric,int64,0,0.0,19,0.0,0.0,19.0,0.5418,1.9185,,
+Curricular units 2nd sem (enrolled),second_semester,feature,numeric,int64,0,0.0,22,0.0,6.0,23.0,6.2321,2.196,,
+Curricular units 2nd sem (evaluations),second_semester,feature,numeric,int64,0,0.0,30,0.0,8.0,33.0,8.0633,3.948,,
+Curricular units 2nd sem (approved),second_semester,feature,numeric,int64,0,0.0,20,0.0,5.0,20.0,4.4358,3.0148,,
+Curricular units 2nd sem (grade),second_semester,feature,numeric,float64,0,0.0,786,0.0,12.2,18.571428571428573,10.2302,5.2108,,
+Curricular units 2nd sem (without evaluations),second_semester,feature,numeric,int64,0,0.0,10,0.0,0.0,12.0,0.1503,0.7538,,
+Unemployment rate,enrollment,feature,numeric,float64,0,0.0,10,7.6,11.1,16.2,11.5661,2.6639,,
+Inflation rate,enrollment,feature,numeric,float64,0,0.0,9,-0.8,1.4,3.7,1.228,1.3827,,
+GDP,enrollment,feature,numeric,float64,0,0.0,10,-4.06,0.32,3.51,0.002,2.2699,,
+Target,outcome,target,categorical,str,0,0.0,3,,,,,,,

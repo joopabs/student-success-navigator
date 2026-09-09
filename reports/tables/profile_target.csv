@@ -1,0 +1,4 @@
+label,count,share,is_dropout
+Graduate,2209,0.4993,0
+Dropout,1421,0.3212,1
+Enrolled,794,0.1795,0

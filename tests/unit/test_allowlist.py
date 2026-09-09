@@ -66,8 +66,8 @@ def test_all_classified_passes_for_fixture(features_yaml, synthetic_frame):
 
 
 def test_empty_skeleton_allows_nothing():
-    a = al.load("configs/features.yaml")
-    assert a.allowed == frozenset() and a.columns == {}
+    a = al.build({"columns": [], "engineered": []})
+    assert a.allowed == frozenset() and a.columns == {} and a.target is None
 
 
 def test_engineered_with_prohibited_input_is_rejected(tmp_path):

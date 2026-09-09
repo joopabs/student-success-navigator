@@ -145,6 +145,13 @@ def build_parser() -> argparse.ArgumentParser:
             p.add_argument(
                 "--ablation", action="append", choices=["ambiguous", "sensitive"], default=[]
             )
+        if (group, name) == ("data", "download"):
+            p.add_argument(
+                "--from-local",
+                default=None,
+                help="copy a manually downloaded CSV instead of fetching",
+            )
+            p.add_argument("--force", action="store_true", help="re-download even if present")
         if (group, name) == (None, "scan-language"):
             p.add_argument("--paths", nargs="+", required=True)
         if (group, name) == (None, "reproduce-check"):
@@ -154,7 +161,13 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _load_handlers() -> None:
+    """Import modules that register handlers via @register (side-effect imports)."""
+    import ssn.data.commands  # noqa: F401
+
+
 def main(argv: Sequence[str] | None = None) -> int:
+    _load_handlers()
     parser = build_parser()
     args = parser.parse_args(argv)
     if not getattr(args, "handler", None):

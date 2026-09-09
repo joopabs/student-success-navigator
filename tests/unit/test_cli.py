@@ -18,7 +18,7 @@ def test_help_lists_every_contract_command():
 
 def test_config_validate_ok():
     r = _run("config", "validate")
-    assert r.returncode == 0 and "config OK" in r.stdout and "allowed=0" in r.stdout
+    assert r.returncode == 0 and "config OK" in r.stdout and "allow-list:" in r.stdout
 
 
 def test_config_validate_bad_file_exits_2(tmp_path):

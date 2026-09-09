@@ -1,0 +1,238 @@
+column,code,label,count,documented
+Application mode,1.0,1st phase - general contingent,1708,True
+Application mode,17.0,2nd phase - general contingent,872,True
+Application mode,39.0,Over 23 years old,785,True
+Application mode,43.0,Change of course,312,True
+Application mode,44.0,Technological specialization diploma holders,213,True
+Application mode,7.0,Holders of other higher courses,139,True
+Application mode,18.0,3rd phase - general contingent,124,True
+Application mode,42.0,Transfer,77,True
+Application mode,51.0,Change of institution/course,59,True
+Application mode,16.0,1st phase - special contingent (Madeira Island),38,True
+Application mode,53.0,Short cycle diploma holders,35,True
+Application mode,15.0,International student (bachelor),30,True
+Application mode,5.0,1st phase - special contingent (Azores Island),16,True
+Application mode,10.0,Ordinance No. 854-B/99,10,True
+Application mode,2.0,Ordinance No. 612/93,3,True
+Application mode,57.0,Change of institution/course (International),1,True
+Application mode,26.0,"Ordinance No. 533-A/99, item b2) (Different Plan)",1,True
+Application mode,27.0,"Ordinance No. 533-A/99, item b3 (Other Institution)",1,True
+Course,9500.0,Nursing,766,True
+Course,9147.0,Management,380,True
+Course,9238.0,Social Service,355,True
+Course,9085.0,Veterinary Nursing,337,True
+Course,9773.0,Journalism and Communication,331,True
+Course,9991.0,Management (evening attendance),268,True
+Course,9670.0,Advertising and Marketing Management,268,True
+Course,9254.0,Tourism,252,True
+Course,9070.0,Communication Design,226,True
+Course,171.0,Animation and Multimedia Design,215,True
+Course,8014.0,Social Service (evening attendance),215,True
+Course,9003.0,Agronomy,210,True
+Course,9853.0,Basic Education,192,True
+Course,9119.0,Informatics Engineering,170,True
+Course,9130.0,Equinculture,141,True
+Course,9556.0,Oral Hygiene,86,True
+Course,33.0,Biofuel Production Technologies,12,True
+Daytime/evening attendance,1.0,daytime,3941,True
+Daytime/evening attendance,0.0,evening,483,True
+Debtor,0.0,no,3921,True
+Debtor,1.0,yes,503,True
+Displaced,1.0,yes,2426,True
+Displaced,0.0,no,1998,True
+Educational special needs,0.0,no,4373,True
+Educational special needs,1.0,yes,51,True
+Father's occupation,9.0,Unskilled Workers,1010,True
+Father's occupation,7.0,"Skilled Workers in Industry, Construction and Craftsmen",666,True
+Father's occupation,5.0,"Personal Services, Security and Safety Workers and Sellers",516,True
+Father's occupation,4.0,Administrative staff,386,True
+Father's occupation,3.0,Intermediate Level Technicians and Professions,384,True
+Father's occupation,8.0,Installation and Machine Operators and Assembly Workers,318,True
+Father's occupation,10.0,Armed Forces Professions,266,True
+Father's occupation,6.0,"Farmers and Skilled Workers in Agriculture, Fisheries and Forestry",242,True
+Father's occupation,2.0,Specialists in Intellectual and Scientific Activities,197,True
+Father's occupation,1.0,"Representatives of the Legislative Power and Executive Bodies, Directors, Directors and Executive Managers",134,True
+Father's occupation,0.0,Student,128,True
+Father's occupation,90.0,Other Situation,65,True
+Father's occupation,99.0,(blank),19,True
+Father's occupation,193.0,"Unskilled workers in extractive industry, construction, manufacturing and transport",15,True
+Father's occupation,144.0,Other administrative support staff,8,True
+Father's occupation,171.0,"Skilled construction workers and the like, except electricians",8,True
+Father's occupation,192.0,"Unskilled workers in agriculture, animal production, fisheries and forestry",6,True
+Father's occupation,163.0,"Farmers, livestock keepers, fishermen, hunters and gatherers, subsistence",5,True
+Father's occupation,175.0,"Workers in food processing, woodworking, clothing and other industries and crafts",4,True
+Father's occupation,103.0,Other Armed Forces personnel,4,True
+Father's occupation,135.0,Information and communication technology technicians,3,True
+Father's occupation,152.0,sellers,3,True
+Father's occupation,183.0,Vehicle drivers and mobile equipment operators,3,True
+Father's occupation,181.0,Fixed plant and machine operators,3,True
+Father's occupation,123.0,teachers,3,True
+Father's occupation,151.0,personal service workers,2,True
+Father's occupation,182.0,assembly workers,2,True
+Father's occupation,194.0,Meal preparation assistants,2,True
+Father's occupation,172.0,"Skilled workers in metallurgy, metalworking and similar",2,True
+Father's occupation,122.0,Health professionals,2,True
+Father's occupation,102.0,Armed Forces Sergeants,2,True
+Father's occupation,112.0,Directors of administrative and commercial services,2,True
+Father's occupation,124.0,"Specialists in finance, accounting, administrative organization, public and commercial relations",1,True
+Father's occupation,121.0,"Specialists in the physical sciences, mathematics, engineering and related techniques",1,True
+Father's occupation,195.0,Street vendors (except food) and street service providers,1,True
+Father's occupation,161.0,Market-oriented farmers and skilled agricultural and animal production workers,1,True
+Father's occupation,132.0,"Technicians and professionals, of intermediate level of health",1,True
+Father's occupation,131.0,Intermediate level science and engineering technicians and professions,1,True
+Father's occupation,143.0,"Data, accounting, statistical, financial services and registry-related operators",1,True
+Father's occupation,134.0,"Intermediate level technicians from legal, social, sports, cultural and similar services",1,True
+Father's occupation,153.0,Personal care workers and the like,1,True
+Father's occupation,174.0,Skilled workers in electricity and electronics,1,True
+Father's occupation,141.0,"Office workers, secretaries in general and data processing operators",1,True
+Father's occupation,114.0,"Hotel, catering, trade and other services directors",1,True
+Father's occupation,101.0,Armed Forces Officers,1,True
+Father's occupation,154.0,Protection and security services personnel,1,True
+Father's qualification,37.0,Basic education 1st cycle (4th/5th year) or equiv.,1209,True
+Father's qualification,19.0,Basic Education 3rd Cycle (9th/10th/11th Year) or Equiv.,968,True
+Father's qualification,1.0,Secondary Education - 12th Year of Schooling or Eq.,904,True
+Father's qualification,38.0,Basic Education 2nd Cycle (6th/7th/8th Year) or Equiv.,702,True
+Father's qualification,3.0,Higher Education - Degree,282,True
+Father's qualification,34.0,Unknown,112,True
+Father's qualification,2.0,Higher Education - Bachelor's Degree,68,True
+Father's qualification,4.0,Higher Education - Master's,39,True
+Father's qualification,12.0,Other - 11th Year of Schooling,38,True
+Father's qualification,39.0,Technological specialization course,20,True
+Father's qualification,5.0,Higher Education - Doctorate,18,True
+Father's qualification,11.0,7th Year (Old),10,True
+Father's qualification,36.0,Can read without having a 4th year of schooling,8,True
+Father's qualification,9.0,12th Year of Schooling - Not Completed,5,True
+Father's qualification,40.0,Higher education - degree (1st cycle),5,True
+Father's qualification,14.0,10th Year of Schooling,4,True
+Father's qualification,22.0,Technical-professional course,4,True
+Father's qualification,30.0,8th year of schooling,4,True
+Father's qualification,29.0,9th Year of Schooling - Not Completed,3,True
+Father's qualification,26.0,7th year of schooling,2,True
+Father's qualification,35.0,Can't read or write,2,True
+Father's qualification,41.0,Specialized higher studies course,2,True
+Father's qualification,43.0,Higher Education - Master (2nd cycle),2,True
+Father's qualification,10.0,11th Year of Schooling - Not Completed,2,True
+Father's qualification,6.0,Frequency of Higher Education,2,True
+Father's qualification,20.0,Complementary High School Course,1,True
+Father's qualification,13.0,2nd year complementary high school course,1,True
+Father's qualification,18.0,General commerce course,1,True
+Father's qualification,42.0,Professional higher technical course,1,True
+Father's qualification,25.0,Complementary High School Course - not concluded,1,True
+Father's qualification,44.0,Higher Education - Doctorate (3rd cycle),1,True
+Father's qualification,33.0,Supplementary Accounting and Administration,1,True
+Father's qualification,27.0,2nd cycle of the general high school course,1,True
+Father's qualification,31.0,General Course of Administration and Commerce,1,True
+Gender,0.0,female,2868,True
+Gender,1.0,male,1556,True
+International,0.0,no,4314,True
+International,1.0,yes,110,True
+Marital status,1.0,single,3919,True
+Marital status,2.0,married,379,True
+Marital status,4.0,divorced,91,True
+Marital status,5.0,facto union,25,True
+Marital status,6.0,legally separated,6,True
+Marital status,3.0,widower,4,True
+Mother's occupation,9.0,Unskilled Workers,1577,True
+Mother's occupation,4.0,Administrative staff,817,True
+Mother's occupation,5.0,"Personal Services, Security and Safety Workers and Sellers",530,True
+Mother's occupation,3.0,Intermediate Level Technicians and Professions,351,True
+Mother's occupation,2.0,Specialists in Intellectual and Scientific Activities,318,True
+Mother's occupation,7.0,"Skilled Workers in Industry, Construction and Craftsmen",272,True
+Mother's occupation,0.0,Student,144,True
+Mother's occupation,1.0,"Representatives of the Legislative Power and Executive Bodies, Directors, Directors and Executive Managers",102,True
+Mother's occupation,6.0,"Farmers and Skilled Workers in Agriculture, Fisheries and Forestry",91,True
+Mother's occupation,90.0,Other Situation,70,True
+Mother's occupation,8.0,Installation and Machine Operators and Assembly Workers,36,True
+Mother's occupation,191.0,cleaning workers,26,True
+Mother's occupation,99.0,(blank),17,True
+Mother's occupation,194.0,Meal preparation assistants,11,True
+Mother's occupation,141.0,"Office workers, secretaries in general and data processing operators",8,True
+Mother's occupation,123.0,teachers,7,True
+Mother's occupation,144.0,Other administrative support staff,6,True
+Mother's occupation,175.0,"Workers in food processing, woodworking, clothing and other industries and crafts",5,True
+Mother's occupation,192.0,"Unskilled workers in agriculture, animal production, fisheries and forestry",5,True
+Mother's occupation,134.0,"Intermediate level technicians from legal, social, sports, cultural and similar services",4,True
+Mother's occupation,10.0,Armed Forces Professions,4,True
+Mother's occupation,193.0,"Unskilled workers in extractive industry, construction, manufacturing and transport",4,True
+Mother's occupation,151.0,personal service workers,3,True
+Mother's occupation,132.0,"Technicians and professionals, of intermediate level of health",3,True
+Mother's occupation,143.0,"Data, accounting, statistical, financial services and registry-related operators",3,True
+Mother's occupation,152.0,sellers,2,True
+Mother's occupation,122.0,Health professionals,2,True
+Mother's occupation,153.0,Personal care workers and the like,2,True
+Mother's occupation,125.0,Specialists in information and communication technologies (ICT),1,True
+Mother's occupation,173.0,"Skilled workers in printing, precision instrument manufacturing, jewelers, artisans and the like",1,True
+Mother's occupation,131.0,Intermediate level science and engineering technicians and professions,1,True
+Mother's occupation,171.0,"Skilled construction workers and the like, except electricians",1,True
+Mother's qualification,1.0,Secondary Education - 12th Year of Schooling or Eq.,1069,True
+Mother's qualification,37.0,Basic education 1st cycle (4th/5th year) or equiv.,1009,True
+Mother's qualification,19.0,Basic Education 3rd Cycle (9th/10th/11th Year) or Equiv.,953,True
+Mother's qualification,38.0,Basic Education 2nd Cycle (6th/7th/8th Year) or Equiv.,562,True
+Mother's qualification,3.0,Higher Education - Degree,438,True
+Mother's qualification,34.0,Unknown,130,True
+Mother's qualification,2.0,Higher Education - Bachelor's Degree,83,True
+Mother's qualification,4.0,Higher Education - Master's,49,True
+Mother's qualification,12.0,Other - 11th Year of Schooling,42,True
+Mother's qualification,5.0,Higher Education - Doctorate,21,True
+Mother's qualification,40.0,Higher education - degree (1st cycle),9,True
+Mother's qualification,9.0,12th Year of Schooling - Not Completed,8,True
+Mother's qualification,39.0,Technological specialization course,8,True
+Mother's qualification,41.0,Specialized higher studies course,6,True
+Mother's qualification,42.0,Professional higher technical course,4,True
+Mother's qualification,6.0,Frequency of Higher Education,4,True
+Mother's qualification,43.0,Higher Education - Master (2nd cycle),4,True
+Mother's qualification,11.0,7th Year (Old),3,True
+Mother's qualification,30.0,8th year of schooling,3,True
+Mother's qualification,35.0,Can't read or write,3,True
+Mother's qualification,36.0,Can read without having a 4th year of schooling,3,True
+Mother's qualification,10.0,11th Year of Schooling - Not Completed,3,True
+Mother's qualification,29.0,9th Year of Schooling - Not Completed,3,True
+Mother's qualification,14.0,10th Year of Schooling,2,True
+Mother's qualification,18.0,General commerce course,1,True
+Mother's qualification,22.0,Technical-professional course,1,True
+Mother's qualification,27.0,2nd cycle of the general high school course,1,True
+Mother's qualification,26.0,7th year of schooling,1,True
+Mother's qualification,44.0,Higher Education - Doctorate (3rd cycle),1,True
+Nacionality,1.0,Portuguese,4314,True
+Nacionality,41.0,Brazilian,38,True
+Nacionality,26.0,Santomean,14,True
+Nacionality,6.0,Spanish,13,True
+Nacionality,22.0,Cape Verdean,13,True
+Nacionality,24.0,Guinean,5,True
+Nacionality,103.0,Ukrainian,3,True
+Nacionality,11.0,Italian,3,True
+Nacionality,100.0,Moldova (Republic of),3,True
+Nacionality,62.0,Romanian,2,True
+Nacionality,25.0,Mozambican,2,True
+Nacionality,21.0,Angolan,2,True
+Nacionality,101.0,Mexican,2,True
+Nacionality,2.0,German,2,True
+Nacionality,105.0,Russian,2,True
+Nacionality,13.0,Dutch,1,True
+Nacionality,32.0,Turkish,1,True
+Nacionality,109.0,Colombian,1,True
+Nacionality,108.0,Cuban,1,True
+Nacionality,14.0,English,1,True
+Nacionality,17.0,Lithuanian,1,True
+Previous qualification,1.0,Secondary education,3717,True
+Previous qualification,39.0,Technological specialization course,219,True
+Previous qualification,19.0,Basic education 3rd cycle (9th/10th/11th year) or equiv.,162,True
+Previous qualification,3.0,Higher education - degree,126,True
+Previous qualification,12.0,Other - 11th year of schooling,45,True
+Previous qualification,40.0,Higher education - degree (1st cycle),40,True
+Previous qualification,42.0,Professional higher technical course,36,True
+Previous qualification,2.0,Higher education - bachelor's degree,23,True
+Previous qualification,6.0,Frequency of higher education,16,True
+Previous qualification,9.0,12th year of schooling - not completed,11,True
+Previous qualification,4.0,Higher education - master's,8,True
+Previous qualification,38.0,Basic education 2nd cycle (6th/7th/8th year) or equiv.,7,True
+Previous qualification,43.0,Higher education - master (2nd cycle),6,True
+Previous qualification,10.0,11th year of schooling - not completed,4,True
+Previous qualification,15.0,10th year of schooling - not completed,2,True
+Previous qualification,5.0,Higher education - doctorate,1,True
+Previous qualification,14.0,10th year of schooling,1,True
+Scholarship holder,0.0,no,3325,True
+Scholarship holder,1.0,yes,1099,True
+Target,,<missing>,4424,
+Tuition fees up to date,1.0,yes,3896,True
+Tuition fees up to date,0.0,no,528,True

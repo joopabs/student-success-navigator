@@ -1,0 +1,70 @@
+column,rule,count
+Marital status,non-numeric or missing,0
+Marital status,code not in UCI documentation,0
+Application mode,non-numeric or missing,0
+Application mode,code not in UCI documentation,0
+Application order,non-numeric or missing,0
+Application order,"outside documented range [0, 9]",0
+Course,non-numeric or missing,0
+Course,code not in UCI documentation,0
+Daytime/evening attendance,non-numeric or missing,0
+Daytime/evening attendance,code not in UCI documentation,0
+Previous qualification,non-numeric or missing,0
+Previous qualification,code not in UCI documentation,0
+Previous qualification (grade),non-numeric or missing,0
+Previous qualification (grade),"outside documented range [0, 200]",0
+Nacionality,non-numeric or missing,0
+Nacionality,code not in UCI documentation,0
+Mother's qualification,non-numeric or missing,0
+Mother's qualification,code not in UCI documentation,0
+Father's qualification,non-numeric or missing,0
+Father's qualification,code not in UCI documentation,0
+Mother's occupation,non-numeric or missing,0
+Mother's occupation,code not in UCI documentation,0
+Father's occupation,non-numeric or missing,0
+Father's occupation,code not in UCI documentation,0
+Admission grade,non-numeric or missing,0
+Admission grade,"outside documented range [0, 200]",0
+Displaced,non-numeric or missing,0
+Displaced,code not in UCI documentation,0
+Educational special needs,non-numeric or missing,0
+Educational special needs,code not in UCI documentation,0
+Debtor,non-numeric or missing,0
+Debtor,code not in UCI documentation,0
+Tuition fees up to date,non-numeric or missing,0
+Tuition fees up to date,code not in UCI documentation,0
+Gender,non-numeric or missing,0
+Gender,code not in UCI documentation,0
+Scholarship holder,non-numeric or missing,0
+Scholarship holder,code not in UCI documentation,0
+Age at enrollment,non-numeric or missing,0
+Age at enrollment,negative value,0
+International,non-numeric or missing,0
+International,code not in UCI documentation,0
+Curricular units 1st sem (credited),non-numeric or missing,0
+Curricular units 1st sem (credited),negative value,0
+Curricular units 1st sem (enrolled),non-numeric or missing,0
+Curricular units 1st sem (enrolled),negative value,0
+Curricular units 1st sem (evaluations),non-numeric or missing,0
+Curricular units 1st sem (evaluations),negative value,0
+Curricular units 1st sem (approved),non-numeric or missing,0
+Curricular units 1st sem (approved),negative value,0
+Curricular units 1st sem (grade),non-numeric or missing,0
+Curricular units 1st sem (grade),"outside documented range [0, 20]",0
+Curricular units 1st sem (without evaluations),non-numeric or missing,0
+Curricular units 1st sem (without evaluations),negative value,0
+Curricular units 2nd sem (credited),non-numeric or missing,0
+Curricular units 2nd sem (credited),negative value,0
+Curricular units 2nd sem (enrolled),non-numeric or missing,0
+Curricular units 2nd sem (enrolled),negative value,0
+Curricular units 2nd sem (evaluations),non-numeric or missing,0
+Curricular units 2nd sem (evaluations),negative value,0
+Curricular units 2nd sem (approved),non-numeric or missing,0
+Curricular units 2nd sem (approved),negative value,0
+Curricular units 2nd sem (grade),non-numeric or missing,0
+Curricular units 2nd sem (grade),"outside documented range [0, 20]",0
+Curricular units 2nd sem (without evaluations),non-numeric or missing,0
+Curricular units 2nd sem (without evaluations),negative value,0
+Unemployment rate,non-numeric or missing,0
+Inflation rate,non-numeric or missing,0
+GDP,non-numeric or missing,0

@@ -1,0 +1,20 @@
+column,q1,q3,iqr_low_fence,iqr_high_fence,n_below,n_above,n_zero
+Application order,1.0,2.0,-0.5,3.5,0,541,1
+Previous qualification (grade),125.0,140.0,102.5,162.5,93,86,0
+Admission grade,117.9,134.8,92.55,160.15000000000003,0,86,0
+Age at enrollment,19.0,25.0,10.0,34.0,0,441,0
+Curricular units 1st sem (credited),0.0,0.0,0.0,0.0,0,577,3847
+Curricular units 1st sem (enrolled),5.0,7.0,2.0,10.0,187,237,180
+Curricular units 1st sem (evaluations),6.0,10.0,0.0,16.0,0,158,349
+Curricular units 1st sem (approved),3.0,6.0,-1.5,10.5,0,180,718
+Curricular units 1st sem (grade),11.0,13.4,7.3999999999999995,17.0,718,8,718
+Curricular units 1st sem (without evaluations),0.0,0.0,0.0,0.0,0,294,4130
+Curricular units 2nd sem (credited),0.0,0.0,0.0,0.0,0,530,3894
+Curricular units 2nd sem (enrolled),5.0,7.0,2.0,10.0,183,186,180
+Curricular units 2nd sem (evaluations),6.0,10.0,0.0,16.0,0,109,401
+Curricular units 2nd sem (approved),2.0,6.0,-4.0,12.0,0,44,870
+Curricular units 2nd sem (grade),10.75,13.333333333333334,6.874999999999999,17.208333333333336,870,7,870
+Curricular units 2nd sem (without evaluations),0.0,0.0,0.0,0.0,0,282,4142
+Unemployment rate,9.4,13.9,2.6500000000000004,20.65,0,0,0
+Inflation rate,0.3,2.6,-3.1500000000000004,6.050000000000001,0,0,0
+GDP,-1.7,1.79,-6.9350000000000005,7.025,0,0,0

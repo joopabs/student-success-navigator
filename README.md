@@ -3,8 +3,8 @@
 Fair and explainable first-semester dropout risk prediction for early academic support, with a
 Dash decision-support companion app.
 
-> **Status: Milestone 1 scaffold.** No data has been downloaded, no model has been trained, and
-> no results exist yet. Every `[PENDING: ...]` marker below names the artifact that will supply
+> **Status: Milestone 2 complete (data acquisition, schema validation, profiling, data dictionary).**
+> No model has been trained and no model results exist yet. Every `[PENDING: ...]` marker below names the artifact that will supply
 > the value once the pipeline has actually been run.
 
 ## What this project does
@@ -35,7 +35,7 @@ Section 5). Evidence links are filled in as milestones complete.
 
 ### Step 2: Data collection and understanding (10 pts)
 - Source, licence, citation: [`data/README.md`](data/README.md)
-- Dataset overview and data dictionary: `[PENDING: data/data_dictionary.md, reports/tables/profile_*.csv]`
+- Dataset overview: [`reports/data_overview.md`](reports/data_overview.md) · Data dictionary: [`data/data_dictionary.md`](data/data_dictionary.md) · Profile tables: `reports/tables/profile_*.csv`
 
 ### Step 3: Data preprocessing, EDA, and feature engineering (10 pts)
 - Cleaning before/after counts, EDA, engineered features, selection, PCA: `[PENDING: reports/eda_feature_engineering_report.md]`
