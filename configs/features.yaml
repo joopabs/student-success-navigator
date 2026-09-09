@@ -1,0 +1,20 @@
+# Column availability classification and model allow-list.
+# Contract: specs/001-dropout-risk-navigator/contracts/feature-allowlist.md
+# Milestone 1 skeleton: NOTHING is allowed until every raw column is classified in Milestone 2 (T019).
+#
+# Each column entry:
+#   name: "<exact source column name>"
+#   availability: enrollment | first_semester | second_semester | outcome | ambiguous
+#   role: feature | sensitive | target | id | excluded
+#   dtype: numeric | categorical | binary
+#   adviser_visible: true | false
+#   encoding_source: "UCI variables table" | "Realinho et al. 2022" | "unverified"
+#   encoding_verified: true | false
+#   note: "<why this availability class>"
+columns: []
+
+# Engineered features: every input must itself be allow-listed.
+#   name: sem1_approval_rate
+#   inputs: ["<1st-sem approved col>", "<1st-sem enrolled col>"]
+#   adviser_visible: true
+engineered: []

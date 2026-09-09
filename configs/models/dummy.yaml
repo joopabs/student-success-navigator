@@ -1,0 +1,9 @@
+name: dummy
+estimator: sklearn.dummy.DummyClassifier
+params:
+  strategy: prior
+  random_state: ${seed}
+search_space: {}
+n_iter: 0
+use_selection: false
+use_pca: false

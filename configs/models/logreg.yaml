@@ -1,0 +1,13 @@
+name: logreg
+estimator: sklearn.linear_model.LogisticRegression
+params:
+  class_weight: balanced
+  max_iter: 2000
+  solver: liblinear
+  random_state: ${seed}
+search_space:
+  C: {type: loguniform, low: 0.001, high: 100}
+  penalty: {type: choice, values: [l1, l2]}
+n_iter: 30
+use_selection: true
+use_pca: false

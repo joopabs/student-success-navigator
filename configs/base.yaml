@@ -1,0 +1,77 @@
+# Student Success Navigator: base configuration.
+# Contract: specs/001-dropout-risk-navigator/contracts/config-schema.md
+# Every value marked ILLUSTRATIVE is an assumption, not a measured fact.
+
+project:
+  name: student-success-navigator
+  model_version: "1.0.0"
+
+seed: 42
+
+paths:
+  raw_csv: data/raw/data.csv
+  interim_dir: data/interim
+  processed_dir: data/processed
+  demo_dir: data/demo
+  evaluation_dir: data/evaluation      # evaluator-only; never read by the app
+  local_dir: data/local                # Git-ignored runtime state (action log)
+  models_dir: models
+  reports_dir: reports
+  features_yaml: configs/features.yaml
+  language_yaml: configs/language.yaml
+
+data:
+  expected_sha256: ""                  # filled in Milestone 2 after download (T015/T018)
+  target_column: Target
+  target_positive_label: Dropout       # verified in PV-02
+  target_expected_labels: [Dropout, Enrolled, Graduate]
+
+split:
+  test_size: 0.2
+  stratify: true
+  cv_folds: 5
+
+capacity:
+  per_week: 10                         # ILLUSTRATIVE students an adviser can contact per week (PV-10)
+  window_weeks: 5                      # ILLUSTRATIVE outreach window
+  k: 50                                # derived = per_week * window_weeks
+  window_sensitivity_weeks: [2, 5, 10]
+  illustrative: true
+
+threshold:
+  rule: oof_quantile_for_capacity
+  band_names: ["Priority outreach", "Check-in suggested", "Standard support"]
+  middle_band_selection_rate_multiplier: 2.0
+
+imbalance:
+  primary: class_weight
+  compare_smote: true                  # SMOTENC with categorical indices (research R-07)
+
+selection:
+  filter_method: mutual_info
+  embedded_method: l1_logreg
+  k_grid: [10, 15, 20, all]
+
+pca:
+  variance_threshold: 0.95
+  compare_in_cv: true
+
+fairness:
+  attributes: [gender, age_band]       # gender requires a verified encoding (PV-04)
+  min_group_size: 30                   # assumption; PV-07 finalises
+  reference_group: largest
+  age_bands: []                        # filled after PV-06 profiling
+
+explain:
+  method: shap
+  pdp_min_distinct_values: 10
+
+app:
+  host: 127.0.0.1
+  port: 8050
+  expected_model_version: "1.0.0"
+  actions_db: data/local/actions.sqlite
+  disclaimer_key: educational
+
+report:
+  reproduction_tolerance_file: docs/REPRODUCIBILITY.md

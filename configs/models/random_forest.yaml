@@ -1,0 +1,14 @@
+name: random_forest
+estimator: sklearn.ensemble.RandomForestClassifier
+params:
+  class_weight: balanced_subsample
+  n_estimators: 500
+  n_jobs: 1
+  random_state: ${seed}
+search_space:
+  max_depth: {type: randint, low: 4, high: 24}
+  min_samples_leaf: {type: randint, low: 2, high: 40}
+  max_features: {type: choice, values: [sqrt, log2, 0.5]}
+n_iter: 40
+use_selection: true
+use_pca: false

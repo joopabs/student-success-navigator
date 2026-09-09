@@ -1,0 +1,14 @@
+name: hist_gb
+estimator: sklearn.ensemble.HistGradientBoostingClassifier
+params:
+  class_weight: balanced
+  early_stopping: true
+  random_state: ${seed}
+search_space:
+  learning_rate: {type: loguniform, low: 0.01, high: 0.3}
+  max_leaf_nodes: {type: randint, low: 8, high: 64}
+  min_samples_leaf: {type: randint, low: 10, high: 100}
+  l2_regularization: {type: loguniform, low: 0.0001, high: 1.0}
+n_iter: 40
+use_selection: true
+use_pca: false

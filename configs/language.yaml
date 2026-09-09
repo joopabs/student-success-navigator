@@ -1,0 +1,29 @@
+# Adviser-facing language rules and feature phrasing.
+# Contract: specs/001-dropout-risk-navigator/contracts/config-schema.md (research R-18)
+
+# Never allowed in adviser-facing text, reports, README, docs, or slides (case-insensitive).
+prohibited_terms:
+  - "at risk of failing"
+  - "likely to drop out"
+  - "problem student"
+  - "failing student"
+
+# A paragraph that mentions one of these AND contains a currency or percent figure
+# MUST also contain one of `assumption_labels`, otherwise scan-language flags it.
+business_terms: ["roi", "saving", "savings", "cost", "value", "capacity", "return on investment"]
+assumption_labels: ["illustrative", "assumption", "assumed", "hypothetical"]
+
+# Over-claims that must never appear unqualified.
+overclaim_phrases:
+  - "the model is fair"
+  - "the model is unbiased"
+  - "no bias"
+
+# Per-feature adviser phrasing. Populated in Milestone 7 (T060); scan-language checks that every
+# allow-listed and engineered feature has an entry once configs/features.yaml is populated.
+#   sem1_approval_rate:
+#     label: "First-semester course completion"
+#     higher_phrase: "completed a larger share of first-semester courses"
+#     lower_phrase: "completed a smaller share of first-semester courses"
+#     adviser_visible: true
+features: {}
