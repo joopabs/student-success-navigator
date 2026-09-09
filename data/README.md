@@ -72,7 +72,8 @@ Source files: `reports/tables/profile_*.csv`, `reports/tables/validate_report.js
 - Values violating documented codes/ranges: **0 rule hits** (`profile_invalid_values.csv`);
   all observed categorical codes appear in the UCI documentation
 - Age at enrollment: min 17, median 20, max 70, mean 23.27
-  (input to PV-06 age-band decision in Milestone 3)
+  (PV-06 decision made 2026-09-10: bands 17-19 / 20-24 / 25-34 / 35+, see `configs/base.yaml` and
+  `reports/eda_feature_engineering_report.md` section 8)
 - First-semester zero denominators (PV-08 input): 180 records with 0 units enrolled; 718 with grade 0 and 0 approved;
   0 records with approved > enrolled
 
@@ -85,6 +86,22 @@ Source files: `reports/tables/profile_*.csv`, `reports/tables/validate_report.js
 | Enrolled | 794 | 0.1795 | 0 |
 
 Derived `is_dropout` positive rate: **0.3212** (1421 of 4424).
+
+## Cleaning and split results (computed 2026-09-10 by `data clean` and `data split`)
+
+Source files: `reports/tables/clean_before_after.csv`, `split_summary.csv`, `zero_denominators.csv`;
+narrative in `reports/eda_feature_engineering_report.md`.
+
+- Cleaning: 4424 rows in, 4424 rows out. No row altered or
+  removed (0 duplicates, 0 missing, 0 undocumented codes or out-of-range values). Kept deliberately:
+  180 records with zero first-semester units enrolled and
+  718 with a first-semester grade of 0.
+- Split (stratified on `is_dropout`, seed 42, test_size 0.2): train **3539** (positive rate 0.3213),
+  test **885** (positive rate 0.3209).
+- Demo cohort = the 885 test records, `record_id` + 21 allowed features only. Evaluator-only file holds
+  `is_dropout`, `Target`, the 6 sensitive columns, and `age_band` for the same records.
+- Zero denominators in train: 138 records with 0 units enrolled; the four rate features are NaN
+  for them and are imputed inside the cross-validation pipeline in Milestone 4, never here.
 
 ## Column classification (configs/features.yaml, generated 2026-09-10)
 

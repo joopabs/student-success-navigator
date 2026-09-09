@@ -732,4 +732,52 @@ columns:
   encoding_source: UCI variables table (api/dataset?id=697, retrieved 2026-09-10)
   encoding_verified: null
   note: Target; never a feature.
-engineered: []
+engineered:
+- name: sem1_approval_rate
+  inputs:
+  - Curricular units 1st sem (approved)
+  - Curricular units 1st sem (enrolled)
+  adviser_visible: true
+  rationale: 'Share of enrolled first-semester units passed: the most direct early signal of academic progress.'
+- name: sem1_evaluation_participation_rate
+  inputs:
+  - Curricular units 1st sem (evaluations)
+  - Curricular units 1st sem (enrolled)
+  adviser_visible: true
+  rationale: 'Evaluations sat per enrolled unit: engagement with assessment, distinct from passing.'
+- name: sem1_non_evaluation_rate
+  inputs:
+  - Curricular units 1st sem (without evaluations)
+  - Curricular units 1st sem (enrolled)
+  adviser_visible: true
+  rationale: 'Share of enrolled units with no evaluation at all: a disengagement or withdrawal signal.'
+- name: grade_diff_vs_admission
+  inputs:
+  - Curricular units 1st sem (grade)
+  - Admission grade
+  adviser_visible: true
+  rationale: 'First-semester grade (0-20 scale, rescaled to 0-200) minus admission grade (0-200): change in performance
+    relative to entry level.'
+- name: sem1_credited_share
+  inputs:
+  - Curricular units 1st sem (credited)
+  - Curricular units 1st sem (enrolled)
+  adviser_visible: true
+  rationale: 'Share of enrolled units credited from prior study: workload actually taken is lower.'
+- name: sem1_load
+  inputs:
+  - Curricular units 1st sem (enrolled)
+  adviser_visible: true
+  rationale: 'Number of first-semester units enrolled: workload proxy (kept explicit for interpretability).'
+- name: sem1_any_approved
+  inputs:
+  - Curricular units 1st sem (approved)
+  adviser_visible: true
+  rationale: 'Whether at least one unit was passed: separates zero-progress students from the rest.'
+- name: age_band
+  inputs:
+  - Age at enrollment
+  adviser_visible: false
+  audit_only: true
+  rationale: EDA and fairness grouping only; derived from a sensitive column, never a model input. Bands in configs/base.yaml
+    fairness.age_bands (PV-06).

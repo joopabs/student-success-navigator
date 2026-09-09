@@ -35,3 +35,4 @@ select = ["E", "F", "I", "B", "UP"]
 
 [tool.ruff.lint.per-file-ignores]
 "src/ssn/reporting/tables.py" = ["E501"]  # markdown templates; long prose lines are intentional
+"src/ssn/reporting/figures.py" = ["E501"]  # figure titles and labels

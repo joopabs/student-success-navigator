@@ -1,0 +1,20 @@
+,spearman_with_is_dropout
+sem1_approval_rate,-0.5896893217853977
+Curricular units 1st sem (approved),-0.5136458965102195
+Curricular units 1st sem (grade),-0.4370510158465393
+sem1_any_approved,-0.4360516202208746
+grade_diff_vs_admission,-0.35699572858712864
+Curricular units 1st sem (enrolled),-0.16541339886306966
+sem1_load,-0.16541339886306966
+Admission grade,-0.10037183034160498
+Previous qualification (grade),-0.07875942838263252
+Application order,-0.07263619234387297
+GDP,-0.05810517916382512
+Curricular units 1st sem (evaluations),-0.043754732122963255
+Curricular units 1st sem (credited),-0.007566498621719601
+sem1_credited_share,-0.004895143045679736
+Unemployment rate,0.007176313142944585
+Inflation rate,0.014631491437374612
+sem1_evaluation_participation_rate,0.048226511965704225
+Curricular units 1st sem (without evaluations),0.08073117260664286
+sem1_non_evaluation_rate,0.08413122250398063

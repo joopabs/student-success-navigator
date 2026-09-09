@@ -1,0 +1,39 @@
+feature,is_dropout,n,mean,median,std,n_missing
+Admission grade,0,2402,128.0455,126.8,14.086,0
+Admission grade,1,1137,125.0723,123.5,15.0862,0
+Application order,0,2402,1.7835,1.0,1.3515,0
+Application order,1,1137,1.6183,1.0,1.2491,0
+Curricular units 1st sem (approved),0,2402,5.7186,6.0,2.6449,0
+Curricular units 1st sem (approved),1,1137,2.6069,2.0,2.8893,0
+Curricular units 1st sem (credited),0,2402,0.7585,0.0,2.4738,0
+Curricular units 1st sem (credited),1,1137,0.6236,0.0,2.1281,0
+Curricular units 1st sem (enrolled),0,2402,6.4692,6.0,2.5217,0
+Curricular units 1st sem (enrolled),1,1137,5.9138,6.0,2.2746,0
+Curricular units 1st sem (evaluations),0,2402,8.5346,8.0,3.7481,0
+Curricular units 1st sem (evaluations),1,1137,7.8575,8.0,4.9027,0
+Curricular units 1st sem (grade),0,2402,12.2309,12.7279,3.0911,0
+Curricular units 1st sem (grade),1,1137,7.3536,10.8182,6.0203,0
+Curricular units 1st sem (without evaluations),0,2402,0.1028,0.0,0.6242,0
+Curricular units 1st sem (without evaluations),1,1137,0.2093,0.0,0.8361,0
+GDP,0,2402,0.1014,0.79,2.2732,0
+GDP,1,1137,-0.128,0.32,2.2506,0
+Inflation rate,0,2402,1.2236,1.4,1.3671,0
+Inflation rate,1,1137,1.281,1.4,1.4,0
+Previous qualification (grade),0,2402,133.3205,133.1,13.3899,0
+Previous qualification (grade),1,1137,131.0943,133.1,12.8819,0
+Unemployment rate,0,2402,11.5326,11.1,2.6041,0
+Unemployment rate,1,1137,11.5969,11.1,2.7729,0
+sem1_approval_rate,0,2315,0.877,1.0,0.193,87
+sem1_approval_rate,1,1086,0.4096,0.4,0.3744,51
+sem1_evaluation_participation_rate,0,2315,1.3446,1.2,0.3962,87
+sem1_evaluation_participation_rate,1,1086,1.3424,1.3333,0.6974,51
+sem1_non_evaluation_rate,0,2315,0.0149,0.0,0.0751,87
+sem1_non_evaluation_rate,1,1086,0.0379,0.0,0.1476,51
+grade_diff_vs_admission,0,2402,-5.7366,0.2833,33.9217,0
+grade_diff_vs_admission,1,1137,-51.5361,-20.0,61.2163,0
+sem1_credited_share,0,2315,0.0687,0.0,0.1904,87
+sem1_credited_share,1,1086,0.0641,0.0,0.184,51
+sem1_load,0,2402,6.4692,6.0,2.5217,0
+sem1_load,1,1137,5.9138,6.0,2.2746,0
+sem1_any_approved,0,2402,0.9496,1.0,0.2188,0
+sem1_any_approved,1,1137,0.6069,1.0,0.4887,0

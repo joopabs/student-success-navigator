@@ -3,7 +3,7 @@
 Fair and explainable first-semester dropout risk prediction for early academic support, with a
 Dash decision-support companion app.
 
-> **Status: Milestone 2 complete (data acquisition, schema validation, profiling, data dictionary).**
+> **Status: Milestone 3 complete (cleaning, split, EDA, leakage-safe feature engineering).**
 > No model has been trained and no model results exist yet. Every `[PENDING: ...]` marker below names the artifact that will supply
 > the value once the pipeline has actually been run.
 
@@ -38,7 +38,8 @@ Section 5). Evidence links are filled in as milestones complete.
 - Dataset overview: [`reports/data_overview.md`](reports/data_overview.md) · Data dictionary: [`data/data_dictionary.md`](data/data_dictionary.md) · Profile tables: `reports/tables/profile_*.csv`
 
 ### Step 3: Data preprocessing, EDA, and feature engineering (10 pts)
-- Cleaning before/after counts, EDA, engineered features, selection, PCA: `[PENDING: reports/eda_feature_engineering_report.md]`
+- Cleaning, EDA, engineered features: [`reports/eda_feature_engineering_report.md`](reports/eda_feature_engineering_report.md) · figures in `reports/figures/` · notebook `notebooks/02_eda_feature_engineering.ipynb`
+- Feature selection and PCA: `[PENDING: Milestone 4]`
 
 ### Step 4: Model implementation and comparison (20 pts)
 - Dummy baseline plus logistic regression, random forest, gradient boosting: `[PENDING: reports/tables/cv_comparison.csv]`

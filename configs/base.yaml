@@ -60,7 +60,12 @@ fairness:
   attributes: [gender, age_band]       # gender requires a verified encoding (PV-04)
   min_group_size: 30                   # assumption; PV-07 finalises
   reference_group: largest
-  age_bands: []                        # filled after PV-06 profiling
+  age_bands:                           # PV-06 decision 2026-09-10 from reports/tables/eda_age_summary.csv (train):
+    - {name: "17-19", lower: 17, upper: 19}   # p25 = 19; traditional entry age
+    - {name: "20-24", lower: 20, upper: 24}   # median 20, p75 = 25
+    - {name: "25-34", lower: 25, upper: 34}   # mature entrants; p90 = 35
+    - {name: "35+",   lower: 35, upper: 120}  # oldest observed 70
+  # Alternatives compared (train counts / dropout rate) in reports/tables/eda_age_band_alternatives.csv
 
 explain:
   method: shap

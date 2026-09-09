@@ -1,0 +1,37 @@
+attribute,group,label,n,share,dropout_rate,reliable
+Educational special needs,0.0,no,3499,0.9887,0.3218,True
+Educational special needs,1.0,yes,40,0.0113,0.275,True
+Gender,0.0,female,2293,0.6479,0.2525,True
+Gender,1.0,male,1246,0.3521,0.4478,True
+International,0.0,no,3452,0.9754,0.3227,True
+International,1.0,yes,87,0.0246,0.2644,True
+Marital status,1.0,single,3127,0.8836,0.3006,True
+Marital status,2.0,married,306,0.0865,0.4641,True
+Marital status,3.0,widower,3,0.0008,0.3333,False
+Marital status,4.0,divorced,72,0.0203,0.5417,True
+Marital status,5.0,facto union,25,0.0071,0.44,False
+Marital status,6.0,legally separated,6,0.0017,0.6667,False
+Nacionality,1.0,Portuguese,3452,0.9754,0.3227,True
+Nacionality,2.0,German,2,0.0006,0.0,False
+Nacionality,6.0,Spanish,10,0.0028,0.2,False
+Nacionality,11.0,Italian,3,0.0008,0.0,False
+Nacionality,13.0,Dutch,1,0.0003,0.0,False
+Nacionality,14.0,English,1,0.0003,0.0,False
+Nacionality,17.0,Lithuanian,1,0.0003,1.0,False
+Nacionality,21.0,Angolan,2,0.0006,0.5,False
+Nacionality,22.0,Cape Verdean,11,0.0031,0.3636,False
+Nacionality,24.0,Guinean,3,0.0008,0.3333,False
+Nacionality,25.0,Mozambican,2,0.0006,0.0,False
+Nacionality,26.0,Santomean,12,0.0034,0.0833,False
+Nacionality,32.0,Turkish,1,0.0003,0.0,False
+Nacionality,41.0,Brazilian,28,0.0079,0.2857,False
+Nacionality,100.0,Moldova (Republic of),3,0.0008,0.6667,False
+Nacionality,101.0,Mexican,1,0.0003,0.0,False
+Nacionality,103.0,Ukrainian,2,0.0006,0.5,False
+Nacionality,105.0,Russian,2,0.0006,0.5,False
+Nacionality,108.0,Cuban,1,0.0003,0.0,False
+Nacionality,109.0,Colombian,1,0.0003,1.0,False
+age_band,17-19,,1549,0.4377,0.2137,True
+age_band,20-24,,1078,0.3046,0.2801,True
+age_band,25-34,,556,0.1571,0.5558,True
+age_band,35+,,356,0.1006,0.5478,True

@@ -1,0 +1,4 @@
+split,n,n_dropout,positive_rate
+train,3539,1137.0,0.3213
+test,885,284.0,0.3209
+demo_cohort (=test features only),885,,

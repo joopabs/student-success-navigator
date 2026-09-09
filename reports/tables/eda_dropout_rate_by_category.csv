@@ -1,0 +1,191 @@
+column,code,label,n,dropout_rate,reliable
+Application mode,1,1st phase - general contingent,1345,0.2015,True
+Application mode,2,Ordinance No. 612/93,1,0.0,False
+Application mode,5,1st phase - special contingent (Azores Island),14,0.1429,False
+Application mode,7,Holders of other higher courses,118,0.6186,True
+Application mode,10,Ordinance No. 854-B/99,9,0.3333,False
+Application mode,15,International student (bachelor),24,0.125,False
+Application mode,16,1st phase - special contingent (Madeira Island),30,0.1667,True
+Application mode,17,2nd phase - general contingent,700,0.2857,True
+Application mode,18,3rd phase - general contingent,96,0.375,True
+Application mode,26,"Ordinance No. 533-A/99, item b2) (Different Plan)",1,1.0,False
+Application mode,27,"Ordinance No. 533-A/99, item b3 (Other Institution)",1,1.0,False
+Application mode,39,Over 23 years old,629,0.558,True
+Application mode,42,Transfer,66,0.4545,True
+Application mode,43,Change of course,257,0.358,True
+Application mode,44,Technological specialization diploma holders,171,0.2982,True
+Application mode,51,Change of institution/course,47,0.3191,True
+Application mode,53,Short cycle diploma holders,29,0.1034,False
+Application mode,57,Change of institution/course (International),1,0.0,False
+Course,33,Biofuel Production Technologies,9,0.5556,False
+Course,171,Animation and Multimedia Design,168,0.3333,True
+Course,8014,Social Service (evening attendance),182,0.3462,True
+Course,9003,Agronomy,172,0.4186,True
+Course,9070,Communication Design,180,0.2278,True
+Course,9085,Veterinary Nursing,262,0.2595,True
+Course,9119,Informatics Engineering,138,0.5435,True
+Course,9130,Equinculture,105,0.5714,True
+Course,9147,Management,314,0.3535,True
+Course,9238,Social Service,276,0.1667,True
+Course,9254,Tourism,204,0.3922,True
+Course,9500,Nursing,622,0.1656,True
+Course,9556,Oral Hygiene,70,0.3857,True
+Course,9670,Advertising and Marketing Management,208,0.351,True
+Course,9773,Journalism and Communication,268,0.3134,True
+Course,9853,Basic Education,151,0.4371,True
+Course,9991,Management (evening attendance),210,0.5095,True
+Daytime/evening attendance,0,evening,392,0.4337,True
+Daytime/evening attendance,1,daytime,3147,0.3073,True
+Displaced,0,no,1609,0.3791,True
+Displaced,1,yes,1930,0.2731,True
+Father's occupation,0,Student,95,0.6737,True
+Father's occupation,1,"Representatives of the Legislative Power and Executive Bodies, Directors, Directors and Executive Managers",111,0.3514,True
+Father's occupation,2,Specialists in Intellectual and Scientific Activities,163,0.3558,True
+Father's occupation,3,Intermediate Level Technicians and Professions,304,0.3059,True
+Father's occupation,4,Administrative staff,301,0.3654,True
+Father's occupation,5,"Personal Services, Security and Safety Workers and Sellers",402,0.2687,True
+Father's occupation,6,"Farmers and Skilled Workers in Agriculture, Fisheries and Forestry",197,0.2893,True
+Father's occupation,7,"Skilled Workers in Industry, Construction and Craftsmen",534,0.279,True
+Father's occupation,8,Installation and Machine Operators and Assembly Workers,260,0.2962,True
+Father's occupation,9,Unskilled Workers,812,0.3202,True
+Father's occupation,10,Armed Forces Professions,219,0.3242,True
+Father's occupation,90,Other Situation,50,0.74,True
+Father's occupation,99,(blank),15,0.6667,False
+Father's occupation,102,Armed Forces Sergeants,2,0.0,False
+Father's occupation,103,Other Armed Forces personnel,3,0.0,False
+Father's occupation,112,Directors of administrative and commercial services,2,0.5,False
+Father's occupation,114,"Hotel, catering, trade and other services directors",1,0.0,False
+Father's occupation,121,"Specialists in the physical sciences, mathematics, engineering and related techniques",1,0.0,False
+Father's occupation,122,Health professionals,1,0.0,False
+Father's occupation,123,teachers,3,0.0,False
+Father's occupation,124,"Specialists in finance, accounting, administrative organization, public and commercial relations",1,0.0,False
+Father's occupation,131,Intermediate level science and engineering technicians and professions,1,0.0,False
+Father's occupation,132,"Technicians and professionals, of intermediate level of health",1,0.0,False
+Father's occupation,134,"Intermediate level technicians from legal, social, sports, cultural and similar services",1,0.0,False
+Father's occupation,135,Information and communication technology technicians,2,0.0,False
+Father's occupation,141,"Office workers, secretaries in general and data processing operators",1,0.0,False
+Father's occupation,143,"Data, accounting, statistical, financial services and registry-related operators",1,0.0,False
+Father's occupation,144,Other administrative support staff,7,0.0,False
+Father's occupation,151,personal service workers,2,0.0,False
+Father's occupation,152,sellers,3,0.3333,False
+Father's occupation,153,Personal care workers and the like,1,0.0,False
+Father's occupation,161,Market-oriented farmers and skilled agricultural and animal production workers,1,0.0,False
+Father's occupation,163,"Farmers, livestock keepers, fishermen, hunters and gatherers, subsistence",4,0.0,False
+Father's occupation,171,"Skilled construction workers and the like, except electricians",6,0.0,False
+Father's occupation,172,"Skilled workers in metallurgy, metalworking and similar",1,0.0,False
+Father's occupation,174,Skilled workers in electricity and electronics,1,0.0,False
+Father's occupation,175,"Workers in food processing, woodworking, clothing and other industries and crafts",3,0.0,False
+Father's occupation,181,Fixed plant and machine operators,2,0.0,False
+Father's occupation,182,assembly workers,2,0.0,False
+Father's occupation,183,Vehicle drivers and mobile equipment operators,3,0.0,False
+Father's occupation,192,"Unskilled workers in agriculture, animal production, fisheries and forestry",5,0.0,False
+Father's occupation,193,"Unskilled workers in extractive industry, construction, manufacturing and transport",12,0.0833,False
+Father's occupation,194,Meal preparation assistants,1,1.0,False
+Father's occupation,195,Street vendors (except food) and street service providers,1,0.0,False
+Father's qualification,1,Secondary Education - 12th Year of Schooling or Eq.,737,0.3134,True
+Father's qualification,2,Higher Education - Bachelor's Degree,60,0.35,True
+Father's qualification,3,Higher Education - Degree,223,0.3184,True
+Father's qualification,4,Higher Education - Master's,30,0.3333,True
+Father's qualification,5,Higher Education - Doctorate,14,0.5714,False
+Father's qualification,6,Frequency of Higher Education,2,1.0,False
+Father's qualification,9,12th Year of Schooling - Not Completed,3,0.0,False
+Father's qualification,10,11th Year of Schooling - Not Completed,1,1.0,False
+Father's qualification,11,7th Year (Old),8,0.375,False
+Father's qualification,12,Other - 11th Year of Schooling,29,0.3448,False
+Father's qualification,13,2nd year complementary high school course,1,1.0,False
+Father's qualification,14,10th Year of Schooling,4,0.25,False
+Father's qualification,19,Basic Education 3rd Cycle (9th/10th/11th Year) or Equiv.,759,0.2754,True
+Father's qualification,22,Technical-professional course,3,1.0,False
+Father's qualification,25,Complementary High School Course - not concluded,1,1.0,False
+Father's qualification,26,7th year of schooling,1,1.0,False
+Father's qualification,27,2nd cycle of the general high school course,1,1.0,False
+Father's qualification,29,9th Year of Schooling - Not Completed,3,1.0,False
+Father's qualification,30,8th year of schooling,3,0.0,False
+Father's qualification,31,General Course of Administration and Commerce,1,1.0,False
+Father's qualification,33,Supplementary Accounting and Administration,1,1.0,False
+Father's qualification,34,Unknown,86,0.7907,True
+Father's qualification,35,Can't read or write,2,1.0,False
+Father's qualification,36,Can read without having a 4th year of schooling,3,0.3333,False
+Father's qualification,37,Basic education 1st cycle (4th/5th year) or equiv.,963,0.351,True
+Father's qualification,38,Basic Education 2nd Cycle (6th/7th/8th Year) or Equiv.,575,0.2383,True
+Father's qualification,39,Technological specialization course,16,0.5,False
+Father's qualification,40,Higher education - degree (1st cycle),5,0.6,False
+Father's qualification,41,Specialized higher studies course,2,0.5,False
+Father's qualification,43,Higher Education - Master (2nd cycle),2,0.0,False
+Mother's occupation,0,Student,111,0.7387,True
+Mother's occupation,1,"Representatives of the Legislative Power and Executive Bodies, Directors, Directors and Executive Managers",83,0.3976,True
+Mother's occupation,2,Specialists in Intellectual and Scientific Activities,262,0.3206,True
+Mother's occupation,3,Intermediate Level Technicians and Professions,276,0.2645,True
+Mother's occupation,4,Administrative staff,640,0.3094,True
+Mother's occupation,5,"Personal Services, Security and Safety Workers and Sellers",414,0.2923,True
+Mother's occupation,6,"Farmers and Skilled Workers in Agriculture, Fisheries and Forestry",80,0.2875,True
+Mother's occupation,7,"Skilled Workers in Industry, Construction and Craftsmen",221,0.2851,True
+Mother's occupation,8,Installation and Machine Operators and Assembly Workers,26,0.4615,False
+Mother's occupation,9,Unskilled Workers,1271,0.3061,True
+Mother's occupation,10,Armed Forces Professions,3,0.0,False
+Mother's occupation,90,Other Situation,61,0.7541,True
+Mother's occupation,99,(blank),13,0.6923,False
+Mother's occupation,122,Health professionals,2,0.0,False
+Mother's occupation,123,teachers,4,0.25,False
+Mother's occupation,125,Specialists in information and communication technologies (ICT),1,0.0,False
+Mother's occupation,131,Intermediate level science and engineering technicians and professions,1,0.0,False
+Mother's occupation,132,"Technicians and professionals, of intermediate level of health",3,0.0,False
+Mother's occupation,134,"Intermediate level technicians from legal, social, sports, cultural and similar services",4,0.25,False
+Mother's occupation,141,"Office workers, secretaries in general and data processing operators",7,0.0,False
+Mother's occupation,143,"Data, accounting, statistical, financial services and registry-related operators",2,0.0,False
+Mother's occupation,144,Other administrative support staff,6,0.0,False
+Mother's occupation,151,personal service workers,3,0.0,False
+Mother's occupation,152,sellers,1,0.0,False
+Mother's occupation,153,Personal care workers and the like,2,0.0,False
+Mother's occupation,171,"Skilled construction workers and the like, except electricians",1,0.0,False
+Mother's occupation,173,"Skilled workers in printing, precision instrument manufacturing, jewelers, artisans and the like",1,0.0,False
+Mother's occupation,175,"Workers in food processing, woodworking, clothing and other industries and crafts",4,0.0,False
+Mother's occupation,191,cleaning workers,21,0.0,False
+Mother's occupation,192,"Unskilled workers in agriculture, animal production, fisheries and forestry",5,0.0,False
+Mother's occupation,193,"Unskilled workers in extractive industry, construction, manufacturing and transport",2,0.5,False
+Mother's occupation,194,Meal preparation assistants,8,0.125,False
+Mother's qualification,1,Secondary Education - 12th Year of Schooling or Eq.,849,0.285,True
+Mother's qualification,2,Higher Education - Bachelor's Degree,61,0.2459,True
+Mother's qualification,3,Higher Education - Degree,359,0.3259,True
+Mother's qualification,4,Higher Education - Master's,37,0.0811,True
+Mother's qualification,5,Higher Education - Doctorate,15,0.3333,False
+Mother's qualification,6,Frequency of Higher Education,4,0.75,False
+Mother's qualification,9,12th Year of Schooling - Not Completed,4,0.75,False
+Mother's qualification,10,11th Year of Schooling - Not Completed,2,0.5,False
+Mother's qualification,11,7th Year (Old),2,1.0,False
+Mother's qualification,12,Other - 11th Year of Schooling,38,0.5,True
+Mother's qualification,14,10th Year of Schooling,1,0.0,False
+Mother's qualification,19,Basic Education 3rd Cycle (9th/10th/11th Year) or Equiv.,771,0.2815,True
+Mother's qualification,22,Technical-professional course,1,0.0,False
+Mother's qualification,26,7th year of schooling,1,0.0,False
+Mother's qualification,27,2nd cycle of the general high school course,1,1.0,False
+Mother's qualification,29,9th Year of Schooling - Not Completed,2,0.5,False
+Mother's qualification,30,8th year of schooling,3,0.3333,False
+Mother's qualification,34,Unknown,98,0.7959,True
+Mother's qualification,35,Can't read or write,3,0.6667,False
+Mother's qualification,36,Can read without having a 4th year of schooling,2,0.5,False
+Mother's qualification,37,Basic education 1st cycle (4th/5th year) or equiv.,806,0.3809,True
+Mother's qualification,38,Basic Education 2nd Cycle (6th/7th/8th Year) or Equiv.,448,0.2366,True
+Mother's qualification,39,Technological specialization course,7,0.5714,False
+Mother's qualification,40,Higher education - degree (1st cycle),9,0.3333,False
+Mother's qualification,41,Specialized higher studies course,6,0.3333,False
+Mother's qualification,42,Professional higher technical course,4,0.5,False
+Mother's qualification,43,Higher Education - Master (2nd cycle),4,0.25,False
+Mother's qualification,44,Higher Education - Doctorate (3rd cycle),1,1.0,False
+Previous qualification,1,Secondary education,2973,0.2889,True
+Previous qualification,2,Higher education - bachelor's degree,17,0.6471,False
+Previous qualification,3,Higher education - degree,108,0.6204,True
+Previous qualification,4,Higher education - master's,5,0.6,False
+Previous qualification,5,Higher education - doctorate,1,1.0,False
+Previous qualification,6,Frequency of higher education,15,0.4,False
+Previous qualification,9,12th year of schooling - not completed,8,1.0,False
+Previous qualification,10,11th year of schooling - not completed,3,0.6667,False
+Previous qualification,12,Other - 11th year of schooling,37,0.6216,True
+Previous qualification,14,10th year of schooling,1,1.0,False
+Previous qualification,15,10th year of schooling - not completed,2,0.5,False
+Previous qualification,19,Basic education 3rd cycle (9th/10th/11th year) or equiv.,123,0.6748,True
+Previous qualification,38,Basic education 2nd cycle (6th/7th/8th year) or equiv.,4,0.25,False
+Previous qualification,39,Technological specialization course,175,0.3143,True
+Previous qualification,40,Higher education - degree (1st cycle),32,0.3125,True
+Previous qualification,42,Professional higher technical course,29,0.1379,False
+Previous qualification,43,Higher education - master (2nd cycle),6,0.3333,False

@@ -1,0 +1,10 @@
+issue,column,count_before,count_after,treatment
+header whitespace/BOM,<all>,0,0,stripped on load (schema.load_raw)
+exact duplicate rows,<all>,0,0,"drop, keep first"
+undocumented Target label,Target,0,0,drop row
+rows with any missing value,<all>,0,0,drop row (UCI: no missing values)
+approved > enrolled (1st sem),Curricular units 1st sem (approved),0,0,flag only; none expected
+zero units enrolled (1st sem),Curricular units 1st sem (enrolled),180,180,keep; rate features become NaN for these rows (imputed inside CV later)
+grade == 0 (1st sem),Curricular units 1st sem (grade),718,718,"keep; coincides with zero approvals, a real academic state not an error"
+IQR outlier candidates,<numeric>,-1,-1,"keep all; see reports/tables/profile_outliers.csv; tree models are robust, LR gets scaling in-pipeline"
+rows,<all>,4424,4424,net effect of all treatments

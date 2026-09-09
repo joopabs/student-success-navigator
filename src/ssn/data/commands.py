@@ -67,3 +67,67 @@ def cmd_profile(args: argparse.Namespace) -> int:
     if report.errors:
         print("NOTE: schema validation reported errors; see validate_report.json")
     return EXIT_OK
+
+
+@register("data", "clean")
+def cmd_clean(args: argparse.Namespace) -> int:
+    from ssn.data import clean as C
+
+    cfg, allow, df = _load_all(args)
+    S.raise_for_errors(S.validate(df, cfg, allow))
+    res = C.clean(df, cfg, allow)
+    processed = cfg.path_for("processed_dir")
+    processed.mkdir(parents=True, exist_ok=True)
+    res.frame.to_parquet(processed / "clean.parquet", index=False)
+    tables = cfg.path_for("reports_dir") / "tables"
+    tables.mkdir(parents=True, exist_ok=True)
+    res.table().to_csv(tables / "clean_before_after.csv", index=False)
+    print(res.table().to_string(index=False))
+    print(f"wrote {processed / 'clean.parquet'} ({len(res.frame)} rows)")
+    return EXIT_OK
+
+
+@register("data", "split")
+def cmd_split(args: argparse.Namespace) -> int:
+    import pandas as pd
+
+    from ssn.data import split as SP
+
+    cfg = load(args.config)  # seeds set here
+    allow = al.load(cfg.path_for("features_yaml"))
+    clean_path = cfg.path_for("processed_dir") / "clean.parquet"
+    if not clean_path.is_file():
+        raise S.SchemaError(f"{clean_path} not found; run `python -m ssn data clean` first")
+    df = pd.read_parquet(clean_path)
+    out = SP.make_split(df, cfg, allow)
+    # privacy guard: demo cohort must contain no labels and no sensitive columns
+    forbidden = {cfg.get("data.target_column"), SP.IS_DROPOUT, SP.AGE_BAND} | set(allow.sensitive)
+    leaked = sorted(forbidden & set(out.demo.columns))
+    if leaked:
+        from ssn.cli import PrivacyError
+
+        raise PrivacyError(f"demo cohort would expose {leaked}")
+    paths = SP.write_outputs(out, cfg)
+    print(out.summary.to_string(index=False))
+    for k, p in paths.items():
+        print(f"wrote {k}: {p.relative_to(cfg.root)}")
+    return EXIT_OK
+
+
+@register(None, "eda")
+def cmd_eda(args: argparse.Namespace) -> int:
+    import pandas as pd
+
+    from ssn.reporting import figures as F
+
+    cfg = load(args.config)
+    allow = al.load(cfg.path_for("features_yaml"))
+    train_path = cfg.path_for("processed_dir") / "train.parquet"
+    if not train_path.is_file():
+        raise S.SchemaError(f"{train_path} not found; run `python -m ssn data split` first")
+    train = pd.read_parquet(train_path)
+    raw = S.load_raw(cfg.path_for("raw_csv"))  # analysis-only second-semester plots
+    written = F.run_eda(train, raw, cfg, allow)
+    for k, p in written.items():
+        print(f"wrote {k}: {p.relative_to(cfg.root)}")
+    return EXIT_OK

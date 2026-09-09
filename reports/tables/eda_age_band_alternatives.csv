@@ -1,0 +1,13 @@
+scheme,band,n,dropout_rate,n_ge_min_group_size
+A (chosen),17-19,1549,0.2137,True
+A (chosen),20-24,1078,0.2801,True
+A (chosen),25-34,556,0.5558,True
+A (chosen),35-+,356,0.5478,True
+B,0-19,1549,0.2137,True
+B,20-22,880,0.2466,True
+B,23-29,534,0.5075,True
+B,30-+,576,0.5521,True
+C,0-20,2028,0.212,True
+C,21-25,676,0.355,True
+C,26-35,513,0.5712,True
+C,36-+,322,0.5404,True

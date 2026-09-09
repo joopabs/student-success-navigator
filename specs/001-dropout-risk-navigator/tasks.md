@@ -208,52 +208,52 @@ computed tables and figures.
 figures; `pytest -q tests/unit/test_split.py tests/unit/test_engineering.py` passes; the demo
 cohort has no label columns.
 
-- [ ] T026 [US1] Implement `src/ssn/data/clean.py` and wire `data clean`: handle missing values, exact duplicates, invalid or out-of-range values (using `configs/ranges.json` and documented allowed codes), and flag outliers per a documented rule; write `data/processed/clean.parquet` and `reports/tables/clean_before_after.csv` (issue, column, count_before, count_after, treatment)
+- [X] T026 [US1] Implement `src/ssn/data/clean.py` and wire `data clean`: handle missing values, exact duplicates, invalid or out-of-range values (using `configs/ranges.json` and documented allowed codes), and flag outliers per a documented rule; write `data/processed/clean.parquet` and `reports/tables/clean_before_after.csv` (issue, column, count_before, count_after, treatment)
   - Type: code
   - Deps: T019, T021
   - Accept: before/after table has one row per issue-column pair; treatment strings are non-empty
   - Verify: `python -m ssn data clean && head -20 reports/tables/clean_before_after.csv`
-- [ ] T027 [US1] Implement `src/ssn/data/split.py` and wire `data split`: derive `is_dropout` per research R-04, add seeded synthetic `record_id`, stratified train/test split per config, write `data/processed/train.parquet`, `data/processed/test.parquet`, `data/demo/demo_cohort.parquet` (record_id + allow-listed feature columns only; no `Target`, `is_dropout`, or `role: sensitive` columns), `data/evaluation/demo_cohort_labels.parquet` (record_id, is_dropout, Target, sensitive columns); write `reports/tables/split_summary.csv` (sizes, positive rates)
+- [X] T027 [US1] Implement `src/ssn/data/split.py` and wire `data split`: derive `is_dropout` per research R-04, add seeded synthetic `record_id`, stratified train/test split per config, write `data/processed/train.parquet`, `data/processed/test.parquet`, `data/demo/demo_cohort.parquet` (record_id + allow-listed feature columns only; no `Target`, `is_dropout`, or `role: sensitive` columns), `data/evaluation/demo_cohort_labels.parquet` (record_id, is_dropout, Target, sensitive columns); write `reports/tables/split_summary.csv` (sizes, positive rates)
   - Type: code
   - Deps: T026
   - Accept: demo cohort lacks label and sensitive columns; train/test disjoint by `record_id`; split summary written
   - Verify: `python -m ssn data split && python -c "import pandas as pd;from ssn.features.allowlist import load;a=load('configs/features.yaml');d=pd.read_parquet('data/demo/demo_cohort.parquet');assert not ({'Target','is_dropout'}|set(a.sensitive))&set(d.columns);print(d.shape)"`
-- [ ] T028 [US1] Implement `src/ssn/features/engineering.py` as a scikit-learn transformer that declares its input columns (`get_input_columns()`), computes `sem1_approval_rate`, `sem1_evaluation_participation_rate`, `sem1_non_evaluation_rate`, `grade_diff_vs_admission`, `age_band` (from `config.fairness.age_bands`; passthrough NaN when bands are empty; produced for EDA and auditing only and excluded from the model feature list because its input is `role: sensitive`), and documented workload/progression measures; apply the zero-denominator rule (NaN then impute, count logged to `reports/tables/zero_denominators.csv`); append engineered entries to `configs/features.yaml`
+- [X] T028 [US1] Implement `src/ssn/features/engineering.py` as a scikit-learn transformer that declares its input columns (`get_input_columns()`), computes `sem1_approval_rate`, `sem1_evaluation_participation_rate`, `sem1_non_evaluation_rate`, `grade_diff_vs_admission`, `age_band` (from `config.fairness.age_bands`; passthrough NaN when bands are empty; produced for EDA and auditing only and excluded from the model feature list because its input is `role: sensitive`), and documented workload/progression measures; apply the zero-denominator rule (NaN then impute, count logged to `reports/tables/zero_denominators.csv`); append engineered entries to `configs/features.yaml`
   - Type: code, config
   - Deps: T027
   - Accept: every engineered feature's inputs are allow-listed; zero-denominator counts written; `features.yaml` `engineered` list populated
   - Verify: `python -c "from ssn.features.engineering import Sem1FeatureEngineer as E;print(E().get_input_columns())"`
-- [ ] T029 [US1] Implement `src/ssn/features/preprocess.py::build_preprocessor(cfg, allowlist)`: `ColumnTransformer` with numeric imputation and scaling, categorical one-hot with unknown handling, engineered features inserted via the transformer from T028, and `get_feature_names_out` support
+- [X] T029 [US1] Implement `src/ssn/features/preprocess.py::build_preprocessor(cfg, allowlist)`: `ColumnTransformer` with numeric imputation and scaling, categorical one-hot with unknown handling, engineered features inserted via the transformer from T028, and `get_feature_names_out` support
   - Type: code
   - Deps: T028
   - Accept: fits on the synthetic fixture and transforms without error; feature names recoverable
   - Verify: `pytest -q tests/unit/test_engineering.py -k preprocess` (after T030)
-- [ ] T030 [P] [US1] Write `tests/unit/test_clean.py` (each treatment applied on fixture; counts logged), `tests/unit/test_split.py` (no label or `role: sensitive` columns in demo; sensitive columns present in evaluator file; disjoint ids; stratification within tolerance; synthetic id not row index), `tests/unit/test_engineering.py` (inputs allow-listed; zero-denominator rule; `preprocess` names)
+- [X] T030 [P] [US1] Write `tests/unit/test_clean.py` (each treatment applied on fixture; counts logged), `tests/unit/test_split.py` (no label or `role: sensitive` columns in demo; sensitive columns present in evaluator file; disjoint ids; stratification within tolerance; synthetic id not row index), `tests/unit/test_engineering.py` (inputs allow-listed; zero-denominator rule; `preprocess` names)
   - Type: tests
   - Deps: T026, T027, T029
   - Accept: all pass on fixture
   - Verify: `pytest -q tests/unit/test_clean.py tests/unit/test_split.py tests/unit/test_engineering.py`
-- [ ] T031 [US1] Implement `src/ssn/reporting/figures.py` and wire `eda`: univariate distributions, target relationships, correlation heatmap, age distribution, engineered-feature distributions, all from `train.parquet`; any second-semester plot reads raw data in an isolated function and saves as `reports/figures/analysis_only_*.png`; write `reports/tables/eda_summary.csv`
+- [X] T031 [US1] Implement `src/ssn/reporting/figures.py` and wire `eda`: univariate distributions, target relationships, correlation heatmap, age distribution, engineered-feature distributions, all from `train.parquet`; any second-semester plot reads raw data in an isolated function and saves as `reports/figures/analysis_only_*.png`; write `reports/tables/eda_summary.csv`
   - Type: code
   - Deps: T028
   - Accept: figures saved; no second-semester column is read outside the analysis-only function (grep)
   - Verify: `python -m ssn eda && ls reports/figures | head -30`
-- [ ] T032 [US1] Run `data clean`, `data split`, `eda` on real data and record: cleaning before/after counts, train/test sizes and positive rates, zero-denominator counts (PV-08), age distribution summary (PV-06 input) into `reports/tables/` outputs and `data/README.md`
+- [X] T032 [US1] Run `data clean`, `data split`, `eda` on real data and record: cleaning before/after counts, train/test sizes and positive rates, zero-denominator counts (PV-08), age distribution summary (PV-06 input) into `reports/tables/` outputs and `data/README.md`
   - Type: run
   - Deps: T030, T031
   - Accept: all listed tables exist and are non-empty; README cites file paths for each number
   - Verify: `make data && make eda && cat reports/tables/split_summary.csv reports/tables/zero_denominators.csv`
-- [ ] T033 [US1] Decide age-band boundaries from the computed age distribution (PV-06): choose bands keeping each above `min_group_size` where possible, write them into `configs/base.yaml: fairness.age_bands`, and record the rationale in `data/data_dictionary.md`; re-run `data split` and `eda` so `age_band` is populated
+- [X] T033 [US1] Decide age-band boundaries from the computed age distribution (PV-06): choose bands keeping each above `min_group_size` where possible, write them into `configs/base.yaml: fairness.age_bands`, and record the rationale in `data/data_dictionary.md`; re-run `data split` and `eda` so `age_band` is populated
   - Type: config, run
   - Deps: T032
   - Accept: `age_bands` non-empty; band counts in `reports/tables/eda_summary.csv`; rationale references the age summary table
   - Verify: `python -c "import yaml;print(yaml.safe_load(open('configs/base.yaml'))['fairness']['age_bands'])" && make data && make eda`
-- [ ] T034 [P] [US1] Create `notebooks/02_eda_feature_engineering.ipynb`: import `ssn` functions, display cleaning table, figures, engineered-feature rationale, and an "analysis-only" section for second-semester plots; execute top-to-bottom
+- [X] T034 [P] [US1] Create `notebooks/02_eda_feature_engineering.ipynb`: import `ssn` functions, display cleaning table, figures, engineered-feature rationale, and an "analysis-only" section for second-semester plots; execute top-to-bottom
   - Type: notebook
   - Deps: T032
   - Accept: executes; analysis-only section clearly titled
   - Verify: `jupyter nbconvert --to notebook --execute notebooks/02_eda_feature_engineering.ipynb --output /tmp/02.ipynb`
-- [ ] T035 [US1] Write `reports/eda_feature_engineering_report.md`: data-quality treatments with before/after counts (from CSV), imbalance quantification, EDA findings referencing figure files, engineered features with one-line academic rationale each, zero-denominator handling, and an "Ambiguous columns" section noting the ablation is pending Phase 5
+- [X] T035 [US1] Write `reports/eda_feature_engineering_report.md`: data-quality treatments with before/after counts (from CSV), imbalance quantification, EDA findings referencing figure files, engineered features with one-line academic rationale each, zero-denominator handling, and an "Ambiguous columns" section noting the ablation is pending Phase 5
   - Type: reports
   - Deps: T033
   - Accept: every number traces to a file in `reports/tables/`; `scan-language` passes

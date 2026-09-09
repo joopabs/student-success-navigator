@@ -1,0 +1,5 @@
+feature,denominator,n_zero_denominator,handling
+sem1_approval_rate,Curricular units 1st sem (enrolled),138,NaN; imputed inside the CV pipeline (never fitted here)
+sem1_evaluation_participation_rate,Curricular units 1st sem (enrolled),138,NaN; imputed inside the CV pipeline (never fitted here)
+sem1_non_evaluation_rate,Curricular units 1st sem (enrolled),138,NaN; imputed inside the CV pipeline (never fitted here)
+sem1_credited_share,Curricular units 1st sem (enrolled),138,NaN; imputed inside the CV pipeline (never fitted here)
