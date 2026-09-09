@@ -164,6 +164,7 @@ def build_parser() -> argparse.ArgumentParser:
 def _load_handlers() -> None:
     """Import modules that register handlers via @register (side-effect imports)."""
     import ssn.data.commands  # noqa: F401
+    import ssn.modeling.commands  # noqa: F401
 
 
 def main(argv: Sequence[str] | None = None) -> int:

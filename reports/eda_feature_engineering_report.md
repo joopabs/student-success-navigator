@@ -224,3 +224,114 @@ semester prediction point. They are excluded by `configs/features.yaml`, by `pro
 - Mother's and Father's qualification and occupation are socioeconomic proxies kept as features per
   PROJECT_DECISIONS; the fairness audit and limitations section must discuss proxy risk.
 - Imbalance treatment and imputation strategy are decided in Milestones 4 and 5 under cross-validation.
+
+## 11. Feature selection and dimensionality reduction (Milestone 4, computed 2026-09-10)
+
+Source files: `selection_cv_by_k.csv`, `selection_filter_scores.csv`, `selection_embedded_scores.csv`,
+`selection_decision.json`, `pca_explained_variance.csv`, `pca_vs_nopca_cv.csv`; figures `pca_scree.png`,
+`pca_2d_train.png`; notebook `notebooks/03_feature_selection_pca.ipynb`.
+
+### 11.1 Design
+
+- **Data:** training split only (3539 records). The held-out test split was not opened by
+  any command in this milestone (enforced by `tests/unit/test_selection_in_pipeline.py` and
+  `tests/unit/test_pca_fit_isolation.py`, which spy on every parquet read).
+- **Validation:** 5-fold stratified cross-validation, seed 42. Preprocessing (median imputation,
+  scaling, one-hot encoding), the selector, and PCA are all pipeline steps, so each is fitted on the
+  training folds only. After preprocessing the feature space has **207** columns (19 numeric incl. 7
+  engineered, 2 binary, 186 one-hot categorical).
+- **Reference estimator:** class-weighted logistic regression, chosen because it is fast and neutral; its
+  scores compare selector *settings*, not models. No candidate-model ranking is made here.
+- **Selectors:** filter = `SelectKBest` with mutual information; embedded = `SelectFromModel` over an
+  L1-penalised logistic regression (coefficients ranked by magnitude). Grid k = [10, 20, 30, 50, 80, 'all'].
+- **Decision rule:** smallest k whose mean CV PR-AUC is within 1.0 standard deviation of the best
+  setting (ties: filter before embedded).
+
+### 11.2 Cross-validation over the k grid
+
+| kind | method | k | pr_auc_mean | pr_auc_std | roc_auc_mean | roc_auc_std |
+|---|---|---|---|---|---|---|
+| filter | mutual_info | 10 | 0.7789 | 0.0117 | 0.8494 | 0.0116 |
+| filter | mutual_info | 20 | 0.7925 | 0.0125 | 0.8563 | 0.0109 |
+| filter | mutual_info | 30 | 0.8011 | 0.0110 | 0.8625 | 0.0106 |
+| filter | mutual_info | 50 | 0.8038 | 0.0118 | 0.8635 | 0.0105 |
+| filter | mutual_info | 80 | 0.8120 | 0.0132 | 0.8714 | 0.0123 |
+| filter | mutual_info | all | 0.8180 | 0.0165 | 0.8778 | 0.0124 |
+| embedded | l1_logreg | 10 | 0.7528 | 0.0374 | 0.8425 | 0.0256 |
+| embedded | l1_logreg | 20 | 0.8000 | 0.0146 | 0.8681 | 0.0110 |
+| embedded | l1_logreg | 30 | 0.8111 | 0.0174 | 0.8730 | 0.0121 |
+| embedded | l1_logreg | 50 | 0.8150 | 0.0163 | 0.8756 | 0.0117 |
+| embedded | l1_logreg | 80 | 0.8175 | 0.0159 | 0.8765 | 0.0136 |
+| embedded | l1_logreg | all | 0.8180 | 0.0165 | 0.8778 | 0.0124 |
+
+**Decision (`selection_decision.json`):** `embedded` / `l1_logreg`, **k = 30** (CV PR-AUC 0.8111 ± 0.0174;
+best setting 0.818 at k = all). Keeping all 207 features scores highest on average, but the
+gain over 30 embedded-selected features is smaller than one fold-to-fold standard deviation, so the parsimony
+rule prefers the smaller, more interpretable set. This becomes the `use_selection` setting for candidate
+pipelines in Milestone 5, where each candidate is compared with and without it.
+
+### 11.3 What the selectors rank highly (training split, descriptive)
+
+Embedded L1 ranking, top 30, by original column: Course (8), Mother's occupation (6), Application mode (4), Father's occupation (3), Mother's qualification (2), Curricular units 1st sem (approved) (1), sem1_any_approved (1), sem1_approval_rate (1), Curricular units 1st sem (grade) (1), Curricular units 1st sem (credited) (1), sem1_evaluation_participation_rate (1), Previous qualification (1).
+Filter (mutual information) ranking, top 30, by original column: Father's occupation (4), Father's qualification (4), Mother's occupation (4), Application mode (3), Previous qualification (2), sem1_approval_rate (1), Curricular units 1st sem (approved) (1), Curricular units 1st sem (grade) (1), grade_diff_vs_admission (1), sem1_any_approved (1), sem1_evaluation_participation_rate (1), Curricular units 1st sem (evaluations) (1), Previous qualification (grade) (1), sem1_load (1), Curricular units 1st sem (enrolled) (1), Admission grade (1), GDP (1), Mother's qualification (1).
+
+Embedded features selected in at least 80% of folds (top-20 setting):
+
+| feature | score | selected_frequency_top20 | source_column |
+|---|---|---|---|
+| cat__Mother's occupation_191 | 1.7029 | 1.0000 | Mother's occupation |
+| num__Curricular units 1st sem (approved) | 1.5096 | 1.0000 | Curricular units 1st sem (approved) |
+| cat__Mother's occupation_0 | 1.4114 | 1.0000 | Mother's occupation |
+| cat__Mother's qualification_4 | 1.3666 | 1.0000 | Mother's qualification |
+| cat__Course_9130 | 1.2063 | 1.0000 | Course |
+| cat__Course_9853 | 1.0687 | 1.0000 | Course |
+| cat__Father's occupation_90 | 1.0502 | 0.8000 | Father's occupation |
+| cat__Course_8014 | 0.8816 | 1.0000 | Course |
+| cat__Application mode_7 | 0.8577 | 0.8000 | Application mode |
+| cat__Mother's qualification_34 | 0.8436 | 1.0000 | Mother's qualification |
+| num__sem1_any_approved | 0.8229 | 1.0000 | sem1_any_approved |
+| num__sem1_approval_rate | 0.7658 | 1.0000 | sem1_approval_rate |
+| cat__Course_9238 | 0.7321 | 1.0000 | Course |
+| cat__Application mode_39 | 0.6849 | 1.0000 | Application mode |
+| num__Curricular units 1st sem (grade) | 0.6845 | 1.0000 | Curricular units 1st sem (grade) |
+
+The two methods agree on the academic core: first-semester approvals, approval rate, first-semester grade,
+`sem1_any_approved`, and grade change versus admission. They disagree on the tails: the L1 ranking gives large
+coefficients to sparse one-hot indicators (individual parental-occupation and course codes), which the
+mutual-information ranking does not reward. This is a known behaviour of L1 on rare indicators and is one
+reason the CV table, not the raw ranking, drives the decision.
+
+### 11.4 PCA
+
+Purpose: (a) describe how concentrated the variance of the preprocessed feature space is, (b) provide a 2-D
+projection for visualisation, and (c) test whether replacing the features with principal components helps
+the reference estimator. It is **not** used to select features.
+
+- **42** of 207 components are needed to reach 95% of the variance (`pca_scree.png`). The first two
+  components explain 23.3% and 12.0%; the 2-D projection (`pca_2d_train.png`) shows
+  overlapping classes with only partial separation.
+
+| pipeline | pr_auc_mean | pr_auc_std | roc_auc_mean | roc_auc_std |
+|---|---|---|---|---|
+| no_pca | 0.8180 | 0.0165 | 0.8778 | 0.0124 |
+| pca_0.95_variance | 0.8007 | 0.0104 | 0.8670 | 0.0096 |
+| pca_2_components | 0.7298 | 0.0248 | 0.8289 | 0.0104 |
+
+**Decision:** PCA is retained for analysis and visualisation only. Under identical CV, the 95%-variance PCA
+pipeline scores 0.8007 PR-AUC versus 0.8180 without PCA, and the two-component pipeline 0.7298.
+Candidate pipelines in Milestone 5 therefore use the original (optionally selected) features
+(`use_pca: false`), which also keeps SHAP explanations in terms of named features.
+
+### 11.5 Limitations of this analysis
+
+- Variance concentration is dominated by 186 one-hot indicator columns, each carrying little variance; PCA on
+  a mixed one-hot/numeric space is a descriptive device here, not a modelling recommendation.
+- Rankings are specific to the reference estimator; tree-based candidates may weight features differently.
+  The Milestone 5 comparison runs each candidate with and without the selected subset.
+- L1 coefficients on rare indicators can be unstable across folds; the stability column and the CV table
+  are reported for that reason.
+- Several highly ranked indicators are parental-occupation and parental-qualification codes, i.e.
+  socioeconomic proxies kept as features by PROJECT_DECISIONS. Their prominence must be discussed in the
+  fairness audit and limitations (Milestone 7).
+- The parsimony rule is a project convention (one CV standard deviation); a different tolerance would
+  change k. It is recorded in `configs/base.yaml` so the choice is auditable.

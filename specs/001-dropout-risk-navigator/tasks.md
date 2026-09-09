@@ -272,32 +272,32 @@ cross-validation.
 tables; `pytest -q tests/unit/test_selection_in_pipeline.py tests/unit/test_pca_fit_isolation.py`
 passes.
 
-- [ ] T036 [US1] Implement `src/ssn/modeling/cv.py`: `make_cv(cfg)` (StratifiedKFold, seeded), `oof_predict(pipeline, X, y, cv)` returning fold ids and scores, and `k_for_fold(k, n_fold, n_test_expected)` per research R-08
+- [X] T036 [US1] Implement `src/ssn/modeling/cv.py`: `make_cv(cfg)` (StratifiedKFold, seeded), `oof_predict(pipeline, X, y, cv)` returning fold ids and scores, and `k_for_fold(k, n_fold, n_test_expected)` per research R-08
   - Type: code
   - Deps: T029
   - Accept: unit-tested rounding of `k_for_fold`; OOF covers every row once
   - Verify: `pytest -q tests/unit/test_metrics.py -k k_for_fold` (after T042) or `python -c "from ssn.modeling.cv import k_for_fold;print(k_for_fold(50,177,885))"`
-- [ ] T037 [US1] Implement `src/ssn/modeling/selection.py` (filter step: `SelectKBest` with mutual information or ANOVA F; embedded step: `SelectFromModel` with L1 logistic regression or tree importances, both as pipeline steps configurable from `selection.*`) and wire `select`: run CV over `k_grid`, write `reports/tables/selection_filter_scores.csv`, `selection_embedded_scores.csv`, `selection_cv_by_k.csv`, `selection_decision.json`
+- [X] T037 [US1] Implement `src/ssn/modeling/selection.py` (filter step: `SelectKBest` with mutual information or ANOVA F; embedded step: `SelectFromModel` with L1 logistic regression or tree importances, both as pipeline steps configurable from `selection.*`) and wire `select`: run CV over `k_grid`, write `reports/tables/selection_filter_scores.csv`, `selection_embedded_scores.csv`, `selection_cv_by_k.csv`, `selection_decision.json`
   - Type: code
   - Deps: T036
   - Accept: selectors are pipeline steps (never fit outside CV); decision JSON names the method and chosen k
   - Verify: `python -m ssn select && cat reports/tables/selection_decision.json`
-- [ ] T038 [US1] Implement `src/ssn/modeling/pca.py` and wire `pca`: pipeline `preprocessor -> PCA(n_components=variance_threshold) -> logistic regression` compared against the non-PCA pipeline under CV; write `reports/tables/pca_explained_variance.csv`, `pca_vs_nopca_cv.csv`, `reports/figures/pca_scree.png`, `reports/figures/pca_2d_train.png` (train only, coloured by `is_dropout`)
+- [X] T038 [US1] Implement `src/ssn/modeling/pca.py` and wire `pca`: pipeline `preprocessor -> PCA(n_components=variance_threshold) -> logistic regression` compared against the non-PCA pipeline under CV; write `reports/tables/pca_explained_variance.csv`, `pca_vs_nopca_cv.csv`, `reports/figures/pca_scree.png`, `reports/figures/pca_2d_train.png` (train only, coloured by `is_dropout`)
   - Type: code
   - Deps: T036
   - Accept: PCA fitted only inside folds; 2D plot uses train only
   - Verify: `python -m ssn pca && cat reports/tables/pca_vs_nopca_cv.csv`
-- [ ] T039 [P] [US1] Write `tests/unit/test_selection_in_pipeline.py` (selector inside `Pipeline`; validation-fold rows do not change fitted mask) and `tests/unit/test_pca_fit_isolation.py` (PCA components identical with and without extra test rows present in the frame passed to `cross_validate` on train indices; `select`/`pca` read only train path via monkeypatched `read_parquet`)
+- [X] T039 [P] [US1] Write `tests/unit/test_selection_in_pipeline.py` (selector inside `Pipeline`; validation-fold rows do not change fitted mask) and `tests/unit/test_pca_fit_isolation.py` (PCA components identical with and without extra test rows present in the frame passed to `cross_validate` on train indices; `select`/`pca` read only train path via monkeypatched `read_parquet`)
   - Type: tests
   - Deps: T037, T038
   - Accept: pass on fixture
   - Verify: `pytest -q tests/unit/test_selection_in_pipeline.py tests/unit/test_pca_fit_isolation.py`
-- [ ] T040 [US1] Run `select` and `pca` on real train data; record chosen method, k, and the PCA versus non-PCA CV result in `reports/tables/` and summarise (with file references) in `reports/eda_feature_engineering_report.md` under "Feature selection" and "Dimensionality reduction"
+- [X] T040 [US1] Run `select` and `pca` on real train data; record chosen method, k, and the PCA versus non-PCA CV result in `reports/tables/` and summarise (with file references) in `reports/eda_feature_engineering_report.md` under "Feature selection" and "Dimensionality reduction"
   - Type: run, reports
   - Deps: T039
   - Accept: report cites `selection_decision.json` and `pca_vs_nopca_cv.csv`; PCA retained or not with reason
   - Verify: `make select && python -m ssn pca && python -m ssn scan-language --paths reports/eda_feature_engineering_report.md`
-- [ ] T041 [P] [US1] Create `notebooks/03_feature_selection_pca.ipynb` displaying selection scores, CV-by-k curve, scree plot, 2D projection; execute top-to-bottom
+- [X] T041 [P] [US1] Create `notebooks/03_feature_selection_pca.ipynb` displaying selection scores, CV-by-k curve, scree plot, 2D projection; execute top-to-bottom
   - Type: notebook
   - Deps: T040
   - Accept: executes; imports from `ssn`

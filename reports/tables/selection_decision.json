@@ -1,0 +1,11 @@
+{
+  "kind": "embedded",
+  "method": "l1_logreg",
+  "k": 30,
+  "cv_pr_auc_mean": 0.8111,
+  "cv_pr_auc_std": 0.0174,
+  "best_pr_auc_mean": 0.818,
+  "rule": "smallest k with mean PR-AUC >= best - 1.0 x std(best) under 5-fold stratified CV on the training split, reference estimator = class-weighted logistic regression",
+  "n_transformed_features": 207,
+  "note": "Selection setting for downstream candidate pipelines (Milestone 5). Not a model-performance claim."
+}

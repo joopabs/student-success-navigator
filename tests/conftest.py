@@ -98,3 +98,32 @@ def features_yaml(tmp_path: Path) -> Path:
 @pytest.fixture()
 def base_config_dict(repo_root: Path) -> dict:
     return yaml.safe_load((repo_root / "configs" / "base.yaml").read_text())
+
+
+@pytest.fixture(scope="session")
+def real_named_frame() -> pd.DataFrame:
+    """Synthetic rows (values invented, seeded) using the REAL allow-listed column names, plus a
+    synthetic is_dropout label that depends on the first-semester approval rate so selectors have
+    signal to find. No real student rows."""
+    from ssn.features import allowlist as al
+    from ssn.features import engineering as E
+
+    rng = np.random.default_rng(7)
+    n = 240
+    allow = al.load(REPO_ROOT / "configs" / "features.yaml")
+    df = pd.DataFrame(index=range(n))
+    for col in sorted(allow.allowed_source):
+        meta = allow.columns[col]
+        if meta.get("codes"):
+            df[col] = rng.choice([int(k) for k in meta["codes"]], size=n)
+        elif meta.get("range"):
+            lo, hi = meta["range"]
+            df[col] = rng.uniform(lo, hi, size=n).round(1)
+        else:
+            df[col] = rng.integers(0, 8, size=n)
+    enrolled = df[E.SEM1["enrolled"]]
+    df[E.SEM1["approved"]] = np.minimum(df[E.SEM1["approved"]], enrolled)
+    df.loc[df.index[:5], E.SEM1["enrolled"]] = 0
+    rate = (df[E.SEM1["approved"]] / enrolled.replace(0, np.nan)).fillna(0)
+    df["is_dropout"] = (rng.random(n) < (0.65 - 0.5 * rate)).astype(int)
+    return df

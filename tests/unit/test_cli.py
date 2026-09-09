@@ -29,7 +29,7 @@ def test_config_validate_bad_file_exits_2(tmp_path):
 
 
 def test_unimplemented_command_exits_2():
-    r = _run("pca")
+    r = _run("tune")
     assert r.returncode == EXIT_CONFIG and "not implemented" in r.stderr
 
 

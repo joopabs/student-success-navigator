@@ -50,7 +50,9 @@ imbalance:
 selection:
   filter_method: mutual_info
   embedded_method: l1_logreg
-  k_grid: [10, 15, 20, all]
+  k_grid: [10, 20, 30, 50, 80, all]     # transformed space has ~207 features on train (M4 dimension check)
+  reference_estimator: logreg          # cheap estimator used only to compare selector settings under CV
+  parsimony_std_rule: 1.0              # pick smallest k within this many CV std of the best mean PR-AUC
 
 pca:
   variance_threshold: 0.95
