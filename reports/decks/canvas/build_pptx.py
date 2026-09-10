@@ -14,6 +14,7 @@ python-pptx is NOT a project dependency and is deliberately not added to `requir
 from __future__ import annotations
 
 import pathlib
+import sys
 
 from pptx import Presentation
 from pptx.dml.color import RGBColor
@@ -23,7 +24,8 @@ from pptx.oxml.ns import qn
 from pptx.util import Emu, Pt
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
-OUT = ROOT / "reports" / "decks" / "business_deck.pptx"
+OUT = (pathlib.Path(sys.argv[1]) if len(sys.argv) > 1
+       else ROOT / "reports" / "decks" / "business_deck.pptx")
 
 # Palette lifted from src/ssn/app/app.py so the deck and the app read as one thing.
 NAVY = RGBColor(0x1F, 0x3A, 0x5F)
@@ -415,7 +417,7 @@ label(s, 926, 248, 270, "The assumption", AMBER_D)
 para(tb(s, 926, 270, 268, 90),
      "10 conversations per adviser-week, over a 5-week window — 50 students from a "
      "cohort of 885. Illustrative assumption only.", 15, INK, first=True, line=1.5)
-rect(s, 908, 380, 300, 104, fill=PANEL, line=RULE)
+rect(s, 908, 380, 300, 130, fill=PANEL, line=RULE)
 label(s, 926, 396, 270, "Deliberately absent", NAVY)
 para(tb(s, 926, 418, 268, 70),
      "No figure here is converted to money. No cost or saving data exists in this "
@@ -545,7 +547,7 @@ for num, title, body in steps:
     y += 92
     if num != "03":
         rect(s, 72, y - 16, 1136, 1, fill=RULE)
-rect(s, 72, 484, 1136, 128, fill=NAVY)
+rect(s, 72, 484, 1136, 153, fill=NAVY)
 rect(s, 96, 512, 2, 72, fill=AMBER_B)
 para(tb(s, 118, 510, 300, 18), "THE ASK", 11, GOLD, bold=True, first=True, track=180)
 para(tb(s, 118, 536, 1050, 70),
@@ -555,5 +557,5 @@ source(s, "reports/final_report.md · reports/model_card.md · model version 1.0
 
 OUT.parent.mkdir(parents=True, exist_ok=True)
 prs.save(OUT)
-print(f"wrote {OUT.relative_to(ROOT)} — {len(prs.slides._sldIdLst)} slides, "
+print(f"wrote {OUT} — {len(prs.slides._sldIdLst)} slides, "
       f"{OUT.stat().st_size / 1024:.0f} KB")
