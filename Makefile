@@ -58,7 +58,7 @@ lint:
 	ruff check .
 
 secrets:
-	detect-secrets scan --exclude-lines '[0-9a-f]{64}' $$(git ls-files) | $(PY) -c "import sys,json; r=json.load(sys.stdin)['results']; [print(f, [x['type'] for x in v]) for f,v in r.items()]; sys.exit(1 if r else 0)"
+	detect-secrets scan --exclude-lines '[0-9a-f]{40,64}' $$(git ls-files) | $(PY) -c "import sys,json; r=json.load(sys.stdin)['results']; [print(f, [x['type'] for x in v]) for f,v in r.items()]; sys.exit(1 if r else 0)"
 	@echo "secrets scan clean"
 
 all: data eda select cv tune final explain fairness report

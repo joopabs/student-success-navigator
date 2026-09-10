@@ -35,7 +35,7 @@ jobs:
         run: ruff check .
 
       - name: Secrets scan
-        # SHA-256 file checksums (64 hex chars) are recorded on purpose and excluded.
+        # SHA-256 checksums (64 hex) and git SHAs (40 hex) are recorded on purpose and excluded.
         run: make secrets
 
       - name: Config and allow-list validate
