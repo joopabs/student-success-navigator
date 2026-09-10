@@ -1,0 +1,777 @@
+<!doctype html><html><head><meta charset='utf-8'><title>Final Report - Student Success Navigator</title><style>body{font-family:Georgia,serif;max-width:960px;margin:2em auto;line-height:1.45;color:#222;padding:0 1em} table{border-collapse:collapse;font-size:0.85em;margin:1em 0} th,td{border:1px solid #bbb;padding:4px 8px} th{background:#f2f2f2} blockquote{border-left:4px solid #c44e52;background:#fbf3f3;padding:0.5em 1em;margin:1em 0} code{background:#f4f4f4;padding:1px 4px;border-radius:3px;font-size:0.9em} h1,h2,h3{color:#1f3a5f} img{max-width:100%}</style></head><body><h1 id="final-report-fair-and-explainable-student-dropout-risk-prediction-for-early-academic-support">Final Report — Fair and Explainable Student Dropout Risk Prediction for Early Academic Support</h1>
+<p><strong>Companion application:</strong> Student Success Navigator · <strong>Model version:</strong> 1.0.0 · <strong>Date:</strong> 2026-09-10
+<strong>Repository:</strong> https://github.com/joopabs/student-success-navigator · <strong>Author:</strong> Julius Pabular</p>
+<blockquote>
+<p>Every figure in this report is read from a file produced by the pipeline (paths in each section). Capacity, window,
+and "share of dropouts reached" figures are ILLUSTRATIVE assumptions; all metrics are MEASURED. The system suggests a
+short outreach list for adviser review; it does not predict any student's future with certainty, does not replace
+advisers, is not shown to cause better outcomes, and can make no adverse decision.</p>
+</blockquote>
+<h2 id="contents">Contents</h2>
+<ol>
+<li>Problem understanding and framing · 2. Data collection and understanding · 3. Preprocessing, EDA and feature
+engineering · 4. Model implementation and comparison · 5. Critical thinking, ethical AI and bias auditing (includes the
+Bias &amp; Fairness Analysis) · 6. Presentations · 7. Repository and reproducibility · 8. Optional steps · 9. Limitations ·</li>
+<li>Rubric map</li>
+</ol>
+<h2 id="1-problem-understanding-and-framing">1. Problem understanding and framing</h2>
+<p><strong>Business problem.</strong> Students who leave a programme early are a loss for them and for the institution. Advisers can
+support at-risk students, but adviser time is limited and there is no consistent, explainable way to decide whom to
+contact first at the moment when it matters: the end of the first semester.</p>
+<p><strong>Data-science problem.</strong> Binary classification. Unit of analysis: one student enrollment record. Prediction point: end
+of the first semester. Target <code>is_dropout</code> = 1 where the source Target is Dropout, 0 for Enrolled or Graduate
+(<code>PROJECT_DECISIONS.md</code>). The output is a <em>support-priority score</em> used to rank students for voluntary, supportive
+adviser outreach.</p>
+<p><strong>Intended use and non-use.</strong> Decision support for qualified advisers and student-support teams, with human review of
+every record. Prohibited: any automated or adverse decision about admission, enrollment, scholarships, financial aid,
+grades, discipline, housing, or other opportunities (<code>.specify/memory/constitution.md</code>, Principle XI).</p>
+<p><strong>Metrics.</strong> Primary technical metric: PR-AUC, chosen because the positive class is a minority (positive rate
+0.321). Intervention metric: Recall@K and Precision@K, where K is the outreach capacity.
+Secondary: ROC-AUC, Brier score, expected calibration error, precision/recall/F1 and confusion matrices at the operating
+threshold, group-level fairness metrics. <strong>Business KPI (illustrative):</strong> the share of eventual dropouts reached within a
+fixed outreach capacity. The capacity is an assumption, 10 conversations per week over
+5 weeks (K = 50 per cohort of 885), stored in <code>configs/base.yaml</code> with
+an <code>illustrative: true</code> flag that the code refuses to run without. No cost or return figure is asserted because the data
+contain none.</p>
+<p><strong>Governance.</strong> The project is governed by a written constitution (12 principles, 10 quality gates) and a Spec Kit
+specification, plan, research log, contracts, and 92-task checklist under <code>specs/001-dropout-risk-navigator/</code>.</p>
+<h2 id="2-data-collection-and-understanding">2. Data collection and understanding</h2>
+<p><strong>Source.</strong> UCI Machine Learning Repository dataset 697, <em>Predict Students' Dropout and Academic Success</em>, Realinho,
+Vieira Martins, Machado and Baptista (2021), DOI 10.24432/C5MC89, licence CC BY 4.0. One Portuguese higher-education
+institution. Full citation, licence verification checklist, checksum, and download procedure: <code>data/README.md</code>. The
+data are <strong>not</strong> representative of Philippine or other institutions.</p>
+<p><strong>Observed facts</strong> (<code>reports/data_overview.md</code>, <code>reports/tables/profile_*.csv</code>): 4424 records × 37 columns; 0 missing
+cells; 0 duplicate rows; 0 values outside the documented codes and ranges. Target: Graduate 2209,
+Dropout 1421, Enrolled 794; derived <code>is_dropout</code> positive rate 0.3212.</p>
+<p><strong>Data dictionary.</strong> <code>data/data_dictionary.md</code> lists every column with type, availability time (enrollment, first
+semester, second semester, outcome, ambiguous), role, documented codes or ranges, observed values, and an
+encoding-verification flag. All 22 coded columns have every observed code inside the UCI documentation, including
+Gender (1 = male, 0 = female), which the fairness audit requires before it will run.</p>
+<p><strong>Column classification</strong> (<code>configs/features.yaml</code>): 21 allowed model inputs (15 enrollment-time, 6 first-semester);
+6 sensitive attributes, audit-only (gender, age at enrollment, nationality, international status, marital status,
+educational special needs); 3 financial-status columns with undocumented recording time, excluded by default (Debtor,
+Tuition fees up to date, Scholarship holder); 6 second-semester columns, prohibited; 1 target. Open verification item:
+the source article could not be retrieved programmatically to settle the timing of the three financial columns.</p>
+<h2 id="3-data-preprocessing-eda-and-feature-engineering">3. Data preprocessing, EDA and feature engineering</h2>
+<p>Full report: <code>reports/eda_feature_engineering_report.md</code> (sections 1–12); notebooks 02 and 03.</p>
+<p><strong>Cleaning</strong> (<code>clean_before_after.csv</code>). Every treatment is logged with before/after counts. No row was altered or
+removed. Kept deliberately: 180 students with zero first-semester units enrolled and
+718 with a first-semester grade of 0 (all with zero approvals): real academic states, not errors. IQR outlier
+candidates are kept; tree models are insensitive and logistic regression is scaled inside the pipeline.</p>
+<p><strong>Split</strong> (<code>split_summary.csv</code>). Stratified 80/20, seed 42: train 3539 (positive rate 0.3213),
+test 885 (positive rate 0.3209). The test split doubles as the de-identified demo cohort
+for the app (features only, synthetic ids); its labels and sensitive columns live in an evaluator-only file the app never reads.</p>
+<p><strong>Applied EDA</strong> (<code>reports/figures/eda_*.png</code>, training split only). First-semester approvals, approval rate and grade show
+the strongest Spearman associations with dropout; categorical dropout rates by programme and application route are
+reported for groups above the minimum size; sensitive-group base rates are reported as audit context (e.g. dropout
+rate by gender and age band) but never used as inputs. Second-semester distributions are plotted analysis-only.</p>
+<p><strong>Feature engineering</strong> (<code>src/ssn/features/engineering.py</code>). Seven stateless features from allow-listed inputs, each
+with an academic rationale: first-semester approval rate, evaluation participation rate, non-evaluation rate, grade
+change versus admission grade (0–20 rescaled to 0–200), credited share, load, any-approved. 138 training
+records have zero enrolled units, so rate features are NaN and are median-imputed inside the cross-validation pipeline.
+<code>age_band</code> is derived for auditing only and is never a model input.</p>
+<p><strong>Leakage controls, measured.</strong> Preprocessing, selectors, PCA and estimators are pipeline steps fitted inside folds;
+tests spy on every parquet read to prove the test split is never opened before the single evaluation. Including the
+three ambiguous financial columns would raise CV PR-AUC by 0.036 to 0.039 (<code>ablation_ambiguous.csv</code>), a gain
+that may be leakage, so they stay excluded. Excluding the six sensitive attributes costs at most 0.0065
+(<code>ablation_sensitive.csv</code>).</p>
+<p><strong>Feature selection</strong> (<code>selection_cv_by_k.csv</code>, <code>selection_decision.json</code>). Filter (mutual information) and embedded
+(L1 logistic) selectors as pipeline steps over k ∈ [10, 20, 30, 50, 80, 'all'] of 207 preprocessed columns; reference
+estimator class-weighted logistic regression. Best mean PR-AUC 0.8180 at k = all; the parsimony rule (within one CV
+std) chose embedded k = 30 (0.8111). Both agree on the academic core; L1 also rewards sparse parental-background
+indicators, a proxy concern carried to section 5.</p>
+<p><strong>Dimensionality reduction</strong> (<code>pca_explained_variance.csv</code>, <code>pca_vs_nopca_cv.csv</code>). 42 components reach 95% variance.
+Under identical CV the PCA pipeline scores 0.8007 PR-AUC versus 0.8180 without, so PCA is retained for
+analysis and visualisation only.</p>
+<h2 id="4-model-implementation-and-comparison">4. Model implementation and comparison</h2>
+<p>Reports: <code>reports/model_comparison_cv.md</code>, <code>reports/model_selection_and_evaluation.md</code>; notebook 04.</p>
+<p><strong>Candidates and validation.</strong> DummyClassifier (prior) baseline; class-weighted logistic regression; random forest
+(500 trees); HistGradientBoosting. Five-fold stratified CV on the training split, seed 42, with selection (none /
+embedded k = 30) and imbalance (class weighting / SMOTENC) variants: 11 pipelines, each with runtime, seed, estimator
+and parameters recorded (<code>cv_comparison.csv</code>).</p>
+<table>
+<thead>
+<tr>
+<th>model</th>
+<th>pr_auc_mean</th>
+<th>pr_auc_std</th>
+<th>roc_auc_mean</th>
+<th>recall_at_k_mean</th>
+<th>precision_at_k_mean</th>
+<th>brier_mean</th>
+<th>ece_mean</th>
+<th>fit_time_s_mean</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dummy</td>
+<td>0.3213</td>
+<td>0.0007</td>
+<td>0.5000</td>
+<td>0.0572</td>
+<td>0.3250</td>
+<td>0.2181</td>
+<td>0.0008</td>
+<td>0.0211</td>
+</tr>
+<tr>
+<td>logreg</td>
+<td>0.8182</td>
+<td>0.0166</td>
+<td>0.8777</td>
+<td>0.1706</td>
+<td>0.9700</td>
+<td>0.1344</td>
+<td>0.0961</td>
+<td>0.0313</td>
+</tr>
+<tr>
+<td>random_forest</td>
+<td>0.8070</td>
+<td>0.0094</td>
+<td>0.8724</td>
+<td>0.1689</td>
+<td>0.9600</td>
+<td>0.1260</td>
+<td>0.0321</td>
+<td>1.1448</td>
+</tr>
+<tr>
+<td>hist_gb</td>
+<td>0.8109</td>
+<td>0.0144</td>
+<td>0.8694</td>
+<td>0.1733</td>
+<td>0.9850</td>
+<td>0.1316</td>
+<td>0.0667</td>
+<td>0.5286</td>
+</tr>
+</tbody>
+</table>
+<p>SMOTENC lowered PR-AUC for both models it was tried on, so class weighting is used. Recall@K is capacity-bound: each
+fold holds about 227 dropouts but K scales to 40 slots, a ceiling of about 0.176.</p>
+<p><strong>Tuning</strong> (<code>tuned_params.json</code>, <code>tuning_results_*.csv</code>). RandomizedSearchCV with PR-AUC scoring on the training split,
+each candidate in both selection settings. Tuned PR-AUC ranged from 0.8057 to 0.8186, all within one CV
+standard deviation.</p>
+<p><strong>Selection</strong> (<code>selection_matrix_ranked.csv</code>, <code>model_selection_decision.json</code>). Criteria: PR-AUC, Recall@K,
+Precision@K, Brier, ECE, preliminary fairness (max demographic-parity difference, min disparate-impact ratio),
+native SHAP support, maintainability, fit time. Accuracy excluded. Rule: 1) eligible = candidates whose OOF PR-AUC &gt;= best PR-AUC - 1 x CV std of the best; 2) rank eligible by Recall@K (rounded to 3 dp, desc), then ECE (2 dp, asc), then fairness_max_dp_difference (2 dp, asc), then Brier (3 dp, asc), then OOF fit time (asc). Accuracy is not a criterion (constitution VIII). Explainability must be natively SHAP-supported.</p>
+<table>
+<thead>
+<tr>
+<th>rank</th>
+<th>candidate</th>
+<th>pr_auc</th>
+<th>recall_at_k</th>
+<th>ece</th>
+<th>fairness_max_dp_difference</th>
+<th>brier</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>random_forest__sel-none</td>
+<td>0.8078</td>
+<td>0.1715</td>
+<td>0.0539</td>
+<td>0.1107</td>
+<td>0.1286</td>
+</tr>
+<tr>
+<td>2</td>
+<td>hist_gb__sel-none</td>
+<td>0.8121</td>
+<td>0.1724</td>
+<td>0.0761</td>
+<td>0.0812</td>
+<td>0.1320</td>
+</tr>
+<tr>
+<td>3</td>
+<td>logreg__sel-none</td>
+<td>0.8173</td>
+<td>0.1706</td>
+<td>0.0938</td>
+<td>0.1309</td>
+<td>0.1343</td>
+</tr>
+<tr>
+<td>4</td>
+<td>random_forest__sel-decided</td>
+<td>0.8066</td>
+<td>0.1706</td>
+<td>0.0895</td>
+<td>0.1297</td>
+<td>0.1355</td>
+</tr>
+<tr>
+<td>5</td>
+<td>logreg__sel-decided</td>
+<td>0.8103</td>
+<td>0.1706</td>
+<td>0.0955</td>
+<td>0.1262</td>
+<td>0.1370</td>
+</tr>
+<tr>
+<td>6</td>
+<td>hist_gb__sel-decided</td>
+<td>0.8029</td>
+<td>0.1697</td>
+<td>0.0885</td>
+<td>0.0974</td>
+<td>0.1379</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Chosen:</strong> <code>random_forest__sel-none</code>. The three families are indistinguishable on PR-AUC; the rule falls through to a Recall@K tie
+and then to calibration error, where the random forest is clearly best. <strong>Calibration:</strong> isotonic, applied under the
+documented rule (ECE 0.054 → 0.017, Brier 0.1286 → 0.1251, PR-AUC unchanged within noise).</p>
+<p><strong>Threshold and bands</strong> (<code>threshold_and_bands.json</code>, <code>threshold_tradeoffs.csv</code>). Threshold 0.9728 is the OOF score at
+the capacity selection rate (200 of 3539). Alternatives and their false-positive / false-negative trade-offs:</p>
+<table>
+<thead>
+<tr>
+<th>rule</th>
+<th>threshold</th>
+<th>n_selected</th>
+<th>precision</th>
+<th>recall</th>
+<th>false_positives</th>
+<th>false_negatives</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>capacity (chosen)</td>
+<td>0.9728</td>
+<td>202</td>
+<td>0.9703</td>
+<td>0.1724</td>
+<td>6</td>
+<td>941</td>
+</tr>
+<tr>
+<td>f1_optimal</td>
+<td>0.3848</td>
+<td>1154</td>
+<td>0.7106</td>
+<td>0.7212</td>
+<td>334</td>
+<td>317</td>
+</tr>
+<tr>
+<td>precision&gt;=0.8</td>
+<td>0.5355</td>
+<td>861</td>
+<td>0.8002</td>
+<td>0.6060</td>
+<td>172</td>
+<td>448</td>
+</tr>
+<tr>
+<td>0.5 (default)</td>
+<td>0.5000</td>
+<td>922</td>
+<td>0.7874</td>
+<td>0.6385</td>
+<td>196</td>
+<td>411</td>
+</tr>
+</tbody>
+</table>
+<p>Three supportive bands (Priority outreach, Check-in suggested, Standard support) are stored in the manifest.</p>
+<p><strong>Reproducibility and artifacts.</strong> <code>models/final_pipeline.joblib</code> (regenerated with <code>make final</code>) and
+<code>models/manifest.json</code> (git SHA, config hash, pipeline SHA-256, library versions, seed, exact 21-column input schema,
+threshold, bands, CV summary, test counter). A fresh-environment re-run reproduced every compared table with a
+maximum absolute delta of 0 (<code>docs/REPRODUCIBILITY.md</code>).</p>
+<p><strong>Single held-out evaluation</strong> (<code>test_metrics_all_models.csv</code>; <code>test_evaluations</code> = 1):</p>
+<table>
+<thead>
+<tr>
+<th>model</th>
+<th>pr_auc</th>
+<th>roc_auc</th>
+<th>recall_at_k</th>
+<th>precision_at_k</th>
+<th>brier</th>
+<th>ece</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>final</td>
+<td>0.8175</td>
+<td>0.8919</td>
+<td>0.1690</td>
+<td>0.9600</td>
+<td>0.1180</td>
+<td>0.0336</td>
+</tr>
+<tr>
+<td>hist_gb__sel-none</td>
+<td>0.8174</td>
+<td>0.8783</td>
+<td>0.1761</td>
+<td>1.0000</td>
+<td>0.1309</td>
+<td>0.0849</td>
+</tr>
+<tr>
+<td>random_forest__sel-decided</td>
+<td>0.8163</td>
+<td>0.8871</td>
+<td>0.1761</td>
+<td>1.0000</td>
+<td>0.1321</td>
+<td>0.0983</td>
+</tr>
+<tr>
+<td>random_forest__sel-none</td>
+<td>0.8161</td>
+<td>0.8915</td>
+<td>0.1690</td>
+<td>0.9600</td>
+<td>0.1235</td>
+<td>0.0754</td>
+</tr>
+<tr>
+<td>logreg__sel-none</td>
+<td>0.8154</td>
+<td>0.8775</td>
+<td>0.1761</td>
+<td>1.0000</td>
+<td>0.1373</td>
+<td>0.1014</td>
+</tr>
+<tr>
+<td>hist_gb__sel-decided</td>
+<td>0.8103</td>
+<td>0.8778</td>
+<td>0.1761</td>
+<td>1.0000</td>
+<td>0.1354</td>
+<td>0.0930</td>
+</tr>
+<tr>
+<td>logreg__sel-decided</td>
+<td>0.8050</td>
+<td>0.8750</td>
+<td>0.1761</td>
+<td>1.0000</td>
+<td>0.1382</td>
+<td>0.1033</td>
+</tr>
+<tr>
+<td>dummy</td>
+<td>0.3209</td>
+<td>0.5000</td>
+<td>0.0739</td>
+<td>0.4200</td>
+<td>0.2179</td>
+<td>0.0004</td>
+</tr>
+</tbody>
+</table>
+<p>Final model: PR-AUC 0.8175 (CV estimate 0.8078), ROC-AUC 0.8919, Brier 0.1180, ECE 0.0336; at the threshold it selects
+57 of 885 students with precision 0.965. Illustrative KPI: under the stated assumption, a
+5-week window reaches a measured 16.9% of the 284 eventual dropouts in the test cohort with
+96% precision; a 10-week window reaches 32.7% (<code>test_recall_precision_at_k.csv</code>).</p>
+<h2 id="5-critical-thinking-ethical-ai-and-bias-auditing">5. Critical thinking, ethical AI and bias auditing</h2>
+<h3 id="51-explainability">5.1 Explainability</h3>
+<p>Method (<code>reports/explainability/method.json</code>): shap.TreeExplainer on each of the 5 calibrated ensemble members;
+one-hot columns summed per source feature and averaged across members; explanations describe uncalibrated base-estimator
+contributions, not the calibrated probability. Global importance (<code>shap_global_importance.csv</code>, <code>shap_global_bar.png</code>):</p>
+<table>
+<thead>
+<tr>
+<th>feature</th>
+<th>mean_abs_shap</th>
+<th>mean_signed_shap</th>
+<th>engineered</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sem1_approval_rate</td>
+<td>0.0919</td>
+<td>-0.0185</td>
+<td>True</td>
+</tr>
+<tr>
+<td>Curricular units 1st sem (approved)</td>
+<td>0.0667</td>
+<td>-0.0122</td>
+<td>False</td>
+</tr>
+<tr>
+<td>Curricular units 1st sem (grade)</td>
+<td>0.0371</td>
+<td>-0.0115</td>
+<td>False</td>
+</tr>
+<tr>
+<td>grade_diff_vs_admission</td>
+<td>0.0305</td>
+<td>-0.0095</td>
+<td>True</td>
+</tr>
+<tr>
+<td>Application mode</td>
+<td>0.0253</td>
+<td>-0.0066</td>
+<td>False</td>
+</tr>
+<tr>
+<td>sem1_any_approved</td>
+<td>0.0245</td>
+<td>-0.0090</td>
+<td>True</td>
+</tr>
+<tr>
+<td>Course</td>
+<td>0.0201</td>
+<td>-0.0050</td>
+<td>False</td>
+</tr>
+<tr>
+<td>Curricular units 1st sem (evaluations)</td>
+<td>0.0107</td>
+<td>-0.0049</td>
+<td>False</td>
+</tr>
+<tr>
+<td>sem1_evaluation_participation_rate</td>
+<td>0.0107</td>
+<td>-0.0053</td>
+<td>True</td>
+</tr>
+<tr>
+<td>Previous qualification</td>
+<td>0.0105</td>
+<td>-0.0028</td>
+<td>False</td>
+</tr>
+</tbody>
+</table>
+<p>Representative true-positive, false-positive, false-negative and true-negative records (synthetic ids,
+<code>shap_local_examples.json</code>) are rendered into supportive adviser phrases through <code>configs/language.yaml</code>; a test proves
+no sensitive attribute can appear. PDP and ICE plots cover 9 continuous raw features; engineered features are
+excluded from PDP with the reason recorded (they cannot be varied independently inside the pipeline).</p>
+<h3 id="52-limitations-reportslimitationsmd">5.2 Limitations (<code>reports/limitations.md</code>)</h3>
+<p><strong>Dataset scope and external validity.</strong> One Portuguese higher-education institution, historical records published by
+UCI (dataset 697, CC BY 4.0). Results describe this institution's past students and do not transfer to Philippine or other
+institutions without new data, re-training, and a new audit. Predicted risk is a statistical association, not a cause.</p>
+<p><strong>Historical bias and proxies.</strong> The label is what happened, including whatever support students did or did not receive.
+Sensitive attributes are excluded from the model, but parental qualification and occupation (four columns), application
+route, programme, and attendance schedule act as proxies for age and socioeconomic background. The fairness audit found
+near-equal true-positive rates by gender but a large equal-opportunity gap by age (TPR 0.10 for 17-19 vs 0.50 for 35+
+at the deployed threshold; <code>reports/fairness/group_metrics.csv</code>). Younger students who later drop out are under-reached.</p>
+<p><strong>Temporal leakage controls and their cost.</strong> Only enrollment-time and first-semester columns are model inputs; the six
+second-semester columns are prohibited and tested. Three financial-status columns (Debtor, Tuition fees up to date,
+Scholarship holder) have undocumented recording time and are excluded; including them would raise CV PR-AUC by about
+0.036 to 0.039 (<code>reports/tables/ablation_ambiguous.csv</code>), a gain that may be leakage. The source article
+could not be retrieved programmatically to settle this (<code>data/README.md</code>, open item).</p>
+<p><strong>Class imbalance.</strong> A 0.32 positive (dropout) rate in both splits. Handled with class weighting (SMOTENC rejected under the documented rule),
+PR-AUC as the primary metric, and a capacity-based threshold rather than 0.5.</p>
+<p><strong>Overfitting and uncertainty.</strong> Fold-to-fold PR-AUC standard deviation is about 0.011 to 0.017, the same order as the
+differences between candidate models, so the model choice rests on secondary criteria (calibration) and is documented as
+such. Held-out PR-AUC (0.8175) matches the CV estimate (0.8078), which argues against selection overfitting.
+The test set was evaluated once; the manifest counter records it. A second fresh-environment run reproduced every table
+exactly (<code>docs/REPRODUCIBILITY.md</code>).</p>
+<p><strong>Capacity assumption.</strong> K = 50 (10 per week × 5 weeks) is illustrative. Recall@K is bounded by it
+(0.169 on test for 284 dropouts); it is a statement about capacity, not model quality. No cost, saving, or return figure is
+asserted anywhere because the data contain none.</p>
+<p><strong>Explanations.</strong> SHAP values describe the uncalibrated ensemble members' contributions, aggregated per source feature and
+averaged; they are not the calibrated probability and not causal. Engineered features cannot be varied independently for
+PDP, so they are explained through SHAP only.</p>
+<p><strong>Human oversight.</strong> The tool proposes a short outreach list; a qualified adviser reviews each record, may dismiss or
+override any suggestion, and records the decision locally. No automated or adverse decision is made or recommended.
+Advisers should keep independent referral routes, especially for first-year students where model recall is lowest, and
+the Equity Dashboard should be reviewed each outreach cycle.</p>
+<h3 id="53-bias-fairness-analysis-reportsbias_fairness_analysismd">5.3 Bias &amp; Fairness Analysis (<code>reports/bias_fairness_analysis.md</code>)</h3>
+<p>Audit of the held-out cohort (n = 885) by gender (verified encoding) and age band, at the deployed threshold and at
+top-K, aggregate only; nationality, marital status, international status and special needs were profiled but not
+audited as groups because most of their categories fall below the minimum reliable size.</p>
+<h2 id="2-group-metrics-at-the-deployed-threshold">2. Group metrics at the deployed threshold</h2>
+<table>
+<thead>
+<tr>
+<th>attribute</th>
+<th>group</th>
+<th>n</th>
+<th>reliable</th>
+<th>base_rate</th>
+<th>selection_rate</th>
+<th>tpr</th>
+<th>fpr</th>
+<th>brier</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gender</td>
+<td>female</td>
+<td>575</td>
+<td>True</td>
+<td>0.2452</td>
+<td>0.0504</td>
+<td>0.1986</td>
+<td>0.0023</td>
+<td>0.1081</td>
+</tr>
+<tr>
+<td>gender</td>
+<td>male</td>
+<td>310</td>
+<td>True</td>
+<td>0.4613</td>
+<td>0.0903</td>
+<td>0.1888</td>
+<td>0.0060</td>
+<td>0.1364</td>
+</tr>
+<tr>
+<td>age_band</td>
+<td>17-19</td>
+<td>403</td>
+<td>True</td>
+<td>0.1935</td>
+<td>0.0199</td>
+<td>0.1026</td>
+<td>0.0000</td>
+<td>0.0963</td>
+</tr>
+<tr>
+<td>age_band</td>
+<td>20-24</td>
+<td>256</td>
+<td>True</td>
+<td>0.3086</td>
+<td>0.0352</td>
+<td>0.1139</td>
+<td>0.0000</td>
+<td>0.1468</td>
+</tr>
+<tr>
+<td>age_band</td>
+<td>25-34</td>
+<td>141</td>
+<td>True</td>
+<td>0.6028</td>
+<td>0.1348</td>
+<td>0.2000</td>
+<td>0.0357</td>
+<td>0.1378</td>
+</tr>
+<tr>
+<td>age_band</td>
+<td>35+</td>
+<td>85</td>
+<td>True</td>
+<td>0.4941</td>
+<td>0.2471</td>
+<td>0.5000</td>
+<td>0.0000</td>
+<td>0.1014</td>
+</tr>
+</tbody>
+</table>
+<p>Attribute-level summary (reference = largest group; reliable groups only):</p>
+<table>
+<thead>
+<tr>
+<th>attribute</th>
+<th>reference_group</th>
+<th>n_reliable_groups</th>
+<th>dp_difference</th>
+<th>di_ratio</th>
+<th>eo_difference</th>
+<th>eq_odds_max_diff</th>
+<th>max_brier_gap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gender</td>
+<td>female</td>
+<td>2</td>
+<td>0.0399</td>
+<td>0.5584</td>
+<td>0.0098</td>
+<td>0.0098</td>
+<td>0.0283</td>
+</tr>
+<tr>
+<td>age_band</td>
+<td>17-19</td>
+<td>4</td>
+<td>0.2272</td>
+<td>0.0803</td>
+<td>0.3974</td>
+<td>0.3974</td>
+<td>0.0505</td>
+</tr>
+</tbody>
+</table>
+<p>At top-K (50 slots) the picture is the same (<code>group_metrics.csv</code>, <code>operating_point = top_k</code>): gender DP difference
+0.0372, age-band DP difference 0.2204.</p>
+<h2 id="3-reading-the-numbers-authors-interpretation">3. Reading the numbers (author's interpretation)</h2>
+<p><strong>Gender.</strong> Male students are selected at 9.0% and female students at 5.0%: a demographic-parity difference of
+0.040 and a disparate-impact ratio of 0.56, below the 0.8 rule-of-thumb often quoted. But the
+observed dropout base rates differ almost two-fold (46.1% vs 24.5%), and the model's <strong>true-positive rate is nearly
+identical</strong> (0.189 vs 0.199, equal-opportunity difference 0.0098) with <strong>false-positive rates both under 1%</strong>.
+In plain terms: among students who later dropped out, men and women had the same chance of being on the outreach list;
+the list contains more men because more men dropped out in this institution's history. Whether that is acceptable depends
+on the goal. If the goal is to reach students who will otherwise leave, equal opportunity is the relevant criterion and
+it is met within noise. If the goal is equal outreach exposure by gender, it is not met, and the only way to meet it is
+to override the model's ranking by gender (section 5), which the constitution forbids for deployment.</p>
+<p><strong>Age.</strong> This is the material finding. Selection rate rises from 2.0% (17-19) to 24.7% (35+), a DP difference of
+0.227 and a DI ratio of 0.08. Base rates also rise steeply (19.4% → 60.3% → 49.4%),
+so part of the gap mirrors history. But <strong>equal opportunity is not met</strong>: the true-positive rate is 0.103 for 17-19-year-olds
+and 0.500 for students 35 and over (difference 0.397). A young student who will drop out is roughly five times less likely
+to be on the outreach list than a mature student who will drop out. False-positive rates are near zero for all bands, so the
+list is precise everywhere; it is recall that is unevenly distributed. Age is not a model input, so this operates through
+proxies: mature entrants differ in application route (<code>Application mode</code> code 39 "Over 23 years old" is an allow-listed
+feature), programme, attendance schedule, and first-semester pattern. The model has learned that those patterns carry
+risk, and they do in this data, but the consequence is that younger students' dropout looks different and is under-served
+by a single global threshold.</p>
+<p><strong>Calibration by group</strong> (<code>group_calibration.csv</code>, <code>group_calibration.png</code>). Brier scores range from 0.096 to
+0.147 across reliable groups (max gap 0.050). Reliability curves are shown for every group with n ≥ 30.
+With 85 to 575 records per group and five bins, curves for the smaller groups are indicative only.</p>
+<p><strong>Subgroup sizes.</strong> All six audited groups exceed the minimum (85 smallest, "35+"). Metric uncertainty is
+still wide for that band: a TPR of 0.50 rests on 42 eventual dropouts.</p>
+<h2 id="4-where-the-disparity-comes-from-proxy-and-historical-bias-discussion">4. Where the disparity comes from (proxy and historical-bias discussion)</h2>
+<ul>
+<li><strong>Historical outcomes.</strong> The label is what happened at one institution in past years. If mature students received less
+  support then, their higher dropout rate is partly institutional, and a model trained to predict it will reproduce it.</li>
+<li><strong>Proxy features.</strong> Four parental background columns (qualification and occupation of each parent) are socioeconomic
+  proxies kept as model inputs by PROJECT_DECISIONS; the Milestone 4 L1 ranking placed several of their codes among the
+  strongest coefficients. <code>Application mode</code> encodes an explicit over-23 route. <code>Course</code> and <code>Daytime/evening attendance</code>
+  correlate with age and with working while studying. These are legitimate academic-context signals <strong>and</strong> channels
+  through which age and class re-enter a model that excludes age itself.</li>
+<li><strong>Data scope.</strong> One Portuguese public institution, 2008-2019 intake per the source; no Philippine or other context.
+  The disparities above describe this dataset, not any other student body.</li>
+</ul>
+<h2 id="5-mitigations-tried-training-out-of-fold-the-test-set-was-not-re-used">5. Mitigations tried (training out-of-fold; the test set was not re-used)</h2>
+<table>
+<thead>
+<tr>
+<th>variant</th>
+<th>deployable</th>
+<th>pr_auc</th>
+<th>recall_at_k</th>
+<th>precision_at_k</th>
+<th>brier</th>
+<th>gender_dp_difference</th>
+<th>gender_di_ratio</th>
+<th>gender_eo_difference</th>
+<th>age_band_dp_difference</th>
+<th>age_band_eo_difference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>baseline (deployed)</td>
+<td>True</td>
+<td>0.8078</td>
+<td>0.1715</td>
+<td>0.9750</td>
+<td>0.1286</td>
+<td>0.0255</td>
+<td>0.6509</td>
+<td>0.0201</td>
+<td>0.1107</td>
+<td>0.1402</td>
+</tr>
+<tr>
+<td>reweighting (gender x label)</td>
+<td>True</td>
+<td>0.8064</td>
+<td>0.1724</td>
+<td>0.9800</td>
+<td>0.1340</td>
+<td>0.0193</td>
+<td>0.7203</td>
+<td>0.0359</td>
+<td>0.1182</td>
+<td>0.1673</td>
+</tr>
+<tr>
+<td>group thresholds (equal selection by gender)</td>
+<td>False</td>
+<td>0.8078</td>
+<td>0.1715</td>
+<td>0.9750</td>
+<td>0.1286</td>
+<td>0.0005</td>
+<td>0.9909</td>
+<td>0.0922</td>
+<td>0.1089</td>
+<td>0.1486</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Reweighting (gender × label, Kamiran-Calders).</strong> Refits the model; no sensitive attribute at inference, so it is
+  deployable. Effect: gender DP difference 0.0193 vs 0.0255 (better), gender EO difference
+  0.0359 vs 0.0201 (worse), PR-AUC 0.8064 vs 0.8078, Brier
+  0.1340 vs 0.1286 (worse). Age-band gaps slightly worse. <strong>Not adopted</strong>: it trades a small parity gain for a
+  loss in the criterion that matters most here (equal opportunity) and in calibration, and it does nothing for age.</li>
+<li><strong>Group-specific thresholds (equal selection by gender).</strong> Closes the gender selection gap almost completely
+  (0.0005) at no cost to PR-AUC, but raises the gender EO difference to 0.0922 and requires reading
+  gender at decision time. <strong>Reported, not deployed</strong> (constitution Principle X).</li>
+<li><strong>Not tried, recommended next:</strong> age-aware capacity allocation <em>by advisers</em> rather than by the model, i.e. reserving
+  part of the outreach capacity for the younger bands where recall is lowest (section 6). This is a human-process
+  mitigation that keeps the model unchanged and the sensitive attribute out of the scoring path.</li>
+</ul>
+<p>No model behaviour was altered to improve these numbers; the deployed model is the Milestone 6 artifact unchanged, and
+every trade-off above is recorded in <code>mitigation_comparison.csv</code>.</p>
+<h2 id="6-residual-risks-and-human-oversight">6. Residual risks and human oversight</h2>
+<ol>
+<li><strong>Under-reach of younger dropouts</strong> (TPR 0.10 for 17-19). Oversight: advisers should treat the list as one input,
+   keep their own referral channels for first-years, and the Equity Dashboard shows this gap explicitly.</li>
+<li><strong>Gender composition of the list</strong> mirrors base rates, not model error. Oversight: report list composition each cycle.</li>
+<li><strong>Proxy channels</strong> (parental background, application route) can re-encode age and class. Oversight: the model card lists
+   them; a future iteration should test removing parental background features and report the cost.</li>
+<li><strong>Single-institution history.</strong> Any deployment elsewhere requires re-training, re-auditing, and local approval.</li>
+<li><strong>Small-group uncertainty.</strong> Metrics for the 35+ band and any nationality group are noisy; do not act on them alone.</li>
+<li><strong>Feedback loops.</strong> Outreach changes outcomes; retraining on post-deployment data would learn the intervention. The app
+   logs actions locally and never feeds them back to the model.</li>
+</ol>
+<h2 id="7-what-the-adviser-sees">7. What the adviser sees</h2>
+<p>Only academic and engagement factors in supportive wording (<code>configs/language.yaml</code>), never gender, age, nationality,
+marital status, international status, or special needs. Sensitive attributes appear in the Equity Dashboard as
+aggregate rates only.</p>
+<h2 id="6-presentations">6. Presentations</h2>
+<ul>
+<li><strong>Technical deck (peers):</strong> <code>notebooks/90_technical_deck.ipynb</code> → <code>reports/decks/technical_deck.slides.html</code>,
+  12 slides: problem, dataset, leakage controls, EDA, features/selection/PCA, model comparison, final evaluation,
+  explainability, fairness, reproducibility, limitations. Built from repository tables and figures.</li>
+<li><strong>Business deck (education-support leaders):</strong> <code>reports/decks/business_deck_outline.md</code>, 10 slides with every
+  figure path and number to paste, illustrative labels, and language guardrails; assembled in PowerPoint/Canva as
+  <code>reports/decks/business_deck.pptx</code> (assembly checklist at the end of the outline).</li>
+</ul>
+<h2 id="7-repository-and-reproducibility">7. Repository and reproducibility</h2>
+<p>Public repository structured as an open-source project: <code>src/ssn/</code> (data, features, modeling, explain, fairness,
+reporting, app), <code>notebooks/</code> (01–05, 90), <code>data/</code> (README, dictionary; contents Git-ignored and regenerable),
+<code>models/</code> (manifest committed, pipeline regenerable), <code>reports/</code>, <code>tests/</code> (165 tests), <code>docs/</code>, <code>configs/</code>,
+<code>README.md</code>, <code>requirements.txt</code>, <code>LICENSE</code> (MIT; dataset CC BY 4.0). CI runs lint, secrets scan, config validation,
+tests and the adviser-language scan on every push. Reproduction steps: <code>README.md</code>; full-pipeline re-run deltas:
+<code>docs/REPRODUCIBILITY.md</code>.</p>
+<h2 id="8-optional-steps">8. Optional steps</h2>
+<ul>
+<li><strong>Step 8, deployment and MLOps:</strong> the Student Success Navigator Dash app (Milestone 9) and MLOps/Docker
+  documentation (Milestone 10) are planned; status is recorded in <code>README.md</code> when complete.</li>
+<li><strong>Step 9, Generative AI:</strong> documented in <code>docs/GENAI_USE.md</code> when written (Milestone 10).</li>
+</ul>
+<h2 id="9-limitations-summary">9. Limitations summary</h2>
+<p>See section 5.2. In one sentence: this is a well-audited prototype on one institution's historical data that ranks a
+small outreach list precisely, under-reaches younger students who later leave, and must be re-trained, re-audited and
+piloted locally before any use.</p>
+<h2 id="10-rubric-map">10. Rubric map</h2>
+<p><code>reports/rubric_map.md</code> links every rubric criterion (10 + 10 + 10 + 20 + 20 + 10 + 15 + 5 = 100 points) to the files
+that evidence it.</p><hr><p><small>Exported from reports/final_report.md with python-markdown. For PDF: open in a browser and print to PDF, or run pandoc if installed.</small></p></body></html>

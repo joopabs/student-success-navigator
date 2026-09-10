@@ -5,10 +5,8 @@
 Fair and explainable first-semester dropout risk prediction for early academic support, with a
 Dash decision-support companion app.
 
-> **Status: Milestone 7 complete (explainability, fairness audit, limitations, model card).**
+> **Status: Milestone 8 complete (final report, technical deck, business deck outline).** Milestones 9 (Dash app) and 10 (MLOps/GenAI docs) remain.
 > Metrics are measured; outreach capacity is an illustrative assumption. No production-readiness or causal claim is made.
-> No model has been trained and no model results exist yet. Every `[PENDING: ...]` marker below names the artifact that will supply
-> the value once the pipeline has actually been run.
 
 ## What this project does
 
@@ -33,7 +31,7 @@ Each heading below corresponds to a criterion in the course rubric (`CAPSTONE_BR
 Section 5). Evidence links are filled in as milestones complete.
 
 ### Step 1: Problem understanding and framing (10 pts)
-- Problem statement, task type, unit of analysis, prediction point: `[PENDING: reports/final_report.md]`
+- Problem statement, task type, unit of analysis, prediction point: [`reports/final_report.md`](reports/final_report.md) section 1 · decisions in `PROJECT_DECISIONS.md`
 - Primary metric PR-AUC; intervention metric Recall@K at an **illustrative** outreach capacity: `reports/tables/test_recall_precision_at_k.csv` (measured recall, illustrative K)
 
 ### Step 2: Data collection and understanding (10 pts)
@@ -55,15 +53,15 @@ Section 5). Evidence links are filled in as milestones complete.
 - Limitations and mitigations: [`reports/limitations.md`](reports/limitations.md) · Model card: [`reports/model_card.md`](reports/model_card.md)
 
 ### Step 6: Final presentation and communication (10 pts)
-- Technical deck (8-12 slides): `[PENDING: reports/decks/technical_deck.slides.html]`
-- Business deck (8-12 slides): `[PENDING: reports/decks/business_deck.pptx]`
+- Technical deck (12 slides): [`reports/decks/technical_deck.slides.html`](reports/decks/technical_deck.slides.html) built from `notebooks/90_technical_deck.ipynb`
+- Business deck (10 slides): outline with figure paths and guardrails in [`reports/decks/business_deck_outline.md`](reports/decks/business_deck_outline.md); assembled file `reports/decks/business_deck.pptx` (assembly checklist in the outline)
 
 ### Step 7: GitHub profile and upload (15 pts)
-- Repository structure: see below. Final report: `[PENDING: reports/final_report.md]`
+- Repository structure: see below. Final report: [`reports/final_report.md`](reports/final_report.md) (HTML export `reports/final_report.html`) · Rubric evidence map: [`reports/rubric_map.md`](reports/rubric_map.md)
 
 ### Bonus: creative and well-presented submission (5 pts)
-- Student Success Navigator Dash app (optional Step 8): `[PENDING: docs/DEPLOYMENT.md]`
-- MLOps and Generative AI documentation (optional Steps 8-9): `[PENDING: docs/MLOPS.md, docs/GENAI_USE.md]`
+- Student Success Navigator Dash app (optional Step 8): planned in Milestone 9 (`docs/DEPLOYMENT.md` when built)
+- MLOps and Generative AI documentation (optional Steps 8-9): planned in Milestone 10 (`docs/MLOPS.md`, `docs/GENAI_USE.md` when written)
 
 ## Reproduction
 
@@ -76,9 +74,22 @@ pytest -q          # Milestone 1 smoke tests
 python -m ssn --version
 ```
 
-End-to-end reproduction (download, clean, split, train, evaluate, explain, audit) is wired in
-later milestones: `[PENDING: Makefile targets per specs/001-dropout-risk-navigator/contracts/cli.md]`.
-Reproduction tolerance: `[PENDING: docs/REPRODUCIBILITY.md]`.
+End-to-end reproduction from the raw download to the audited model (about 8 minutes on a laptop):
+
+```bash
+make data      # download (checksum-verified), validate, profile, clean, split
+make eda       # EDA figures and tables (training split)
+make select    # feature selection + PCA under CV
+make cv        # dummy + candidates under CV
+make tune      # RandomizedSearchCV
+make final     # select-model, calibrate, threshold, fit-final, evaluate-test (the single held-out pass)
+make explain   # SHAP, PDP/ICE
+make fairness  # group audit + mitigation experiment
+make report    # model card, rubric map, language scan
+```
+
+A second run in a fresh environment reproduced every compared table with a maximum absolute delta of 0
+(`docs/REPRODUCIBILITY.md`). Tests: `make test`; lint: `make lint`; secrets scan: `make secrets`.
 
 ## Repository structure
 

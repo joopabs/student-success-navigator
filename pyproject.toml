@@ -38,5 +38,6 @@ select = ["E", "F", "I", "B", "UP"]
 "src/ssn/reporting/figures.py" = ["E501"]  # figure titles and labels
 "src/ssn/modeling/commands.py" = ["E501"]  # console print statements
 "src/ssn/reporting/model_card.py" = ["E501"]  # markdown template; long prose lines are intentional
+"src/ssn/reporting/rubric_map.py" = ["E501"]  # markdown template
 "src/ssn/fairness/commands.py" = ["E501"]  # console print statements
 "src/ssn/explain/commands.py" = ["E501"]  # console print statements

@@ -1,0 +1,21 @@
+# Rubric Evidence Map
+
+**Generated:** 2026-09-10 07:21 UTC by `python -m ssn rubric-map`. Criteria and points from
+`CAPSTONE_BRIEF.md` section 5 (total 100, bonus included). Links are relative to `reports/`; an item marked
+(pending) does not exist yet in the repository.
+
+| Criterion | Points | Evidence |
+|---|---|---|
+| 1: Problem Understanding & Framing | 10 | [`reports/final_report.md#1-problem-understanding-and-framing`](../reports/final_report.md#1-problem-understanding-and-framing)<br>[`PROJECT_DECISIONS.md`](../PROJECT_DECISIONS.md)<br>[`reports/tables/test_recall_precision_at_k.csv`](../reports/tables/test_recall_precision_at_k.csv)<br>[`configs/base.yaml`](../configs/base.yaml) |
+| Step 2: Data Collection & Understanding | 10 | [`data/README.md`](../data/README.md)<br>[`reports/data_overview.md`](../reports/data_overview.md)<br>[`data/data_dictionary.md`](../data/data_dictionary.md)<br>[`reports/tables/profile_columns.csv`](../reports/tables/profile_columns.csv)<br>[`reports/tables/profile_target.csv`](../reports/tables/profile_target.csv)<br>[`notebooks/01_data_profiling.ipynb`](../notebooks/01_data_profiling.ipynb) |
+| Step 3: Data Preprocessing, EDA & Feature Engineering | 10 | [`reports/eda_feature_engineering_report.md`](../reports/eda_feature_engineering_report.md)<br>[`reports/tables/clean_before_after.csv`](../reports/tables/clean_before_after.csv)<br>[`reports/figures/eda_correlation_spearman.png`](../reports/figures/eda_correlation_spearman.png)<br>[`reports/tables/selection_decision.json`](../reports/tables/selection_decision.json)<br>[`reports/tables/pca_vs_nopca_cv.csv`](../reports/tables/pca_vs_nopca_cv.csv)<br>[`src/ssn/features/engineering.py`](../src/ssn/features/engineering.py)<br>[`notebooks/02_eda_feature_engineering.ipynb`](../notebooks/02_eda_feature_engineering.ipynb)<br>[`notebooks/03_feature_selection_pca.ipynb`](../notebooks/03_feature_selection_pca.ipynb) |
+| Step 4: Model Implementation & Comparison | 20 | [`reports/model_comparison_cv.md`](../reports/model_comparison_cv.md)<br>[`reports/model_selection_and_evaluation.md`](../reports/model_selection_and_evaluation.md)<br>[`reports/tables/cv_comparison.csv`](../reports/tables/cv_comparison.csv)<br>[`reports/tables/selection_matrix_ranked.csv`](../reports/tables/selection_matrix_ranked.csv)<br>[`reports/tables/test_metrics_all_models.csv`](../reports/tables/test_metrics_all_models.csv)<br>[`models/manifest.json`](../models/manifest.json)<br>[`docs/REPRODUCIBILITY.md`](../docs/REPRODUCIBILITY.md)<br>[`notebooks/04_model_comparison.ipynb`](../notebooks/04_model_comparison.ipynb) |
+| Step 5: Critical Thinking, Ethical AI & Bias Auditing | 20 | [`reports/bias_fairness_analysis.md`](../reports/bias_fairness_analysis.md)<br>[`reports/limitations.md`](../reports/limitations.md)<br>[`reports/model_card.md`](../reports/model_card.md)<br>[`reports/explainability/shap_global_bar.png`](../reports/explainability/shap_global_bar.png)<br>[`reports/explainability/shap_local_examples.json`](../reports/explainability/shap_local_examples.json)<br>[`reports/fairness/group_metrics.csv`](../reports/fairness/group_metrics.csv)<br>[`reports/fairness/mitigation_comparison.csv`](../reports/fairness/mitigation_comparison.csv)<br>[`notebooks/05_explainability_fairness.ipynb`](../notebooks/05_explainability_fairness.ipynb) |
+| Step 6: Final Presentation & Communication | 10 | [`reports/decks/technical_deck.slides.html`](../reports/decks/technical_deck.slides.html)<br>[`notebooks/90_technical_deck.ipynb`](../notebooks/90_technical_deck.ipynb)<br>[`reports/decks/business_deck_outline.md`](../reports/decks/business_deck_outline.md) |
+| Step 7: GitHub Profile & Upload | 15 | [`README.md`](../README.md)<br>[`requirements.txt`](../requirements.txt)<br>[`reports/final_report.md`](../reports/final_report.md)<br>[`tests`](../tests)<br>[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)<br>[`LICENSE`](../LICENSE) |
+| Bonus: Creative and well-presented submission | 5 | [`docs/DEPLOYMENT.md`](../docs/DEPLOYMENT.md) (pending)<br>[`docs/MLOPS.md`](../docs/MLOPS.md) (pending)<br>[`docs/GENAI_USE.md`](../docs/GENAI_USE.md) (pending)<br>[`src/ssn/app`](../src/ssn/app) |
+| **Total** | **100** | |
+
+<!-- BEGIN NOTES -->
+_Hand-written notes (e.g. submission checklist completion) go here and survive regeneration._
+<!-- END NOTES -->

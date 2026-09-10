@@ -494,7 +494,7 @@ and business deck (8-12 slides) built from computed artifacts.
 **Independent Test**: `reports/final_report.md` exists with a rubric map linking every
 criterion; technical deck slide count is 8-12 by automated check; business deck count recorded.
 
-- [ ] T069 [US6] Implement `src/ssn/reporting/rubric_map.py` and wire `rubric-map`: generate `reports/rubric_map.md` with one row per rubric criterion (from `CAPSTONE_BRIEF.md` Section 5), points, and links to evidencing files or report sections; keep hand-edited link cells across regenerations
+- [X] T069 [US6] Implement `src/ssn/reporting/rubric_map.py` and wire `rubric-map`: generate `reports/rubric_map.md` with one row per rubric criterion (from `CAPSTONE_BRIEF.md` Section 5), points, and links to evidencing files or report sections; keep hand-edited link cells across regenerations
   - Type: code, reports
   - Deps: T067
   - Accept: eight rows (seven criteria plus bonus) with points summing to 100; every link resolves
@@ -504,17 +504,17 @@ t=open('reports/rubric_map.md').read()
 links=re.findall(r'\]\(([^)]+)\)',t); missing=[l for l in links if not l.startswith('#') and not os.path.exists(l.split('#')[0])]
 print("links",len(links),"missing",missing); assert not missing
 PY`
-- [ ] T070 [US6] Write `reports/final_report.md` covering Steps 1-7: problem statement (unit of analysis, prediction point, users, intended use, non-use), dataset and dictionary reference, EDA and feature engineering summary, model comparison and selection rationale, threshold and capacity analysis, test evaluation, explainability, "Bias & Fairness Analysis" (group metrics with n, mitigations, residual risk), limitations (include `reports/limitations.md`), optional steps status, rubric map; every number references a file; every business figure labelled illustrative
+- [X] T070 [US6] Write `reports/final_report.md` covering Steps 1-7: problem statement (unit of analysis, prediction point, users, intended use, non-use), dataset and dictionary reference, EDA and feature engineering summary, model comparison and selection rationale, threshold and capacity analysis, test evaluation, explainability, "Bias & Fairness Analysis" (group metrics with n, mitigations, residual risk), limitations (include `reports/limitations.md`), optional steps status, rubric map; every number references a file; every business figure labelled illustrative
   - Type: reports
   - Deps: T069
   - Accept: sections present; `scan-language` passes; no `[PENDING`
   - Verify: `python -m ssn scan-language --paths reports/final_report.md && ! grep -n 'PENDING' reports/final_report.md`
-- [ ] T071 [US6] Create `notebooks/90_technical_deck.ipynb` with slide-type cell metadata (8-12 `slide` cells: problem, data, leakage controls, EDA, features, model comparison, threshold and capacity, test results, explainability, fairness, limitations, reproducibility) loading figures and tables from `reports/`; export with nbconvert and check slide count
+- [X] T071 [US6] Create `notebooks/90_technical_deck.ipynb` with slide-type cell metadata (8-12 `slide` cells: problem, data, leakage controls, EDA, features, model comparison, threshold and capacity, test results, explainability, fairness, limitations, reproducibility) loading figures and tables from `reports/`; export with nbconvert and check slide count
   - Type: notebook, reports
   - Deps: T070
   - Accept: `reports/decks/technical_deck.slides.html` has 8-12 top-level sections
   - Verify: `jupyter nbconvert notebooks/90_technical_deck.ipynb --to slides --output-dir reports/decks --output technical_deck && python -c "import re;h=open('reports/decks/technical_deck.slides.html').read();n=len(re.findall(r'<section(?![^>]*data-parent)',h));print(n);assert 8<=n<=12"`
-- [ ] T072 [US6] Generate `reports/decks/business_deck_outline.md`: per-slide outline (8-12 slides: problem and stakeholders, what the tool does and does not do, illustrative KPI read from `reports/tables/test_recall_precision_at_k.csv` and phrased as the share of eventual dropout cases reached within the illustrative outreach window (per-week capacity times window weeks), risks and safeguards, fairness summary, limitations, rollout strategy, ask) with every figure path and number to paste, all labelled illustrative
+- [X] T072 [US6] Generate `reports/decks/business_deck_outline.md`: per-slide outline (8-12 slides: problem and stakeholders, what the tool does and does not do, illustrative KPI read from `reports/tables/test_recall_precision_at_k.csv` and phrased as the share of eventual dropout cases reached within the illustrative outreach window (per-week capacity times window weeks), risks and safeguards, fairness summary, limitations, rollout strategy, ask) with every figure path and number to paste, all labelled illustrative
   - Type: reports
   - Deps: T070
   - Accept: outline lists 8-12 slides; KPI cites its CSV path
@@ -524,12 +524,12 @@ PY`
   - Deps: T072
   - Accept: file present; recorded slide count between 8 and 12; no unlabelled ROI figures
   - Verify: `ls -la reports/decks/business_deck.pptx && tail -3 reports/decks/business_deck_outline.md`
-- [ ] T074 [US6] Run `scan-language` across `reports/`, `README.md`, `docs/`, `notebooks/` and fix findings
+- [X] T074 [US6] Run `scan-language` across `reports/`, `README.md`, `docs/`, `notebooks/` and fix findings
   - Type: run
   - Deps: T071, T073
   - Accept: exit 0
   - Verify: `python -m ssn scan-language --paths reports README.md docs notebooks`
-- [ ] T075 [US6] Export `reports/final_report.md` to `reports/final_report.pdf` (pandoc if available, otherwise an editor export) and complete `README.md`: replace every `[PENDING]` with file-referenced values, finish reproduction steps, repository structure, rubric section links, optional-step status
+- [X] T075 [US6] Export `reports/final_report.md` to `reports/final_report.pdf` (pandoc if available, otherwise an editor export) and complete `README.md`: replace every `[PENDING]` with file-referenced values, finish reproduction steps, repository structure, rubric section links, optional-step status
   - Type: docs, reports
   - Deps: T074
   - Accept: PDF exists; README has zero `[PENDING`; README reproduction steps match quickstart.md

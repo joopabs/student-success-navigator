@@ -25,3 +25,14 @@ def cmd_model_card(args: argparse.Namespace) -> int:
     )
     print(f"wrote {inputs['out_path'].relative_to(cfg.root)} ({len(text.splitlines())} lines)")
     return EXIT_OK
+
+
+@register(None, "rubric-map")
+def cmd_rubric_map(args: argparse.Namespace) -> int:
+    from ssn.reporting import rubric_map as RM
+
+    cfg = load(args.config, set_seeds=False)
+    out = cfg.path_for("reports_dir") / "rubric_map.md"
+    _, missing = RM.render(cfg.root, out)
+    print(f"wrote {out.relative_to(cfg.root)}; pending evidence: {missing or 'none'}")
+    return EXIT_OK
