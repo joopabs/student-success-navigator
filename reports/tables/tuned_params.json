@@ -1,0 +1,92 @@
+{
+  "logreg__sel-none": {
+    "model": "logreg",
+    "selection": "none",
+    "best_params": {
+      "C": 1.1219752813215704,
+      "l1_ratio": 1.0
+    },
+    "cv_pr_auc_mean": 0.8186422656164458,
+    "cv_pr_auc_std": 0.01464573399547891,
+    "cv_roc_auc_mean": 0.8778689157676377,
+    "n_iter": 30,
+    "n_folds": 5,
+    "seed": 42
+  },
+  "logreg__sel-decided": {
+    "model": "logreg",
+    "selection": "decided",
+    "best_params": {
+      "C": 14.528246637516036,
+      "l1_ratio": 1.0
+    },
+    "cv_pr_auc_mean": 0.8115245385220151,
+    "cv_pr_auc_std": 0.014226755439234436,
+    "cv_roc_auc_mean": 0.8721647224359229,
+    "n_iter": 30,
+    "n_folds": 5,
+    "seed": 42
+  },
+  "random_forest__sel-none": {
+    "model": "random_forest",
+    "selection": "none",
+    "best_params": {
+      "max_depth": 18,
+      "max_features": "sqrt",
+      "min_samples_leaf": 2
+    },
+    "cv_pr_auc_mean": 0.8094307003557532,
+    "cv_pr_auc_std": 0.011228998692957898,
+    "cv_roc_auc_mean": 0.8730747314066638,
+    "n_iter": 40,
+    "n_folds": 5,
+    "seed": 42
+  },
+  "random_forest__sel-decided": {
+    "model": "random_forest",
+    "selection": "decided",
+    "best_params": {
+      "max_depth": 20,
+      "max_features": "log2",
+      "min_samples_leaf": 5
+    },
+    "cv_pr_auc_mean": 0.8087761524846154,
+    "cv_pr_auc_std": 0.010981906096010246,
+    "cv_roc_auc_mean": 0.8718039888191175,
+    "n_iter": 40,
+    "n_folds": 5,
+    "seed": 42
+  },
+  "hist_gb__sel-none": {
+    "model": "hist_gb",
+    "selection": "none",
+    "best_params": {
+      "l2_regularization": 0.11044350847124683,
+      "learning_rate": 0.06746437142284309,
+      "max_leaf_nodes": 21,
+      "min_samples_leaf": 36
+    },
+    "cv_pr_auc_mean": 0.8146493925969949,
+    "cv_pr_auc_std": 0.014888687402964581,
+    "cv_roc_auc_mean": 0.8720706760886161,
+    "n_iter": 40,
+    "n_folds": 5,
+    "seed": 42
+  },
+  "hist_gb__sel-decided": {
+    "model": "hist_gb",
+    "selection": "decided",
+    "best_params": {
+      "l2_regularization": 0.11044350847124683,
+      "learning_rate": 0.06746437142284309,
+      "max_leaf_nodes": 21,
+      "min_samples_leaf": 36
+    },
+    "cv_pr_auc_mean": 0.8056887310895172,
+    "cv_pr_auc_std": 0.015302615104123863,
+    "cv_roc_auc_mean": 0.8645152315141302,
+    "n_iter": 40,
+    "n_folds": 5,
+    "seed": 42
+  }
+}

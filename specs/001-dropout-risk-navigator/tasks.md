@@ -361,52 +361,52 @@ the test set once, and prove reproducibility.
 with `test_evaluations: 1`, and test tables; `pytest -q tests/unit/test_threshold.py
 tests/unit/test_persist_manifest.py tests/integration/test_reproduce_fixture.py` passes.
 
-- [ ] T048 [US1] Implement `src/ssn/modeling/tune.py` and wire `tune --models ...`: `RandomizedSearchCV` over each model's `search_space` with PR-AUC scoring, seeded, on train only; write `reports/tables/tuning_results_<model>.csv` and `reports/tables/tuned_params.json`
+- [X] T048 [US1] Implement `src/ssn/modeling/tune.py` and wire `tune --models ...`: `RandomizedSearchCV` over each model's `search_space` with PR-AUC scoring, seeded, on train only; write `reports/tables/tuning_results_<model>.csv` and `reports/tables/tuned_params.json`
   - Type: code
   - Deps: T044
   - Accept: results contain `n_iter` rows per model; best params serialisable
   - Verify: `python -m ssn tune --models logreg random_forest hist_gb && ls reports/tables/tuning_results_*.csv`
-- [ ] T049 [US4] Implement `src/ssn/fairness/groups.py` (gender group labels from verified encoding; `age_band` from config; refuse gender if `encoding_verified` is false) and `src/ssn/fairness/metrics.py` (selection rate, TPR, FPR, Brier per group; DPD, DIR, EOD, equalized-odds max diff at attribute level with largest group as reference; `n` and `reliable`); write `tests/unit/test_fairness_metrics.py` with hand-computed values and `tests/unit/test_groups_min_size.py`
+- [X] T049 [US4] Implement `src/ssn/fairness/groups.py` (gender group labels from verified encoding; `age_band` from config; refuse gender if `encoding_verified` is false) and `src/ssn/fairness/metrics.py` (selection rate, TPR, FPR, Brier per group; DPD, DIR, EOD, equalized-odds max diff at attribute level with largest group as reference; `n` and `reliable`); write `tests/unit/test_fairness_metrics.py` with hand-computed values and `tests/unit/test_groups_min_size.py`
   - Type: code, tests
   - Deps: T020, T033, T042
   - Accept: metrics match hand calculations; unverified gender raises; small groups flagged
   - Verify: `pytest -q tests/unit/test_fairness_metrics.py tests/unit/test_groups_min_size.py`
-- [ ] T050 [US1] Wire `select-model`: build `reports/tables/selection_matrix.csv` from tuned CV results (PR-AUC, Recall@K, Precision@K, Brier, ECE), a preliminary OOF fairness summary (max DPD and min DIR across attributes via T049), an explainability feasibility flag, and a maintainability note per model; exclude accuracy; write `reports/tables/selection_decision.json` with the chosen model and a rationale string referencing the matrix; persist each tuned candidate pipeline (refit on full train, `n_jobs=1`) to `models/candidates/<name>.joblib` (Git-ignored) so the single test pass in T054 can load them without refitting
+- [X] T050 [US1] Wire `select-model`: build `reports/tables/selection_matrix.csv` from tuned CV results (PR-AUC, Recall@K, Precision@K, Brier, ECE), a preliminary OOF fairness summary (max DPD and min DIR across attributes via T049), an explainability feasibility flag, and a maintainability note per model; exclude accuracy; write `reports/tables/selection_decision.json` with the chosen model and a rationale string referencing the matrix; persist each tuned candidate pipeline (refit on full train, `n_jobs=1`) to `models/candidates/<name>.joblib` (Git-ignored) so the single test pass in T054 can load them without refitting
   - Type: code
   - Deps: T048, T049
   - Accept: `accuracy` absent from the matrix; decision JSON present
   - Verify: `python -m ssn select-model && python -c "import pandas as pd;m=pd.read_csv('reports/tables/selection_matrix.csv');assert 'accuracy' not in m.columns;print(m.columns.tolist())"`
-- [ ] T051 [US1] Implement `src/ssn/modeling/threshold.py` and wire `threshold`: from the selected model's OOF scores compute the capacity threshold (research R-09), band boundaries, F1-optimal and fixed-precision alternatives, Recall@K/Precision@K for the K values derived from `capacity.window_sensitivity_weeks`; write `reports/tables/threshold_and_bands.json` and `reports/tables/oof_recall_precision_at_k.csv`; write `tests/unit/test_threshold.py` (monotone bands, selection rate matches K/N, zero-positive edge case reported)
+- [X] T051 [US1] Implement `src/ssn/modeling/threshold.py` and wire `threshold`: from the selected model's OOF scores compute the capacity threshold (research R-09), band boundaries, F1-optimal and fixed-precision alternatives, Recall@K/Precision@K for the K values derived from `capacity.window_sensitivity_weeks`; write `reports/tables/threshold_and_bands.json` and `reports/tables/oof_recall_precision_at_k.csv`; write `tests/unit/test_threshold.py` (monotone bands, selection rate matches K/N, zero-positive edge case reported)
   - Type: code, tests
   - Deps: T050
   - Accept: JSON has rule, threshold, three bands with supportive names, sensitivity block; tests pass
   - Verify: `python -m ssn threshold && cat reports/tables/threshold_and_bands.json && pytest -q tests/unit/test_threshold.py`
-- [ ] T052 [US1] Implement `src/ssn/modeling/calibrate.py` and wire `calibrate`: compare uncalibrated versus `CalibratedClassifierCV` (isotonic, sigmoid) within train CV on Brier, ECE, PR-AUC; apply rule from research R-10; write `reports/tables/calibration_comparison.csv` and `reports/figures/oof_calibration.png`; record decision in `reports/tables/calibration_decision.json`
+- [X] T052 [US1] Implement `src/ssn/modeling/calibrate.py` and wire `calibrate`: compare uncalibrated versus `CalibratedClassifierCV` (isotonic, sigmoid) within train CV on Brier, ECE, PR-AUC; apply rule from research R-10; write `reports/tables/calibration_comparison.csv` and `reports/figures/oof_calibration.png`; record decision in `reports/tables/calibration_decision.json`
   - Type: code
   - Deps: T050
   - Accept: decision JSON states applied/not and method
   - Verify: `python -m ssn calibrate && cat reports/tables/calibration_decision.json`
-- [ ] T053 [US1] Implement `src/ssn/modeling/persist.py` and wire `fit-final`: refit selected (optionally calibrated) pipeline on full train with `n_jobs=1`, save `models/final_pipeline.joblib`, write `models/manifest.json` per contracts/artifact-manifest.md (git sha, config hash, pipeline sha256, library versions, data summary, features, estimator, threshold, bands, selection rationale, cv_summary, `test_evaluations: 0`); write `tests/unit/test_persist_manifest.py` (all contract keys present; no row-level data; sha matches file)
+- [X] T053 [US1] Implement `src/ssn/modeling/persist.py` and wire `fit-final`: refit selected (optionally calibrated) pipeline on full train with `n_jobs=1`, save `models/final_pipeline.joblib`, write `models/manifest.json` per contracts/artifact-manifest.md (git sha, config hash, pipeline sha256, library versions, data summary, features, estimator, threshold, bands, selection rationale, cv_summary, `test_evaluations: 0`); write `tests/unit/test_persist_manifest.py` (all contract keys present; no row-level data; sha matches file)
   - Type: code, tests, artifacts
   - Deps: T051, T052
   - Accept: manifest validates against the contract key list; sha256 matches
   - Verify: `python -m ssn fit-final && pytest -q tests/unit/test_persist_manifest.py`
-- [ ] T054 [US1] Wire `evaluate-test`: load the final pipeline plus the dummy baseline and every tuned candidate from `models/candidates/`, read `data/processed/test.parquet` (features and `is_dropout`), and in ONE pass compute all FR-012 to FR-015 metrics for each model at its own OOF-derived threshold and for the K values derived from `capacity.window_sensitivity_weeks`; write `reports/tables/test_metrics_all_models.csv`, `reports/tables/test_metrics.csv` (final model), `test_recall_precision_at_k.csv`, `reports/figures/test_pr_curve.png`, `test_calibration.png`, `test_confusion_matrix.png`; increment `manifest.test_evaluations` once and fill `test_summary`. Selection is already locked by T050; this pass MUST NOT change it. If the final threshold yields zero predicted positives, write the event to `test_metrics.csv` and the manifest (spec edge case)
+- [X] T054 [US1] Wire `evaluate-test`: load the final pipeline plus the dummy baseline and every tuned candidate from `models/candidates/`, read `data/processed/test.parquet` (features and `is_dropout`), and in ONE pass compute all FR-012 to FR-015 metrics for each model at its own OOF-derived threshold and for the K values derived from `capacity.window_sensitivity_weeks`; write `reports/tables/test_metrics_all_models.csv`, `reports/tables/test_metrics.csv` (final model), `test_recall_precision_at_k.csv`, `reports/figures/test_pr_curve.png`, `test_calibration.png`, `test_confusion_matrix.png`; increment `manifest.test_evaluations` once and fill `test_summary`. Selection is already locked by T050; this pass MUST NOT change it. If the final threshold yields zero predicted positives, write the event to `test_metrics.csv` and the manifest (spec edge case)
   - Type: code
   - Deps: T053
   - Accept: `test_metrics_all_models.csv` has a `dummy` row and one row per tuned candidate; manifest `test_evaluations` equals 1 after the pass; a warning is printed if it exceeds 1
   - Verify: `python -m ssn evaluate-test && python -c "import json;m=json.load(open('models/manifest.json'));print(m['test_evaluations'],m['test_summary'])"`
-- [ ] T055 [P] [US1] Implement `reproduce-check` (compare two run directories of `reports/tables/*.csv` and manifests; write per-metric absolute deltas to `docs/REPRODUCIBILITY.md`) and write `tests/integration/test_reproduce_fixture.py` (two fixture runs with the same seed produce identical CV tables)
+- [X] T055 [P] [US1] Implement `reproduce-check` (compare two run directories of `reports/tables/*.csv` and manifests; write per-metric absolute deltas to `docs/REPRODUCIBILITY.md`) and write `tests/integration/test_reproduce_fixture.py` (two fixture runs with the same seed produce identical CV tables)
   - Type: code, tests, docs
   - Deps: T053
   - Accept: fixture runs identical; command writes a delta table
   - Verify: `pytest -q tests/integration/test_reproduce_fixture.py`
-- [ ] T056 [US1] Run the final sequence once on real data: `tune`, `select-model`, `threshold`, `calibrate`, `fit-final`, `evaluate-test`; record PV-10 (final K and sensitivity) and PV-11 (all model, threshold, calibration, and test results) as file references in `README.md` and `reports/eda_feature_engineering_report.md` where relevant; commit `models/manifest.json`
+- [X] T056 [US1] Run the final sequence once on real data: `tune`, `select-model`, `threshold`, `calibrate`, `fit-final`, `evaluate-test`; record PV-10 (final K and sensitivity) and PV-11 (all model, threshold, calibration, and test results) as file references in `README.md` and `reports/eda_feature_engineering_report.md` where relevant; commit `models/manifest.json`
   - Type: run, artifacts
   - Deps: T054, T055
   - Accept: `manifest.test_evaluations == 1`; `models/manifest.json` tracked; joblib Git-ignored and README documents `make final` as the regeneration step with the manifest sha256 to compare against
   - Verify: `make final && python -c "import json;assert json.load(open('models/manifest.json'))['test_evaluations']==1" && du -h models/final_pipeline.joblib`
-- [ ] T057 [US1] Run a second reproduction in a fresh virtual environment (`rm -rf .venv`, reinstall, `make all` into a copy directory) and `reproduce-check`; set the tolerance in `docs/REPRODUCIBILITY.md` to the observed maximum delta plus margin (PV-13) and document any nondeterminism source
+- [X] T057 [US1] Run a second reproduction in a fresh virtual environment (`rm -rf .venv`, reinstall, `make all` into a copy directory) and `reproduce-check`; set the tolerance in `docs/REPRODUCIBILITY.md` to the observed maximum delta plus margin (PV-13) and document any nondeterminism source
   - Type: run, docs
   - Deps: T056
   - Accept: `docs/REPRODUCIBILITY.md` contains the delta table and a stated tolerance; `test_evaluations` remains 1 in the committed manifest (the second run's evaluation happens in the copy directory)

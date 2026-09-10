@@ -157,6 +157,7 @@ def build_parser() -> argparse.ArgumentParser:
         if (group, name) == (None, "reproduce-check"):
             p.add_argument("--runs-a", required=True)
             p.add_argument("--runs-b", required=True)
+            p.add_argument("--tolerance", type=float, default=0.005)
         p.set_defaults(handler=handler)
     return parser
 

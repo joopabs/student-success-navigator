@@ -1,0 +1,89 @@
+{
+  "rule": "oof_quantile_for_capacity",
+  "capacity_per_week": 10,
+  "window_weeks": 5,
+  "capacity_k": 50,
+  "capacity_illustrative": true,
+  "n_cohort_expected": 885,
+  "n_oof_rows": 3539,
+  "k_scaled_to_oof": 200,
+  "selection_rate": 0.05651313930488839,
+  "threshold": 0.9728410513141427,
+  "bands": [
+    {
+      "name": "Priority outreach",
+      "lower": 0.9728410513141427,
+      "upper": 1.0,
+      "rule": "score >= capacity threshold"
+    },
+    {
+      "name": "Check-in suggested",
+      "lower": 0.8412499014360375,
+      "upper": 0.9728410513141427,
+      "rule": "score >= threshold at 2 x capacity selection rate"
+    },
+    {
+      "name": "Standard support",
+      "lower": 0.0,
+      "upper": 0.8412499014360375,
+      "rule": "remaining scores"
+    }
+  ],
+  "band_shares_oof": {
+    "Priority outreach": 0.05707827069793727,
+    "Check-in suggested": 0.05623057360836394,
+    "Standard support": 0.8866911556936988
+  },
+  "tradeoffs": [
+    {
+      "rule": "capacity (chosen)",
+      "threshold": 0.9728410513141427,
+      "n_selected": 202,
+      "selection_rate": 0.05707827069793727,
+      "precision": 0.9702970297029703,
+      "recall": 0.1723834652594547,
+      "f1": 0.292755787901419,
+      "false_positives": 6,
+      "false_negatives": 941,
+      "true_positives": 196
+    },
+    {
+      "rule": "f1_optimal",
+      "threshold": 0.38476668186654506,
+      "n_selected": 1154,
+      "selection_rate": 0.326080813789206,
+      "precision": 0.7105719237435009,
+      "recall": 0.7211961301671064,
+      "f1": 0.7158446093408992,
+      "false_positives": 334,
+      "false_negatives": 317,
+      "true_positives": 820
+    },
+    {
+      "rule": "precision>=0.8",
+      "threshold": 0.535472434542202,
+      "n_selected": 861,
+      "selection_rate": 0.2432890647075445,
+      "precision": 0.8002322880371661,
+      "recall": 0.6059806508355321,
+      "f1": 0.6896896896896897,
+      "false_positives": 172,
+      "false_negatives": 448,
+      "true_positives": 689
+    },
+    {
+      "rule": "0.5 (default)",
+      "threshold": 0.5,
+      "n_selected": 922,
+      "selection_rate": 0.26052557219553546,
+      "precision": 0.7874186550976139,
+      "recall": 0.6385224274406333,
+      "f1": 0.7051966974259349,
+      "false_positives": 196,
+      "false_negatives": 411,
+      "true_positives": 726
+    }
+  ],
+  "zero_predicted_positives": false,
+  "source": "out-of-fold scores on the training split; test data not used"
+}

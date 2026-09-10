@@ -5,8 +5,8 @@
 Fair and explainable first-semester dropout risk prediction for early academic support, with a
 Dash decision-support companion app.
 
-> **Status: Milestone 5 complete (baseline and candidate-model comparison under cross-validation).**
-> No final model has been selected and the held-out test set has not been evaluated.
+> **Status: Milestone 6 complete (tuning, selection, threshold, calibration, persisted artifact, single held-out evaluation).**
+> Metrics are measured; outreach capacity is an illustrative assumption. No production-readiness or causal claim is made.
 > No model has been trained and no model results exist yet. Every `[PENDING: ...]` marker below names the artifact that will supply
 > the value once the pipeline has actually been run.
 
@@ -34,7 +34,7 @@ Section 5). Evidence links are filled in as milestones complete.
 
 ### Step 1: Problem understanding and framing (10 pts)
 - Problem statement, task type, unit of analysis, prediction point: `[PENDING: reports/final_report.md]`
-- Primary metric PR-AUC; intervention metric Recall@K at an **illustrative** outreach capacity: `[PENDING: reports/tables/test_recall_precision_at_k.csv]`
+- Primary metric PR-AUC; intervention metric Recall@K at an **illustrative** outreach capacity: `reports/tables/test_recall_precision_at_k.csv` (measured recall, illustrative K)
 
 ### Step 2: Data collection and understanding (10 pts)
 - Source, licence, citation: [`data/README.md`](data/README.md)
@@ -46,8 +46,8 @@ Section 5). Evidence links are filled in as milestones complete.
 
 ### Step 4: Model implementation and comparison (20 pts)
 - Dummy baseline plus logistic regression, random forest, gradient boosting under CV: [`reports/model_comparison_cv.md`](reports/model_comparison_cv.md) · `reports/tables/cv_comparison.csv`, `ablation_*.csv` · `reports/figures/cv_pr_curves.png`, `cv_calibration.png` · notebook `notebooks/04_model_comparison.ipynb`
-- Selection matrix and final test evaluation: `[PENDING: reports/tables/selection_matrix.csv, reports/tables/test_metrics.csv]`
-- Saved pipeline and manifest: `[PENDING: models/manifest.json]`
+- Tuning, selection matrix, threshold, calibration, single held-out evaluation: [`reports/model_selection_and_evaluation.md`](reports/model_selection_and_evaluation.md) · `reports/tables/selection_matrix*.csv`, `threshold_and_bands.json`, `test_metrics*.csv`
+- Saved pipeline and manifest: [`models/manifest.json`](models/manifest.json) (pipeline regenerated with `make final`; sha256 recorded)
 
 ### Step 5: Critical thinking, ethical AI, and bias auditing (20 pts)
 - SHAP, PDP/ICE: `[PENDING: reports/explainability/]`

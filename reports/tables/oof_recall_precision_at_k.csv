@@ -1,0 +1,4 @@
+window_weeks,capacity_k,k_scaled_to_train,recall_at_k,precision_at_k,share_of_dropouts_reached_illustrative,note
+2,20,80,0.07036059806508356,1.0,0.07036059806508356,ILLUSTRATIVE capacity; recall ceiling = k / positives
+5,50,200,0.1706244503078276,0.97,0.1706244503078276,ILLUSTRATIVE capacity; recall ceiling = k / positives
+10,100,400,0.3324538258575198,0.945,0.3324538258575198,ILLUSTRATIVE capacity; recall ceiling = k / positives

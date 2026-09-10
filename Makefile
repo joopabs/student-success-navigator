@@ -31,8 +31,8 @@ tune:
 
 final:
 	$(SSN) select-model --config $(CFG)
-	$(SSN) threshold --config $(CFG)
 	$(SSN) calibrate --config $(CFG)
+	$(SSN) threshold --config $(CFG)
 	$(SSN) fit-final --config $(CFG)
 	$(SSN) evaluate-test --config $(CFG)
 

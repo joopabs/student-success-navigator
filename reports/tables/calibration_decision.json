@@ -1,0 +1,19 @@
+{
+  "applied": true,
+  "method": "isotonic",
+  "rule": "apply the calibration method with the lowest Brier if it beats the uncalibrated Brier and its PR-AUC is not lower than uncalibrated PR-AUC minus one CV std",
+  "uncalibrated": {
+    "pr_auc": 0.8077554361094091,
+    "brier": 0.12855377013128017,
+    "ece": 0.05393260830754236,
+    "recall_at_k": 0.17150395778364116
+  },
+  "chosen": {
+    "pr_auc": 0.8070357290249685,
+    "brier": 0.12514865571691822,
+    "ece": 0.016952682663566653,
+    "recall_at_k": 0.1706244503078276
+  },
+  "inner_cv": 5,
+  "note": "Calibration affects probability quality, not ranking-based Recall@K. Evaluated on the training split only."
+}
