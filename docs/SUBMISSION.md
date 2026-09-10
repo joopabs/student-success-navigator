@@ -8,12 +8,15 @@ upload → Submit Assignment.
 
 | File | Source | Status |
 |---|---|---|
-| `Julius_Pabular_Pillar5_Capstone_Project_Report.pdf` | print `reports/final_report.html` to PDF (pandoc not installed) | manual |
+| `Julius_Pabular_Pillar5_Capstone_Project_Report.doc` | `reports/final_report.html` converted by `textutil` (pandoc not installed); `.doc` is an approved format | packaged |
 | `Julius_Pabular_Pillar5_Capstone_Project_Report.html` | `reports/final_report.html` | packaged |
 | `Julius_Pabular_Pillar5_Capstone_Project_Technical_Deck.html` | `reports/decks/technical_deck.slides.html` (12 slides) | packaged |
-| `Julius_Pabular_Pillar5_Capstone_Project_Business_Deck.pptx` | assemble from `reports/decks/business_deck_outline.md` (10 slides) | manual (T073) |
+| `Julius_Pabular_Pillar5_Capstone_Project_Business_Deck.pptx` | `reports/decks/business_deck.pptx` (10 slides) | packaged |
 | `Julius_Pabular_Pillar5_Capstone_Project_Code.zip` | `git archive HEAD` (code, configs, reports, tests; no data or model binaries) | packaged |
 | `Julius_Pabular_Pillar5_Capstone_Project_Links.txt` | GitHub repository URL | packaged |
+
+If a PDF is preferred over the `.doc`, open the packaged `.doc` in Word and export to PDF, then re-run
+`make submission` with `reports/final_report.pdf` in place — the target prefers a PDF when one exists.
 
 ## Pre-publication gate (quickstart section 11)
 

@@ -67,7 +67,14 @@ ASSIGNMENT ?= Pillar5_Capstone_Project
 submission:
 	rm -rf submission && mkdir -p submission
 	cp reports/final_report.html submission/$(NAME)_$(ASSIGNMENT)_Report.html
-	@test -f reports/final_report.pdf && cp reports/final_report.pdf submission/$(NAME)_$(ASSIGNMENT)_Report.pdf || echo "note: reports/final_report.pdf not found (print reports/final_report.html to PDF)"
+	@if [ -f reports/final_report.pdf ]; then \
+		cp reports/final_report.pdf submission/$(NAME)_$(ASSIGNMENT)_Report.pdf; \
+	elif command -v textutil >/dev/null 2>&1; then \
+		textutil -convert doc -output submission/$(NAME)_$(ASSIGNMENT)_Report.doc reports/final_report.html; \
+		echo "note: no reports/final_report.pdf; packaged .doc via textutil (.doc is an approved format)"; \
+	else \
+		echo "note: reports/final_report.pdf not found (print reports/final_report.html to PDF)"; \
+	fi
 	cp reports/decks/technical_deck.slides.html submission/$(NAME)_$(ASSIGNMENT)_Technical_Deck.html
 	@test -f reports/decks/business_deck.pptx && cp reports/decks/business_deck.pptx submission/$(NAME)_$(ASSIGNMENT)_Business_Deck.pptx || echo "note: reports/decks/business_deck.pptx not found (assemble from the outline)"
 	git archive --format=zip -o submission/$(NAME)_$(ASSIGNMENT)_Code.zip HEAD
