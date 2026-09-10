@@ -636,7 +636,7 @@ listed as not attempted in `README.md` and `reports/final_report.md`.
   - Deps: T075
   - Accept: FR-074 fields present or explicit not-used statement
   - Verify: `python -m ssn scan-language --paths docs/GENAI_USE.md`
-- [ ] T091 [US6] (manual: no browser automation available in this environment; recording steps in docs/SUBMISSION.md) Produce demo media: record `reports/decks/demo.gif` or a screencast (link in `docs/DEPLOYMENT.md` and `README.md`) showing the six pages, the acknowledgement modal, and the version-mismatch page; confirm no outcome labels are visible in the recording
+- [X] T091 [US6] (generated 2026-09-11 in process by `scripts/render_demo_gif.py` — no browser or screen recorder needed; the outcome-label check is asserted in code, not eyeballed) Produce demo media: record `reports/decks/demo.gif` or a screencast (link in `docs/DEPLOYMENT.md` and `README.md`) showing the six pages, the acknowledgement modal, and the version-mismatch page; confirm no outcome labels are visible in the recording
   - Type: reports
   - Deps: T086
   - Accept: media present and linked; reviewed for privacy

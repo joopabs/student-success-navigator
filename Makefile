@@ -3,7 +3,7 @@ PY ?= python
 CFG ?= configs/base.yaml
 SSN = $(PY) -m ssn
 
-.PHONY: setup data eda select cv tune final explain fairness report app test lint secrets submission all
+.PHONY: setup data eda select cv tune final explain fairness report report-export demo app test lint secrets submission all
 
 setup:
 	$(PY) -m pip install -r requirements.txt -r requirements-dev.txt
@@ -47,6 +47,15 @@ report:
 	$(SSN) model-card --config $(CFG)
 	$(SSN) rubric-map --config $(CFG)
 	$(SSN) scan-language --paths reports README.md docs
+
+report-export:
+	$(PY) scripts/md_to_html.py reports/final_report.md reports/final_report.html
+	@$(PY) -c "import xhtml2pdf" 2>/dev/null \
+		&& $(PY) scripts/html_to_pdf.py reports/final_report.html reports/final_report.pdf \
+		|| echo "note: xhtml2pdf not installed; keeping the existing reports/final_report.pdf (see scripts/html_to_pdf.py)"
+
+demo:
+	$(PY) scripts/render_demo_gif.py reports/decks/demo.gif
 
 app:
 	$(SSN) app --config $(CFG)

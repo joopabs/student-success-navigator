@@ -769,8 +769,10 @@ tests and the adviser-language scan on every push. Reproduction steps: <code>REA
   with an acknowledgement-gated local action log; 30 tests cover privacy, ranking, validation, version checks, and
   the acknowledgement flow. MLOps: <code>docs/MLOPS.md</code> (pinned environment, config-driven runs, manifest versioning and
   rollback, CI on every push, monitoring plan with baselines read from the fairness and threshold files) and a
-  <code>Dockerfile</code> that copies only runtime inputs (<code>tests/unit/test_dockerignore.py</code>). Demo media: recording steps in
-  <code>docs/SUBMISSION.md</code>; the file <code>reports/decks/demo.gif</code> is produced manually.</li>
+  <code>Dockerfile</code> that copies only runtime inputs (<code>tests/unit/test_dockerignore.py</code>). Demo media:
+  <code>reports/decks/demo.gif</code> (8 frames — the six adviser pages, the acknowledgement modal and the
+  version-mismatch page), generated in process by <code>scripts/render_demo_gif.py</code>, which asserts that no
+  outcome label appears on any record-bearing frame before writing the file.</li>
 <li><strong>Step 9, Generative AI (attempted).</strong> <code>docs/GENAI_USE.md</code> documents the use of Claude Code with Spec Kit as a
   development assistant: purposes, example prompts, human review at every milestone, data handling, and limitations.
   No generative model is part of the shipped software.</li>
@@ -781,4 +783,4 @@ small outreach list precisely, under-reaches younger students who later leave, a
 piloted locally before any use.</p>
 <h2 id="10-rubric-map">10. Rubric map</h2>
 <p><code>reports/rubric_map.md</code> links every rubric criterion (10 + 10 + 10 + 20 + 20 + 10 + 15 + 5 = 100 points) to the files
-that evidence it.</p><hr><p><small>Exported from reports/final_report.md with python-markdown. For PDF: open in a browser and print to PDF, or run pandoc if installed.</small></p></body></html>
+that evidence it.</p><hr><p><small>Exported from reports/final_report.md by scripts/md_to_html.py (python-markdown). PDF export: scripts/html_to_pdf.py.</small></p></body></html>

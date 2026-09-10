@@ -63,7 +63,7 @@ Section 5). Evidence links are filled in as milestones complete.
 - Student Success Navigator Dash app (optional Step 8): `python -m ssn app` · guide [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) · six pages (Overview, Support Queue, Student Review, New Record Scoring, Equity Dashboard, Model Card) · loads the saved pipeline, never retrains · acknowledgement-gated local action log · 30 app tests under `tests/app/`
 - MLOps (optional Step 8): [`docs/MLOPS.md`](docs/MLOPS.md) (reproducible environment, config-driven runs, manifest versioning and rollback, CI, monitoring plan) · container: `docker build -t ssn . && docker run --rm -p 8050:8050 ssn`
 - Generative AI (optional Step 9): [`docs/GENAI_USE.md`](docs/GENAI_USE.md) (tool, purposes, prompts, human review, data handling, limitations)
-- Demo recording (not yet recorded): `reports/decks/demo.gif` is produced manually and is not part of the automated pipeline — steps in [`docs/SUBMISSION.md`](docs/SUBMISSION.md)
+- Demo recording: [`reports/decks/demo.gif`](reports/decks/demo.gif) — 8 frames (six adviser pages, the acknowledgement modal, the version-mismatch page), generated in process by [`scripts/render_demo_gif.py`](scripts/render_demo_gif.py); no browser or screen recorder involved
 
 ## Reproduction
 

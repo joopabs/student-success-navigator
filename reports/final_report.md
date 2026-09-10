@@ -381,8 +381,10 @@ tests and the adviser-language scan on every push. Reproduction steps: `README.m
   with an acknowledgement-gated local action log; 30 tests cover privacy, ranking, validation, version checks, and
   the acknowledgement flow. MLOps: `docs/MLOPS.md` (pinned environment, config-driven runs, manifest versioning and
   rollback, CI on every push, monitoring plan with baselines read from the fairness and threshold files) and a
-  `Dockerfile` that copies only runtime inputs (`tests/unit/test_dockerignore.py`). Demo media: recording steps in
-  `docs/SUBMISSION.md`; the file `reports/decks/demo.gif` is produced manually.
+  `Dockerfile` that copies only runtime inputs (`tests/unit/test_dockerignore.py`). Demo media:
+  `reports/decks/demo.gif` (8 frames — the six adviser pages, the acknowledgement modal and the
+  version-mismatch page), generated in process by `scripts/render_demo_gif.py`, which asserts that no
+  outcome label appears on any record-bearing frame before writing the file.
 - **Step 9, Generative AI (attempted).** `docs/GENAI_USE.md` documents the use of Claude Code with Spec Kit as a
   development assistant: purposes, example prompts, human review at every milestone, data handling, and limitations.
   No generative model is part of the shipped software.

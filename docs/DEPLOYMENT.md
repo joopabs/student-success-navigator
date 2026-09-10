@@ -103,7 +103,7 @@ python -m ssn app --config /tmp/mismatch.yaml      # blocking page, no scores
 | 2026-09-10 | Queue → open record → tick acknowledgement → Save: 3 interactions (callback-level test `test_queue_to_action_interactions.py`) | pass |
 | 2026-09-10 | Version-mismatch config serves the blocking page (`test_version_check.py`) | pass |
 | 2026-09-10 | `docker build -t ssn:demo .` (80 s, 372 MB image); container serves `/`, `/queue`, `/score`, `/equity`, `/model-card`, `/_dash-layout` with HTTP 200; `data/raw`, `data/processed`, `data/evaluation`, `tests/`, `notebooks/` absent inside the image | pass |
-| pending | Screen recording / GIF of the six pages, the modal, and the blocking page (`reports/decks/demo.gif`); steps in `docs/SUBMISSION.md` | manual, T091 |
+| 2026-09-11 | Demo media `reports/decks/demo.gif` (8 frames: six pages, acknowledgement modal, blocking page) generated in process by `scripts/render_demo_gif.py`; outcome-label assertion clean on every record-bearing frame | pass |
 
 ## 9. Optional container
 

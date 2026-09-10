@@ -37,10 +37,18 @@ _Hand-written notes (e.g. submission checklist completion) go here and survive r
 (12 slides), the business deck (10 slides), the code archive, and the repository link. Both
 `.doc` and `.pptx` are approved formats under the brief's section 8.
 
+### Demo media (T091, complete)
+
+`reports/decks/demo.gif` — 8 frames covering the six adviser pages, the acknowledgement modal and the
+version-mismatch blocking page. Generated in process by `scripts/render_demo_gif.py` (`make demo`):
+`route()` returns the same component tree the browser renders, so every frame carries the app's real
+text and real numbers. The script asserts that no outcome label appears on any record-bearing frame
+and refuses to write the file if one does, which makes the privacy claim checkable rather than
+eyeballed. The Model Card frame is exempt and documented as such: it states the target encoding and
+carries no record data.
+
 ### Open at the time of writing
 
-- **T091 — demo recording.** `reports/decks/demo.gif` is produced by hand; steps are in
-  `docs/SUBMISSION.md`. No browser automation is available in this environment.
 - **T092 — repository visibility.** The repository is still private, pending the owner's
   decision to publish. Every gate above passes, so publishing is unblocked on the technical side.
 <!-- END NOTES -->

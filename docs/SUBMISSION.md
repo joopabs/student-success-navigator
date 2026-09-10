@@ -8,15 +8,16 @@ upload → Submit Assignment.
 
 | File | Source | Status |
 |---|---|---|
-| `Julius_Pabular_Pillar5_Capstone_Project_Report.doc` | `reports/final_report.html` converted by `textutil` (pandoc not installed); `.doc` is an approved format | packaged |
+| `Julius_Pabular_Pillar5_Capstone_Project_Report.pdf` | `reports/final_report.pdf`, rendered from the HTML by `scripts/html_to_pdf.py` (xhtml2pdf; pandoc not installed) | packaged |
 | `Julius_Pabular_Pillar5_Capstone_Project_Report.html` | `reports/final_report.html` | packaged |
 | `Julius_Pabular_Pillar5_Capstone_Project_Technical_Deck.html` | `reports/decks/technical_deck.slides.html` (12 slides) | packaged |
 | `Julius_Pabular_Pillar5_Capstone_Project_Business_Deck.pptx` | `reports/decks/business_deck.pptx` (10 slides) | packaged |
 | `Julius_Pabular_Pillar5_Capstone_Project_Code.zip` | `git archive HEAD` (code, configs, reports, tests; no data or model binaries) | packaged |
 | `Julius_Pabular_Pillar5_Capstone_Project_Links.txt` | GitHub repository URL | packaged |
 
-If a PDF is preferred over the `.doc`, open the packaged `.doc` in Word and export to PDF, then re-run
-`make submission` with `reports/final_report.pdf` in place — the target prefers a PDF when one exists.
+The target prefers `reports/final_report.pdf` when it exists and otherwise falls back to a `.doc` produced by
+macOS `textutil`; both are approved formats. Regenerate the PDF with `scripts/html_to_pdf.py` after editing
+the report.
 
 ## Pre-publication gate (quickstart section 11)
 
@@ -33,14 +34,22 @@ Then, and only then, make the repository public:
 gh repo edit joopabs/student-success-navigator --visibility public --accept-visibility-change-consequences
 ```
 
-## Demo media (T091, manual)
+## Demo media (T091)
 
-Record `reports/decks/demo.gif` (or a screencast and link it in `docs/DEPLOYMENT.md` and `README.md`):
+`reports/decks/demo.gif` is generated rather than recorded. `scripts/render_demo_gif.py` drives the app in
+process — `route()` returns the same component tree the browser renders — and draws each state with Pillow,
+so no browser and no screen-recording permission are involved:
 
-1. `python -m ssn app`, open http://127.0.0.1:8050.
-2. macOS: Cmd+Shift+5 → record a selected window; visit Overview → Support Queue (change K) → a Student Review →
-   "Record support action" (show Save disabled until the acknowledgement is ticked; save) → New Record Scoring
-   (submit empty for validation, then a valid record) → Equity Dashboard → Model Card.
-3. Show the blocking page: `python -m ssn app --config /tmp/mismatch.yaml` (see `docs/DEPLOYMENT.md` §6).
-4. Convert to GIF (e.g. `ffmpeg -i demo.mov -vf "fps=8,scale=1000:-1" reports/decks/demo.gif`) and check no
-   outcome label or identifier is visible in the recording (none exist on adviser pages by design).
+```bash
+.venv/bin/python scripts/render_demo_gif.py
+```
+
+Eight frames: the six adviser pages, the acknowledgement modal, and the version-mismatch blocking page. The
+script asserts that no outcome label appears on any record-bearing frame and refuses to write the GIF if one
+does. The Model Card frame is exempt and says so: it documents the target encoding and carries no record data.
+
+To record a live screencast instead, run `python -m ssn app` and use Cmd+Shift+5 on macOS: Overview → Support
+Queue (change K) → a Student Review → "Record support action" (Save stays disabled until the acknowledgement
+is ticked; save) → New Record Scoring (submit empty for validation, then a valid record) → Equity Dashboard →
+Model Card, then the blocking page via `python -m ssn app --config /tmp/mismatch.yaml` (`docs/DEPLOYMENT.md` §6).
+Link it from `docs/DEPLOYMENT.md` and `README.md`.
