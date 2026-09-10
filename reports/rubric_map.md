@@ -39,7 +39,8 @@ artifacts that satisfy it. All paths are relative to the repository root.
 | G10 | Communication & Repo | [`reports/decks/technical_deck.slides.html`](../reports/decks/technical_deck.slides.html) (12 slides) · [`reports/decks/business_deck.pptx`](../reports/decks/business_deck.pptx) (10 slides) · [`reports/final_report.md`](../reports/final_report.md) · this rubric map · [`README.md`](../README.md) | pass |
 
 The Definition of Done additionally requires that the repository be public with no secrets or private
-data. That is the one criterion still open, tracked as T092.
+data. Satisfied on 2026-09-11: the repository is public at https://github.com/joopabs/student-success-navigator,
+published after a final check confirming no tracked private files, no secrets and no model binaries (T092).
 
 ### Pre-publication checklist — run 2026-09-11 (quickstart section 11, T092)
 
@@ -69,8 +70,9 @@ and refuses to write the file if one does, which makes the privacy claim checkab
 eyeballed. The Model Card frame is exempt and documented as such: it states the target encoding and
 carries no record data.
 
-### Open at the time of writing
+### Status
 
-- **T092 — repository visibility.** The repository is still private, pending the owner's
-  decision to publish. Every gate above passes, so publishing is unblocked on the technical side.
+All 92 tasks are complete and every gate above passes. The repository is public, the submission package
+is built by `make submission` (run it after the final commit — it archives `HEAD`), and the Definition of
+Done in the constitution is met in full.
 <!-- END NOTES -->
