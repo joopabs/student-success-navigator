@@ -161,7 +161,7 @@ KPI value read from `reports/tables/test_recall_precision_at_k.csv` with an "ill
 ## 11. Pre-publication checklist
 
 ```bash
-git ls-files | grep -Ei 'data/(raw|processed|demo|evaluation|local)/|\.env$|\.sqlite|Pillar5' && echo "STOP: private file tracked" || echo "clean"
+git ls-files | grep -v '\.gitkeep$' | grep -Ei 'data/(raw|interim|processed|demo|evaluation|local)/|\.env$|\.sqlite|Pillar5' && echo "STOP: private file tracked" || echo "clean"
 make secrets                             # detect-secrets over tracked files; 64-hex checksums excluded
 pytest -q && ruff check .
 ```

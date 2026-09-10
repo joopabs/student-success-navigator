@@ -616,7 +616,7 @@ safeguards tested.
 **Independent Test**: Each optional item is either present with its verification passing or
 listed as not attempted in `README.md` and `reports/final_report.md`.
 
-- [ ] T087 [US6] Write `docs/MLOPS.md`: environment reproducibility (venv, pins, `.python-version`), config-driven runs, manifest-based versioning and rollback procedure (how to restore a previous `models/manifest.json` and joblib and change `app.expected_model_version`), CI description, basic monitoring plan (score distribution drift and group selection-rate drift against baselines read from `reports/fairness/group_metrics.json` and `reports/tables/threshold_and_bands.json`)
+- [X] T087 [US6] Write `docs/MLOPS.md`: environment reproducibility (venv, pins, `.python-version`), config-driven runs, manifest-based versioning and rollback procedure (how to restore a previous `models/manifest.json` and joblib and change `app.expected_model_version`), CI description, basic monitoring plan (score distribution drift and group selection-rate drift against baselines read from `reports/fairness/group_metrics.json` and `reports/tables/threshold_and_bands.json`)
   - Type: docs
   - Deps: T057, T064
   - Accept: rollback steps are executable commands; monitoring baselines cite files, not typed numbers
@@ -626,22 +626,22 @@ listed as not attempted in `README.md` and `reports/final_report.md`.
   - Deps: T085
   - Accept: workflow passes on the remote after push; badge added to README
   - Verify: `gh run list --limit 1` (after push) or `act -l` locally if available
-- [ ] T089 [P] [US6] Write `Dockerfile` (python:3.11-slim, copy `src/`, `configs/`, `models/`, `data/demo/`, `reports/fairness/`, `reports/model_card.md`, `reports/explainability/shap_values_test.npz`; run `python -m ssn app --host 0.0.0.0`), `.dockerignore` excluding `data/raw`, `data/processed`, `data/evaluation`, `data/local`, `.env*`, `references/`, and `tests/unit/test_dockerignore.py` asserting those exclusions
+- [X] T089 [P] [US6] Write `Dockerfile` (python:3.11-slim, copy `src/`, `configs/`, `models/`, `data/demo/`, `reports/fairness/`, `reports/model_card.md`, `reports/explainability/shap_values_test.npz`; run `python -m ssn app --host 0.0.0.0`), `.dockerignore` excluding `data/raw`, `data/processed`, `data/evaluation`, `data/local`, `.env*`, `references/`, and `tests/unit/test_dockerignore.py` asserting those exclusions
   - Type: config, tests
   - Deps: T086
   - Accept: image builds and serves; test passes
   - Verify: `pytest -q tests/unit/test_dockerignore.py && docker build -t ssn . && docker run --rm -d -p 8050:8050 --name ssn ssn && sleep 5 && curl -s -o /dev/null -w "%{http_code}\n" http://127.0.0.1:8050/ ; docker rm -f ssn`
-- [ ] T090 [P] [US6] Write `docs/GENAI_USE.md`: either "Generative AI was not used" or, for each use, tool, purpose, prompts or examples, human review performed, limitations, and confirmation that no raw student rows were sent to external services; link code or examples in the repo or presentation
+- [X] T090 [P] [US6] Write `docs/GENAI_USE.md`: either "Generative AI was not used" or, for each use, tool, purpose, prompts or examples, human review performed, limitations, and confirmation that no raw student rows were sent to external services; link code or examples in the repo or presentation
   - Type: docs
   - Deps: T075
   - Accept: FR-074 fields present or explicit not-used statement
   - Verify: `python -m ssn scan-language --paths docs/GENAI_USE.md`
-- [ ] T091 [US6] Produce demo media: record `reports/decks/demo.gif` or a screencast (link in `docs/DEPLOYMENT.md` and `README.md`) showing the six pages, the acknowledgement modal, and the version-mismatch page; confirm no outcome labels are visible in the recording
+- [ ] T091 [US6] (manual: no browser automation available in this environment; recording steps in docs/SUBMISSION.md) Produce demo media: record `reports/decks/demo.gif` or a screencast (link in `docs/DEPLOYMENT.md` and `README.md`) showing the six pages, the acknowledgement modal, and the version-mismatch page; confirm no outcome labels are visible in the recording
   - Type: reports
   - Deps: T086
   - Accept: media present and linked; reviewed for privacy
   - Verify: `ls -la reports/decks/demo.gif || grep -n 'screencast' docs/DEPLOYMENT.md README.md`
-- [ ] T092 [US6] Final pre-publication and submission check: run quickstart.md section 11 including the content-level secrets scan, review `git log --oneline` for imperative one-change-per-commit history and squash or reword where needed, update `README.md` and `reports/final_report.md` optional-step status (attempted or not attempted), confirm no private files tracked, rename submission files per course instruction pattern `Your_Name_Assignment name`, and record the checklist completion in `reports/rubric_map.md`
+- [ ] T092 [US6] (gate run 2026-09-10: tests 197 pass, lint clean, secrets clean, tracked-file check clean, history reviewed; packaging via `make submission`; awaiting owner decision to flip visibility to public) Final pre-publication and submission check: run quickstart.md section 11 including the content-level secrets scan, review `git log --oneline` for imperative one-change-per-commit history and squash or reword where needed, update `README.md` and `reports/final_report.md` optional-step status (attempted or not attempted), confirm no private files tracked, rename submission files per course instruction pattern `Your_Name_Assignment name`, and record the checklist completion in `reports/rubric_map.md`
   - Type: run, docs
   - Deps: T087, T088, T089, T090, T091
   - Accept: `clean` output from the tracked-file check; secrets scanner reports no findings; all tests and lint pass; commit history reviewed; submission files named

@@ -1,0 +1,26 @@
+# Never ship private or reproducible-only data
+data/raw
+data/interim
+data/processed
+data/evaluation
+data/local
+references
+.env
+.env.*
+# Not needed at runtime
+.git
+.github
+.venv
+venv
+.specify
+.claude
+notebooks
+tests
+specs
+docs
+models/candidates
+__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+*.ipynb

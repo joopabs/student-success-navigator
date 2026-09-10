@@ -50,3 +50,6 @@ models/candidates/
 .DS_Store
 .vscode/
 .idea/
+
+# Packaged submission copies (regenerate with `make submission`)
+submission/

@@ -1,6 +1,6 @@
 # Rubric Evidence Map
 
-**Generated:** 2026-09-10 08:34 UTC by `python -m ssn rubric-map`. Criteria and points from
+**Generated:** 2026-09-10 08:54 UTC by `python -m ssn rubric-map`. Criteria and points from
 `CAPSTONE_BRIEF.md` section 5 (total 100, bonus included). Links are relative to `reports/`; an item marked
 (pending) does not exist yet in the repository.
 
@@ -13,7 +13,7 @@
 | Step 5: Critical Thinking, Ethical AI & Bias Auditing | 20 | [`reports/bias_fairness_analysis.md`](../reports/bias_fairness_analysis.md)<br>[`reports/limitations.md`](../reports/limitations.md)<br>[`reports/model_card.md`](../reports/model_card.md)<br>[`reports/explainability/shap_global_bar.png`](../reports/explainability/shap_global_bar.png)<br>[`reports/explainability/shap_local_examples.json`](../reports/explainability/shap_local_examples.json)<br>[`reports/fairness/group_metrics.csv`](../reports/fairness/group_metrics.csv)<br>[`reports/fairness/mitigation_comparison.csv`](../reports/fairness/mitigation_comparison.csv)<br>[`notebooks/05_explainability_fairness.ipynb`](../notebooks/05_explainability_fairness.ipynb) |
 | Step 6: Final Presentation & Communication | 10 | [`reports/decks/technical_deck.slides.html`](../reports/decks/technical_deck.slides.html)<br>[`notebooks/90_technical_deck.ipynb`](../notebooks/90_technical_deck.ipynb)<br>[`reports/decks/business_deck_outline.md`](../reports/decks/business_deck_outline.md) |
 | Step 7: GitHub Profile & Upload | 15 | [`README.md`](../README.md)<br>[`requirements.txt`](../requirements.txt)<br>[`reports/final_report.md`](../reports/final_report.md)<br>[`tests`](../tests)<br>[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)<br>[`LICENSE`](../LICENSE) |
-| Bonus: Creative and well-presented submission | 5 | [`docs/DEPLOYMENT.md`](../docs/DEPLOYMENT.md)<br>[`docs/MLOPS.md`](../docs/MLOPS.md) (pending)<br>[`docs/GENAI_USE.md`](../docs/GENAI_USE.md) (pending)<br>[`src/ssn/app`](../src/ssn/app) |
+| Bonus: Creative and well-presented submission | 5 | [`docs/DEPLOYMENT.md`](../docs/DEPLOYMENT.md)<br>[`docs/MLOPS.md`](../docs/MLOPS.md)<br>[`docs/GENAI_USE.md`](../docs/GENAI_USE.md)<br>[`src/ssn/app`](../src/ssn/app) |
 | **Total** | **100** | |
 
 <!-- BEGIN NOTES -->

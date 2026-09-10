@@ -5,7 +5,7 @@
 Fair and explainable first-semester dropout risk prediction for early academic support, with a
 Dash decision-support companion app.
 
-> **Status: Milestone 9 complete (Student Success Navigator Dash app).** Milestone 10 (MLOps/GenAI docs, demo media) remains.
+> **Status: all ten milestones implemented.** Manual items outstanding: business-deck assembly, PDF export of the report, and the demo recording (`docs/SUBMISSION.md`).
 > Metrics are measured; outreach capacity is an illustrative assumption. No production-readiness or causal claim is made.
 
 ## What this project does
@@ -61,7 +61,9 @@ Section 5). Evidence links are filled in as milestones complete.
 
 ### Bonus: creative and well-presented submission (5 pts)
 - Student Success Navigator Dash app (optional Step 8): `python -m ssn app` · guide [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) · six pages (Overview, Support Queue, Student Review, New Record Scoring, Equity Dashboard, Model Card) · loads the saved pipeline, never retrains · acknowledgement-gated local action log · 30 app tests under `tests/app/`
-- MLOps and Generative AI documentation (optional Steps 8-9): planned in Milestone 10 (`docs/MLOPS.md`, `docs/GENAI_USE.md` when written)
+- MLOps (optional Step 8): [`docs/MLOPS.md`](docs/MLOPS.md) (reproducible environment, config-driven runs, manifest versioning and rollback, CI, monitoring plan) · container: `docker build -t ssn . && docker run --rm -p 8050:8050 ssn`
+- Generative AI (optional Step 9): [`docs/GENAI_USE.md`](docs/GENAI_USE.md) (tool, purposes, prompts, human review, data handling, limitations)
+- Demo recording: `reports/decks/demo.gif` (recording steps in [`docs/SUBMISSION.md`](docs/SUBMISSION.md))
 
 ## Reproduction
 

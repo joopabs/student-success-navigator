@@ -376,9 +376,16 @@ tests and the adviser-language scan on every push. Reproduction steps: `README.m
 
 ## 8. Optional steps
 
-- **Step 8, deployment and MLOps:** the Student Success Navigator Dash app (Milestone 9) and MLOps/Docker
-  documentation (Milestone 10) are planned; status is recorded in `README.md` when complete.
-- **Step 9, Generative AI:** documented in `docs/GENAI_USE.md` when written (Milestone 10).
+- **Step 8, deployment and MLOps (attempted).** Local deployment: the Student Success Navigator Dash app
+  (`python -m ssn app`; `docs/DEPLOYMENT.md`) loads the persisted pipeline without retraining and serves six pages
+  with an acknowledgement-gated local action log; 30 tests cover privacy, ranking, validation, version checks, and
+  the acknowledgement flow. MLOps: `docs/MLOPS.md` (pinned environment, config-driven runs, manifest versioning and
+  rollback, CI on every push, monitoring plan with baselines read from the fairness and threshold files) and a
+  `Dockerfile` that copies only runtime inputs (`tests/unit/test_dockerignore.py`). Demo media: recording steps in
+  `docs/SUBMISSION.md`; the file `reports/decks/demo.gif` is produced manually.
+- **Step 9, Generative AI (attempted).** `docs/GENAI_USE.md` documents the use of Claude Code with Spec Kit as a
+  development assistant: purposes, example prompts, human review at every milestone, data handling, and limitations.
+  No generative model is part of the shipped software.
 
 ## 9. Limitations summary
 
