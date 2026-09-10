@@ -84,6 +84,7 @@ CRITERIA: list[tuple[str, int, list[str]]] = [
             "reports/decks/technical_deck.slides.html",
             "notebooks/90_technical_deck.ipynb",
             "reports/decks/business_deck_outline.md",
+            "reports/decks/business_deck.pptx",
         ],
     ),
     (
@@ -101,7 +102,13 @@ CRITERIA: list[tuple[str, int, list[str]]] = [
     (
         "Bonus: Creative and well-presented submission",
         5,
-        ["docs/DEPLOYMENT.md", "docs/MLOPS.md", "docs/GENAI_USE.md", "src/ssn/app"],
+        [
+            "docs/DEPLOYMENT.md",
+            "docs/MLOPS.md",
+            "docs/GENAI_USE.md",
+            "src/ssn/app",
+            "reports/decks/demo.gif",
+        ],
     ),
 ]
 

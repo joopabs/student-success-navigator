@@ -1,6 +1,6 @@
 # Rubric Evidence Map
 
-**Generated:** 2026-09-10 08:54 UTC by `python -m ssn rubric-map`. Criteria and points from
+**Generated:** 2026-09-10 19:02 UTC by `python -m ssn rubric-map`. Criteria and points from
 `CAPSTONE_BRIEF.md` section 5 (total 100, bonus included). Links are relative to `reports/`; an item marked
 (pending) does not exist yet in the repository.
 
@@ -13,11 +13,33 @@
 | Step 5: Critical Thinking, Ethical AI & Bias Auditing | 20 | [`reports/bias_fairness_analysis.md`](../reports/bias_fairness_analysis.md)<br>[`reports/limitations.md`](../reports/limitations.md)<br>[`reports/model_card.md`](../reports/model_card.md)<br>[`reports/explainability/shap_global_bar.png`](../reports/explainability/shap_global_bar.png)<br>[`reports/explainability/shap_local_examples.json`](../reports/explainability/shap_local_examples.json)<br>[`reports/fairness/group_metrics.csv`](../reports/fairness/group_metrics.csv)<br>[`reports/fairness/mitigation_comparison.csv`](../reports/fairness/mitigation_comparison.csv)<br>[`notebooks/05_explainability_fairness.ipynb`](../notebooks/05_explainability_fairness.ipynb) |
 | Step 6: Final Presentation & Communication | 10 | [`reports/decks/technical_deck.slides.html`](../reports/decks/technical_deck.slides.html)<br>[`notebooks/90_technical_deck.ipynb`](../notebooks/90_technical_deck.ipynb)<br>[`reports/decks/business_deck_outline.md`](../reports/decks/business_deck_outline.md)<br>[`reports/decks/business_deck.pptx`](../reports/decks/business_deck.pptx) |
 | Step 7: GitHub Profile & Upload | 15 | [`README.md`](../README.md)<br>[`requirements.txt`](../requirements.txt)<br>[`reports/final_report.md`](../reports/final_report.md)<br>[`tests`](../tests)<br>[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)<br>[`LICENSE`](../LICENSE) |
-| Bonus: Creative and well-presented submission | 5 | [`docs/DEPLOYMENT.md`](../docs/DEPLOYMENT.md)<br>[`docs/MLOPS.md`](../docs/MLOPS.md)<br>[`docs/GENAI_USE.md`](../docs/GENAI_USE.md)<br>[`src/ssn/app`](../src/ssn/app) |
+| Bonus: Creative and well-presented submission | 5 | [`docs/DEPLOYMENT.md`](../docs/DEPLOYMENT.md)<br>[`docs/MLOPS.md`](../docs/MLOPS.md)<br>[`docs/GENAI_USE.md`](../docs/GENAI_USE.md)<br>[`src/ssn/app`](../src/ssn/app)<br>[`reports/decks/demo.gif`](../reports/decks/demo.gif) |
 | **Total** | **100** | |
 
 <!-- BEGIN NOTES -->
 _Hand-written notes (e.g. submission checklist completion) go here and survive regeneration._
+
+### Constitutional quality gates G1–G10 — evidence
+
+The constitution requires that "Gate evidence MUST be linked from the final report's rubric map"
+(`.specify/memory/constitution.md`, Quality Gates & Definition of Done). Each gate below links the
+artifacts that satisfy it. All paths are relative to the repository root.
+
+| Gate | Phase | Evidence | Status |
+|---|---|---|---|
+| G1 | Framing | [`reports/final_report.md`](../reports/final_report.md) §1 · [`specs/001-dropout-risk-navigator/spec.md`](../specs/001-dropout-risk-navigator/spec.md) · [`PROJECT_DECISIONS.md`](../PROJECT_DECISIONS.md) | pass |
+| G2 | Data | [`data/README.md`](../data/README.md) · [`reports/data_overview.md`](../reports/data_overview.md) · `reports/tables/profile_columns.csv` · `reports/tables/profile_categorical_values.csv` · `tests/unit/test_schema.py` | pass |
+| G3 | Leakage | [`configs/features.yaml`](../configs/features.yaml) allow-list · `tests/unit/test_allowlist.py` · `tests/unit/test_features_yaml_complete.py` · `tests/unit/test_pca_fit_isolation.py` · `tests/unit/test_selection_in_pipeline.py` | pass |
+| G4 | Preprocessing & EDA | [`reports/eda_feature_engineering_report.md`](../reports/eda_feature_engineering_report.md) · `reports/tables/clean_before_after.csv` · `reports/tables/pca_explained_variance.csv` · `reports/figures/` | pass |
+| G5 | Modelling | [`reports/model_comparison_cv.md`](../reports/model_comparison_cv.md) · [`reports/model_selection_and_evaluation.md`](../reports/model_selection_and_evaluation.md) · `reports/tables/cv_comparison.csv` · `reports/tables/test_metrics_all_models.csv` · `reports/figures/test_pr_curve.png` | pass |
+| G6 | Explainability | [`reports/explainability/`](../reports/explainability) — `reports/explainability/shap_global_importance.csv`, `reports/explainability/shap_global_bar.png`, `reports/explainability/pdp_ice_*.png`, `reports/explainability/method.json` | pass |
+| G7 | Fairness | [`reports/bias_fairness_analysis.md`](../reports/bias_fairness_analysis.md) · `reports/fairness/group_metrics.csv` · `reports/fairness/selection_rates.png` · `tests/unit/test_groups_min_size.py` · `tests/unit/test_language_no_sensitive_reasons.py` | pass |
+| G8 | Application | [`src/ssn/app`](../src/ssn/app) · [`docs/DEPLOYMENT.md`](../docs/DEPLOYMENT.md) · [`reports/model_card.md`](../reports/model_card.md) · `tests/app/test_no_labels_rendered.py`, `tests/app/test_queue_to_action_interactions.py`, `tests/app/test_version_check.py` · [`reports/decks/demo.gif`](../reports/decks/demo.gif) | pass |
+| G9 | Reproducibility | [`docs/REPRODUCIBILITY.md`](../docs/REPRODUCIBILITY.md) · `models/manifest.json` · `tests/integration/test_reproduce_fixture.py` · `tests/unit/test_persist_manifest.py` | pass |
+| G10 | Communication & Repo | [`reports/decks/technical_deck.slides.html`](../reports/decks/technical_deck.slides.html) (12 slides) · [`reports/decks/business_deck.pptx`](../reports/decks/business_deck.pptx) (10 slides) · [`reports/final_report.md`](../reports/final_report.md) · this rubric map · [`README.md`](../README.md) | pass |
+
+The Definition of Done additionally requires that the repository be public with no secrets or private
+data. That is the one criterion still open, tracked as T092.
 
 ### Pre-publication checklist — run 2026-09-11 (quickstart section 11, T092)
 

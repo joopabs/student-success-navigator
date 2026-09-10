@@ -529,7 +529,7 @@ PY`
   - Deps: T071, T073
   - Accept: exit 0
   - Verify: `python -m ssn scan-language --paths reports README.md docs notebooks`
-- [X] T075 [US6] Export `reports/final_report.md` to `reports/final_report.pdf` (pandoc if available, otherwise an editor export) and complete `README.md`: replace every `[PENDING]` with file-referenced values, finish reproduction steps, repository structure, rubric section links, optional-step status
+- [X] T075 [US6] (correction: marked complete at milestone 8, but `reports/final_report.pdf` did not exist until 2026-09-11, when `scripts/html_to_pdf.py` produced it in commit 3ebf0a2 — the acceptance check `ls reports/final_report.pdf` would have failed in between; README `[PENDING]` replacement was complete from milestone 8) Export `reports/final_report.md` to `reports/final_report.pdf` (pandoc if available, otherwise an editor export) and complete `README.md`: replace every `[PENDING]` with file-referenced values, finish reproduction steps, repository structure, rubric section links, optional-step status
   - Type: docs, reports
   - Deps: T074
   - Accept: PDF exists; README has zero `[PENDING`; README reproduction steps match quickstart.md
