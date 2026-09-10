@@ -164,6 +164,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def _load_handlers() -> None:
     """Import modules that register handlers via @register (side-effect imports)."""
+    import ssn.app.commands  # noqa: F401
     import ssn.data.commands  # noqa: F401
     import ssn.explain.commands  # noqa: F401
     import ssn.fairness.commands  # noqa: F401

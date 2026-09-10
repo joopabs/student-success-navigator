@@ -5,7 +5,7 @@
 Fair and explainable first-semester dropout risk prediction for early academic support, with a
 Dash decision-support companion app.
 
-> **Status: Milestone 8 complete (final report, technical deck, business deck outline).** Milestones 9 (Dash app) and 10 (MLOps/GenAI docs) remain.
+> **Status: Milestone 9 complete (Student Success Navigator Dash app).** Milestone 10 (MLOps/GenAI docs, demo media) remains.
 > Metrics are measured; outreach capacity is an illustrative assumption. No production-readiness or causal claim is made.
 
 ## What this project does
@@ -60,7 +60,7 @@ Section 5). Evidence links are filled in as milestones complete.
 - Repository structure: see below. Final report: [`reports/final_report.md`](reports/final_report.md) (HTML export `reports/final_report.html`) · Rubric evidence map: [`reports/rubric_map.md`](reports/rubric_map.md)
 
 ### Bonus: creative and well-presented submission (5 pts)
-- Student Success Navigator Dash app (optional Step 8): planned in Milestone 9 (`docs/DEPLOYMENT.md` when built)
+- Student Success Navigator Dash app (optional Step 8): `python -m ssn app` · guide [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) · six pages (Overview, Support Queue, Student Review, New Record Scoring, Equity Dashboard, Model Card) · loads the saved pipeline, never retrains · acknowledgement-gated local action log · 30 app tests under `tests/app/`
 - MLOps and Generative AI documentation (optional Steps 8-9): planned in Milestone 10 (`docs/MLOPS.md`, `docs/GENAI_USE.md` when written)
 
 ## Reproduction
@@ -86,6 +86,7 @@ make final     # select-model, calibrate, threshold, fit-final, evaluate-test (t
 make explain   # SHAP, PDP/ICE
 make fairness  # group audit + mitigation experiment
 make report    # model card, rubric map, language scan
+make app       # Student Success Navigator at http://127.0.0.1:8050 (python -m ssn app)
 ```
 
 A second run in a fresh environment reproduced every compared table with a maximum absolute delta of 0

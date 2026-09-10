@@ -67,7 +67,12 @@ def _paragraphs(text: str) -> list[tuple[int, str]]:
     return out
 
 
-def scan_text(text: str, rules: LanguageRules, path: str = "<text>") -> list[Finding]:
+PROSE_EXTENSIONS = {".md", ".ipynb", ".txt", ".html", "<text>"}
+
+
+def scan_text(
+    text: str, rules: LanguageRules, path: str = "<text>", *, business_rule: bool = True
+) -> list[Finding]:
     findings: list[Finding] = []
     for i, line in enumerate(text.splitlines(), start=1):
         low = line.lower()
@@ -77,6 +82,8 @@ def scan_text(text: str, rules: LanguageRules, path: str = "<text>") -> list[Fin
         for phrase in rules.overclaim_phrases:
             if phrase in low:
                 findings.append(Finding("fairness-overclaim", path, i, line))
+    if not business_rule:
+        return findings
     for start, para in _paragraphs(text):
         low = para.lower()
         has_business = any(re.search(rf"\b{re.escape(t)}\b", low) for t in rules.business_terms)
@@ -120,7 +127,10 @@ def scan_paths(paths: list[str | Path], rules: LanguageRules) -> list[Finding]:
         if rules.source is not None and f.resolve() == rules.source:
             continue  # the rules file necessarily contains the phrases it forbids
         text = _notebook_text(f) if f.suffix == ".ipynb" else f.read_text(errors="ignore")
-        findings.extend(scan_text(text, rules, path=str(f)))
+        # business-figure rule targets prose; code and config carry `value`/`100%` legitimately
+        findings.extend(
+            scan_text(text, rules, path=str(f), business_rule=f.suffix in PROSE_EXTENSIONS)
+        )
     return findings
 
 

@@ -548,57 +548,57 @@ acknowledgement, and logs actions locally.
 **Independent Test**: `pytest -q tests/app` passes; `python -m ssn app` serves six pages;
 quickstart.md section 9 walkthrough succeeds.
 
-- [ ] T076 [US2] Implement `src/ssn/app/app.py::create_app(cfg)` and wire `app`: load manifest, verify `model_version == app.expected_model_version` and `pipeline_sha256` matches file (on mismatch serve a single blocking page and no scores), load pipeline with joblib, load `data/demo/demo_cohort.parquet`, call `assert_frame_allowed` on the feature frame, register pages, inject `components/disclaimer.py` and a footer with version metadata into the base layout
+- [X] T076 [US2] Implement `src/ssn/app/app.py::create_app(cfg)` and wire `app`: load manifest, verify `model_version == app.expected_model_version` and `pipeline_sha256` matches file (on mismatch serve a single blocking page and no scores), load pipeline with joblib, load `data/demo/demo_cohort.parquet`, call `assert_frame_allowed` on the feature frame, register pages, inject `components/disclaimer.py` and a footer with version metadata into the base layout
   - Type: code
   - Deps: T056, T060
   - Accept: app starts; mismatch config produces the blocking page; no `fit` call anywhere under `src/ssn/app`
   - Verify: `python -m ssn app & sleep 5; curl -s http://127.0.0.1:8050/ | grep -c 'illustrative'; kill %1`
-- [ ] T077 [US2] Implement `src/ssn/app/services/scoring.py`: score demo cohort once at startup (`predict_proba`), assign bands from manifest, rank descending with `record_id` ascending tie-break, `top_k(k)` with notice when `k > n`, `score_record(dict)` for hypotheticals; write `tests/app/test_top_k_ranking.py` (exact K rows, tie-break, K > n notice, bands from manifest not recomputed)
+- [X] T077 [US2] Implement `src/ssn/app/services/scoring.py`: score demo cohort once at startup (`predict_proba`), assign bands from manifest, rank descending with `record_id` ascending tie-break, `top_k(k)` with notice when `k > n`, `score_record(dict)` for hypotheticals; write `tests/app/test_top_k_ranking.py` (exact K rows, tie-break, K > n notice, bands from manifest not recomputed)
   - Type: code, tests
   - Deps: T076
   - Accept: tests pass on a fixture pipeline and manifest
   - Verify: `pytest -q tests/app/test_top_k_ranking.py`
-- [ ] T078 [US2] Implement `src/ssn/app/services/actions.py`: create table per contracts/action-log.md if missing, `append_action(...)` INSERT only, `export_csv()`; handle unwritable path by returning a status the UI shows; wire `actions export`; write `tests/app/test_actions_log.py` (append-only: no UPDATE/DELETE strings in module; duplicate record_id creates second row; unwritable path handled; file path matches `.gitignore` rule)
+- [X] T078 [US2] Implement `src/ssn/app/services/actions.py`: create table per contracts/action-log.md if missing, `append_action(...)` INSERT only, `export_csv()`; handle unwritable path by returning a status the UI shows; wire `actions export`; write `tests/app/test_actions_log.py` (append-only: no UPDATE/DELETE strings in module; duplicate record_id creates second row; unwritable path handled; file path matches `.gitignore` rule)
   - Type: code, tests
   - Deps: T076
   - Accept: tests pass; `git check-ignore data/local/actions.sqlite` matches
   - Verify: `pytest -q tests/app/test_actions_log.py && git check-ignore -v data/local/actions.sqlite`
-- [ ] T079 [P] [US2] Implement `src/ssn/app/pages/overview.py` (route `/`): purpose, intended use, non-use, illustrative K with label from `capacity.illustrative`, model version and date, cohort size, band legend, disclaimer
+- [X] T079 [P] [US2] Implement `src/ssn/app/pages/overview.py` (route `/`): purpose, intended use, non-use, illustrative K with label from `capacity.illustrative`, model version and date, cohort size, band legend, disclaimer
   - Type: code
   - Deps: T077
   - Accept: page renders with all listed elements; no outcome or identifier strings
   - Verify: `pytest -q tests/app/test_no_labels_rendered.py -k overview` (after T085)
-- [ ] T080 [US2] Implement `src/ssn/app/pages/support_queue.py` (route `/queue`): top-K table (record_id, score 2 dp, band, top-2 neutral factors), K selector limited to the K values derived from `capacity.window_sensitivity_weeks`, K > n notice, "Record support action" opening the acknowledgement modal per contracts/app-pages.md (Save disabled until checkbox; Dismiss/Override always enabled; all three log via `actions.append_action`), toast on success or unwritable notice
+- [X] T080 [US2] Implement `src/ssn/app/pages/support_queue.py` (route `/queue`): top-K table (record_id, score 2 dp, band, top-2 neutral factors), K selector limited to the K values derived from `capacity.window_sensitivity_weeks`, K > n notice, "Record support action" opening the acknowledgement modal per contracts/app-pages.md (Save disabled until checkbox; Dismiss/Override always enabled; all three log via `actions.append_action`), toast on success or unwritable notice
   - Type: code
   - Deps: T077, T078
   - Accept: modal flow matches the contract; exactly K rows shown
   - Verify: `pytest -q tests/app -k queue`
-- [ ] T081 [US3] Implement `src/ssn/app/services/explanations.py` (load `shap_values_test.npz` or compute with the same explainer type at startup; `render_local` via `ssn.explain.language`) and `src/ssn/app/pages/student_review.py` (route `/review/<record_id>`): score, band, ranked neutral factor phrases with direction, allow-listed feature values with labels, acknowledgement modal, version metadata, disclaimer; sensitive attributes never displayed
+- [X] T081 [US3] Implement `src/ssn/app/services/explanations.py` (load `shap_values_test.npz` or compute with the same explainer type at startup; `render_local` via `ssn.explain.language`) and `src/ssn/app/pages/student_review.py` (route `/review/<record_id>`): score, band, ranked neutral factor phrases with direction, allow-listed feature values with labels, acknowledgement modal, version metadata, disclaimer; sensitive attributes never displayed
   - Type: code
   - Deps: T077, T078, T060
   - Accept: unknown `record_id` shows a not-found message; no non-visible feature appears
   - Verify: `pytest -q tests/app -k review`
-- [ ] T082 [US5] Implement `src/ssn/app/pages/new_record.py` (route `/score`): form generated from the allow-list (numeric ranges from `configs/ranges.json`, categorical options from verified encodings in `features.yaml`), server-side validation with field-level messages, result labelled "Hypothetical" with score, band, neutral factors, disclaimer; write `tests/app/test_new_record_validation.py` (missing field, out-of-range, invalid code, valid submission, no second-semester inputs present)
+- [X] T082 [US5] Implement `src/ssn/app/pages/new_record.py` (route `/score`): form generated from the allow-list (numeric ranges from `configs/ranges.json`, categorical options from verified encodings in `features.yaml`), server-side validation with field-level messages, result labelled "Hypothetical" with score, band, neutral factors, disclaimer; write `tests/app/test_new_record_validation.py` (missing field, out-of-range, invalid code, valid submission, no second-semester inputs present)
   - Type: code, tests
   - Deps: T077, T081
   - Accept: tests pass; form contains no `second_semester` or `outcome` fields
   - Verify: `pytest -q tests/app/test_new_record_validation.py`
-- [ ] T083 [US4] Implement `src/ssn/app/services/equity.py` (read `reports/fairness/group_metrics.json` only; "audit not yet run" state if absent) and `src/ssn/app/pages/equity_dashboard.py` (route `/equity`): attribute toggle, per-group table with `n`, reliable flag and warning, selection rate, TPR, FPR, Brier; attribute-level DPD, DIR, EOD, equalized-odds max diff; calibration plot for reliable groups; residual-risk text from `reports/limitations.md`
+- [X] T083 [US4] Implement `src/ssn/app/services/equity.py` (read `reports/fairness/group_metrics.json` only; "audit not yet run" state if absent) and `src/ssn/app/pages/equity_dashboard.py` (route `/equity`): attribute toggle, per-group table with `n`, reliable flag and warning, selection rate, TPR, FPR, Brier; attribute-level DPD, DIR, EOD, equalized-odds max diff; calibration plot for reliable groups; residual-risk text from `reports/limitations.md`
   - Type: code
   - Deps: T064, T076
   - Accept: page renders from JSON without computing metrics; small groups show warnings
   - Verify: `pytest -q tests/app -k equity`
-- [ ] T084 [P] [US6] Implement `src/ssn/app/pages/model_card.py` (route `/model-card`): render `reports/model_card.md` as markdown
+- [X] T084 [P] [US6] Implement `src/ssn/app/pages/model_card.py` (route `/model-card`): render `reports/model_card.md` as markdown
   - Type: code
   - Deps: T067, T076
   - Accept: page shows intended use, non-use, citation, metrics, limitations, version, disclaimer
   - Verify: `pytest -q tests/app -k model_card`
-- [ ] T085 [US2] Write `tests/app/test_no_labels_rendered.py` (render every page layout with fixture cohort; assert absence of `Target`, `is_dropout`, outcome-label usages, prohibited terms, and any `adviser_visible: false` feature label), `tests/app/test_forbidden_imports.py` (AST scan of `src/ssn/app/**`: no `.fit(` calls; no import of `ssn.modeling.evaluate`, `ssn.fairness.audit`, `ssn.modeling.tune`; no string containing `data/evaluation` or `data/processed`), `tests/app/test_version_check.py` (mismatched version or sha yields blocking layout and `scoring` never called), and `tests/app/test_queue_to_action_interactions.py` (from the queue layout, the acknowledgement modal's Save is reachable in at most three callback invocations: open record or modal, tick acknowledgement, save; verifies SC-006)
+- [X] T085 [US2] Write `tests/app/test_no_labels_rendered.py` (render every page layout with fixture cohort; assert absence of `Target`, `is_dropout`, outcome-label usages, prohibited terms, and any `adviser_visible: false` feature label), `tests/app/test_forbidden_imports.py` (AST scan of `src/ssn/app/**`: no `.fit(` calls; no import of `ssn.modeling.evaluate`, `ssn.fairness.audit`, `ssn.modeling.tune`; no string containing `data/evaluation` or `data/processed`), `tests/app/test_version_check.py` (mismatched version or sha yields blocking layout and `scoring` never called), and `tests/app/test_queue_to_action_interactions.py` (from the queue layout, the acknowledgement modal's Save is reachable in at most three callback invocations: open record or modal, tick acknowledgement, save; verifies SC-006)
   - Type: tests
   - Deps: T079, T080, T081, T082, T083, T084
   - Accept: all pass; failure messages name the offending page or file
   - Verify: `pytest -q tests/app`
-- [ ] T086 [US2] Write `docs/DEPLOYMENT.md` (prerequisites, `make data && make final` or artifact download, `python -m ssn app`, configuration keys, version-mismatch behaviour, action-log location and export, privacy notes) and perform the quickstart.md section 9 manual walkthrough; record the walkthrough date and results at the bottom of `docs/DEPLOYMENT.md`; capture `reports/decks/demo.gif` or a screencast link
+- [X] T086 [US2] (demo media deferred to T091) Write `docs/DEPLOYMENT.md` (prerequisites, `make data && make final` or artifact download, `python -m ssn app`, configuration keys, version-mismatch behaviour, action-log location and export, privacy notes) and perform the quickstart.md section 9 manual walkthrough; record the walkthrough date and results at the bottom of `docs/DEPLOYMENT.md`; capture `reports/decks/demo.gif` or a screencast link
   - Type: docs, run
   - Deps: T085
   - Accept: a fresh clone following the guide reaches a running app; walkthrough checklist all ticked, including the count of interactions from opening the Support Queue to a saved acknowledged action (must be three or fewer, recorded in `docs/DEPLOYMENT.md` for SC-006); demo media present

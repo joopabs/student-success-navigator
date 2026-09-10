@@ -3,6 +3,8 @@ from __future__ import annotations
 import subprocess
 import sys
 
+import pytest
+
 from ssn.cli import CONTRACT_COMMANDS, EXIT_CONFIG, main
 
 
@@ -28,9 +30,19 @@ def test_config_validate_bad_file_exits_2(tmp_path):
     assert r.returncode == EXIT_CONFIG and "missing required key" in r.stderr
 
 
-def test_unimplemented_command_exits_2():
-    r = _run("app")
-    assert r.returncode == EXIT_CONFIG and "not implemented" in r.stderr
+def test_unimplemented_command_exits_2(monkeypatch):
+    """All contract commands are implemented; exercise the not-implemented path in-process."""
+    import argparse
+
+    from ssn import cli
+
+    handler = cli._not_implemented("data", "future-step")
+    with pytest.raises(cli.NotImplementedCommand, match="not implemented"):
+        handler(argparse.Namespace())
+    # main() maps NotImplementedCommand to EXIT_CONFIG: load real handlers first, then stub one
+    cli._load_handlers()
+    monkeypatch.setitem(cli.REGISTRY, (None, "eda"), cli._not_implemented(None, "eda"))
+    assert main(["eda"]) == EXIT_CONFIG
 
 
 def test_unknown_command_is_rejected():
