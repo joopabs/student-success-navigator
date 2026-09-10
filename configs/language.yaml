@@ -1,29 +1,229 @@
 # Adviser-facing language rules and feature phrasing.
 # Contract: specs/001-dropout-risk-navigator/contracts/config-schema.md (research R-18)
+# Populated 2026-09-10 (T060). Parental background features are socioeconomic proxies; their phrases are
+# deliberately neutral and non-judgemental and they are listed under proxy_note_features for the fairness report.
 
-# Never allowed in adviser-facing text, reports, README, docs, or slides (case-insensitive).
 prohibited_terms:
-  - "at risk of failing"
-  - "likely to drop out"
-  - "problem student"
-  - "failing student"
-
-# A paragraph that mentions one of these AND contains a currency or percent figure
-# MUST also contain one of `assumption_labels`, otherwise scan-language flags it.
-business_terms: ["roi", "saving", "savings", "cost", "value", "capacity", "return on investment"]
-assumption_labels: ["illustrative", "assumption", "assumed", "hypothetical"]
-
-# Over-claims that must never appear unqualified.
+- at risk of failing
+- likely to drop out
+- problem student
+- failing student
+business_terms:
+- roi
+- saving
+- savings
+- cost
+- value
+- capacity
+- return on investment
+assumption_labels:
+- illustrative
+- assumption
+- assumed
+- hypothetical
 overclaim_phrases:
-  - "the model is fair"
-  - "the model is unbiased"
-  - "no bias"
-
-# Per-feature adviser phrasing. Populated in Milestone 7 (T060); scan-language checks that every
-# allow-listed and engineered feature has an entry once configs/features.yaml is populated.
-#   sem1_approval_rate:
-#     label: "First-semester course completion"
-#     higher_phrase: "completed a larger share of first-semester courses"
-#     lower_phrase: "completed a smaller share of first-semester courses"
-#     adviser_visible: true
-features: {}
+- the model is fair
+- the model is unbiased
+- no bias
+features:
+  Admission grade:
+    label: Admission grade
+    higher_phrase: was admitted with a higher grade
+    lower_phrase: was admitted with a lower grade
+    adviser_visible: true
+    value_kind: numeric
+  Application mode:
+    label: Application route
+    higher_phrase: applied through a route associated with higher support needs in past cohorts
+    lower_phrase: applied through a route associated with lower support needs in past cohorts
+    adviser_visible: true
+    value_kind: categorical
+  Application order:
+    label: Programme preference order
+    higher_phrase: this programme was a lower-ranked preference
+    lower_phrase: this programme was a high-ranked preference
+    adviser_visible: true
+    value_kind: numeric
+  Course:
+    label: Programme of study
+    higher_phrase: is enrolled in a programme where past cohorts more often needed support
+    lower_phrase: is enrolled in a programme where past cohorts less often needed support
+    adviser_visible: true
+    value_kind: categorical
+  Curricular units 1st sem (approved):
+    label: First-semester units passed
+    higher_phrase: passed more first-semester units
+    lower_phrase: passed fewer first-semester units
+    adviser_visible: true
+    value_kind: numeric
+  Curricular units 1st sem (credited):
+    label: First-semester units credited
+    higher_phrase: had more first-semester units credited from prior study
+    lower_phrase: had fewer first-semester units credited from prior study
+    adviser_visible: true
+    value_kind: numeric
+  Curricular units 1st sem (enrolled):
+    label: First-semester units enrolled
+    higher_phrase: enrolled in more first-semester units
+    lower_phrase: enrolled in fewer first-semester units
+    adviser_visible: true
+    value_kind: numeric
+  Curricular units 1st sem (evaluations):
+    label: First-semester evaluations taken
+    higher_phrase: sat more first-semester evaluations
+    lower_phrase: sat fewer first-semester evaluations
+    adviser_visible: true
+    value_kind: numeric
+  Curricular units 1st sem (grade):
+    label: First-semester grade average
+    higher_phrase: has a higher first-semester grade average
+    lower_phrase: has a lower first-semester grade average
+    adviser_visible: true
+    value_kind: numeric
+  Curricular units 1st sem (without evaluations):
+    label: First-semester units without evaluation
+    higher_phrase: had more first-semester units with no evaluation
+    lower_phrase: had fewer first-semester units with no evaluation
+    adviser_visible: true
+    value_kind: numeric
+  Daytime/evening attendance:
+    label: Attendance schedule
+    higher_phrase: attends in the daytime schedule
+    lower_phrase: attends in the evening schedule
+    adviser_visible: true
+    value_kind: binary
+  Displaced:
+    label: Studying away from home region
+    higher_phrase: is studying away from their home region
+    lower_phrase: is studying in their home region
+    adviser_visible: true
+    value_kind: binary
+  Father's occupation:
+    label: Parental occupation (father)
+    higher_phrase: family occupation background differs from the typical pattern
+    lower_phrase: family occupation background is close to the typical pattern
+    adviser_visible: true
+    value_kind: categorical
+  Father's qualification:
+    label: Parental education (father)
+    higher_phrase: family education background differs from the typical pattern
+    lower_phrase: family education background is close to the typical pattern
+    adviser_visible: true
+    value_kind: categorical
+  GDP:
+    label: Economic growth at enrollment
+    higher_phrase: enrolled in a year with stronger economic growth
+    lower_phrase: enrolled in a year with weaker economic growth
+    adviser_visible: true
+    value_kind: numeric
+  Inflation rate:
+    label: Inflation at enrollment
+    higher_phrase: enrolled in a year with higher inflation
+    lower_phrase: enrolled in a year with lower inflation
+    adviser_visible: true
+    value_kind: numeric
+  Mother's occupation:
+    label: Parental occupation (mother)
+    higher_phrase: family occupation background differs from the typical pattern
+    lower_phrase: family occupation background is close to the typical pattern
+    adviser_visible: true
+    value_kind: categorical
+  Mother's qualification:
+    label: Parental education (mother)
+    higher_phrase: family education background differs from the typical pattern
+    lower_phrase: family education background is close to the typical pattern
+    adviser_visible: true
+    value_kind: categorical
+  Previous qualification:
+    label: Prior qualification type
+    higher_phrase: entered with a prior qualification type associated with higher support needs
+    lower_phrase: entered with a prior qualification type associated with lower support needs
+    adviser_visible: true
+    value_kind: categorical
+  Previous qualification (grade):
+    label: Prior qualification grade
+    higher_phrase: entered with a higher prior qualification grade
+    lower_phrase: entered with a lower prior qualification grade
+    adviser_visible: true
+    value_kind: numeric
+  Unemployment rate:
+    label: Regional unemployment at enrollment
+    higher_phrase: enrolled in a year with higher regional unemployment
+    lower_phrase: enrolled in a year with lower regional unemployment
+    adviser_visible: true
+    value_kind: numeric
+  sem1_approval_rate:
+    label: First-semester completion rate
+    higher_phrase: completed a larger share of enrolled first-semester units
+    lower_phrase: completed a smaller share of enrolled first-semester units
+    adviser_visible: true
+    value_kind: numeric
+  sem1_evaluation_participation_rate:
+    label: First-semester assessment participation
+    higher_phrase: took part in more assessments per enrolled unit
+    lower_phrase: took part in fewer assessments per enrolled unit
+    adviser_visible: true
+    value_kind: numeric
+  sem1_non_evaluation_rate:
+    label: Units left unassessed
+    higher_phrase: left a larger share of first-semester units unassessed
+    lower_phrase: left a smaller share of first-semester units unassessed
+    adviser_visible: true
+    value_kind: numeric
+  grade_diff_vs_admission:
+    label: Grade change since admission
+    higher_phrase: first-semester grades rose relative to the admission grade
+    lower_phrase: first-semester grades fell relative to the admission grade
+    adviser_visible: true
+    value_kind: numeric
+  sem1_credited_share:
+    label: Share of units credited
+    higher_phrase: a larger share of first-semester units was credited from prior study
+    lower_phrase: a smaller share of first-semester units was credited from prior study
+    adviser_visible: true
+    value_kind: numeric
+  sem1_load:
+    label: First-semester workload
+    higher_phrase: carried a heavier first-semester workload
+    lower_phrase: carried a lighter first-semester workload
+    adviser_visible: true
+    value_kind: numeric
+  sem1_any_approved:
+    label: Passed at least one unit
+    higher_phrase: passed at least one first-semester unit
+    lower_phrase: did not pass any first-semester unit
+    adviser_visible: true
+    value_kind: binary
+  Age at enrollment:
+    label: Age at enrollment
+    adviser_visible: false
+    note: 'sensitive attribute: aggregate fairness auditing only; never an adviser-facing reason'
+  Educational special needs:
+    label: Educational special needs
+    adviser_visible: false
+    note: 'sensitive attribute: aggregate fairness auditing only; never an adviser-facing reason'
+  Gender:
+    label: Gender
+    adviser_visible: false
+    note: 'sensitive attribute: aggregate fairness auditing only; never an adviser-facing reason'
+  International:
+    label: International
+    adviser_visible: false
+    note: 'sensitive attribute: aggregate fairness auditing only; never an adviser-facing reason'
+  Marital status:
+    label: Marital status
+    adviser_visible: false
+    note: 'sensitive attribute: aggregate fairness auditing only; never an adviser-facing reason'
+  Nacionality:
+    label: Nacionality
+    adviser_visible: false
+    note: 'sensitive attribute: aggregate fairness auditing only; never an adviser-facing reason'
+  age_band:
+    label: age_band
+    adviser_visible: false
+    note: 'sensitive attribute: aggregate fairness auditing only; never an adviser-facing reason'
+proxy_note_features:
+- Mother's qualification
+- Father's qualification
+- Mother's occupation
+- Father's occupation

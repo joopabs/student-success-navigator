@@ -127,3 +127,76 @@ def scan_paths(paths: list[str | Path], rules: LanguageRules) -> list[Finding]:
 def missing_feature_entries(rules: LanguageRules, feature_names: list[str]) -> list[str]:
     """Allow-listed or engineered features without a language entry (enforced from T060)."""
     return [f for f in feature_names if f not in rules.features]
+
+
+PROHIBITED_REASON_FEATURES_MSG = "sensitive attribute cannot be shown as an adviser-facing reason"
+
+
+def _situation_phrase(
+    meta: dict[str, Any], value: Any, shap_value: float, reference: dict[str, float] | None
+) -> str:
+    """Pick the phrase that describes the record's situation.
+
+    numeric: value above the training median -> higher_phrase, else lower_phrase (needs
+    `reference`);
+    binary: value >= 0.5 -> higher_phrase else lower_phrase;
+    categorical codes have no order: a positive contribution -> higher_phrase (written as
+    "associated with higher support needs in past cohorts"), otherwise lower_phrase.
+    """
+    kind = meta.get("value_kind", "numeric")
+    if isinstance(value, float) and value != value:  # NaN (e.g. undefined rate) -> unknown
+        value = None
+    if kind == "binary" and value is not None:
+        return meta["higher_phrase"] if float(value) >= 0.5 else meta["lower_phrase"]
+    if kind == "numeric" and value is not None and reference and meta_name(meta) in reference:
+        return (
+            meta["higher_phrase"]
+            if float(value) > reference[meta_name(meta)]
+            else meta["lower_phrase"]
+        )
+    return meta["higher_phrase"] if shap_value > 0 else meta["lower_phrase"]
+
+
+def meta_name(meta: dict[str, Any]) -> str:
+    return meta.get("_name", "")
+
+
+def render_local(
+    contributions: list[dict[str, Any]],
+    rules: LanguageRules,
+    top: int = 5,
+    reference: dict[str, float] | None = None,
+) -> list[dict[str, Any]]:
+    """Turn (feature, shap, value) contributions into supportive adviser phrases.
+
+    Features with `adviser_visible: false` (sensitive attributes) are dropped, never rendered.
+    `phrase` describes the record's situation; `direction` gives the sign of the contribution
+    (positive SHAP raises the support-priority score). `reference` maps numeric feature -> training
+    median, used to decide whether a value counts as higher or lower than typical.
+    """
+    out: list[dict[str, Any]] = []
+    for c in contributions:
+        meta = rules.features.get(c["feature"])
+        if meta is None or not meta.get("adviser_visible", False):
+            continue
+        meta = {**meta, "_name": c["feature"]}
+        shap_value = float(c["shap"])
+        out.append(
+            {
+                "label": meta["label"],
+                "phrase": _situation_phrase(meta, c.get("value"), shap_value, reference),
+                "direction": "raises support priority"
+                if shap_value > 0
+                else "lowers support priority",
+                "strength": abs(shap_value),
+            }
+        )
+        if len(out) >= top:
+            break
+    return out
+
+
+def missing_language_entries(rules: LanguageRules, allow) -> list[str]:
+    """Allow-listed source + engineered features without a language entry (T060 completeness)."""
+    names = sorted(allow.allowed_source) + list(allow.engineered)
+    return [n for n in names if n not in rules.features]

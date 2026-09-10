@@ -1,0 +1,8 @@
+{
+  "method": "shap.TreeExplainer",
+  "ensemble_members": 5,
+  "base_value_mean": 0.5000000000000003,
+  "aggregation": "one-hot columns summed per source column; averaged over calibrated ensemble members",
+  "explains": "uncalibrated base-estimator score contributions, not the calibrated probability",
+  "pdp_min_distinct_values": 10
+}

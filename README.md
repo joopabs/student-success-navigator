@@ -5,7 +5,7 @@
 Fair and explainable first-semester dropout risk prediction for early academic support, with a
 Dash decision-support companion app.
 
-> **Status: Milestone 6 complete (tuning, selection, threshold, calibration, persisted artifact, single held-out evaluation).**
+> **Status: Milestone 7 complete (explainability, fairness audit, limitations, model card).**
 > Metrics are measured; outreach capacity is an illustrative assumption. No production-readiness or causal claim is made.
 > No model has been trained and no model results exist yet. Every `[PENDING: ...]` marker below names the artifact that will supply
 > the value once the pipeline has actually been run.
@@ -50,9 +50,9 @@ Section 5). Evidence links are filled in as milestones complete.
 - Saved pipeline and manifest: [`models/manifest.json`](models/manifest.json) (pipeline regenerated with `make final`; sha256 recorded)
 
 ### Step 5: Critical thinking, ethical AI, and bias auditing (20 pts)
-- SHAP, PDP/ICE: `[PENDING: reports/explainability/]`
-- Bias & Fairness Analysis by verified gender encoding and age bands: `[PENDING: reports/fairness/group_metrics.csv]`
-- Limitations and mitigations: `[PENDING: reports/limitations.md]`
+- SHAP global/local, PDP/ICE: `reports/explainability/` (`shap_global_bar.png`, `shap_beeswarm.png`, `shap_local_examples.json`, `pdp_ice_*.png`, `method.json`) · notebook `notebooks/05_explainability_fairness.ipynb`
+- Bias & Fairness Analysis: [`reports/bias_fairness_analysis.md`](reports/bias_fairness_analysis.md) · `reports/fairness/group_metrics.{csv,json}`, `attribute_summary.csv`, `mitigation_comparison.csv`, `selection_rates.png`, `group_calibration.png`
+- Limitations and mitigations: [`reports/limitations.md`](reports/limitations.md) · Model card: [`reports/model_card.md`](reports/model_card.md)
 
 ### Step 6: Final presentation and communication (10 pts)
 - Technical deck (8-12 slides): `[PENDING: reports/decks/technical_deck.slides.html]`

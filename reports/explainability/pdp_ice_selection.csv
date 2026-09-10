@@ -1,0 +1,29 @@
+feature,n_distinct,included,reason_excluded
+Application mode,15.0,False,not continuous (dtype categorical)
+Application order,7.0,False,only 7 distinct values (< 10)
+Course,17.0,False,not continuous (dtype categorical)
+Daytime/evening attendance,2.0,False,not continuous (dtype binary)
+Previous qualification,13.0,False,not continuous (dtype categorical)
+Previous qualification (grade),71.0,True,
+Mother's qualification,18.0,False,not continuous (dtype categorical)
+Father's qualification,22.0,False,not continuous (dtype categorical)
+Mother's occupation,21.0,False,not continuous (dtype categorical)
+Father's occupation,27.0,False,not continuous (dtype categorical)
+Admission grade,363.0,True,
+Displaced,2.0,False,not continuous (dtype binary)
+Curricular units 1st sem (credited),18.0,True,
+Curricular units 1st sem (enrolled),20.0,True,
+Curricular units 1st sem (evaluations),30.0,True,
+Curricular units 1st sem (approved),19.0,True,
+Curricular units 1st sem (grade),257.0,True,
+Curricular units 1st sem (without evaluations),8.0,False,only 8 distinct values (< 10)
+Unemployment rate,10.0,True,
+Inflation rate,9.0,False,only 9 distinct values (< 10)
+GDP,10.0,True,
+sem1_approval_rate,,False,engineered inside the pipeline; cannot be varied independently of its inputs (see SHAP)
+sem1_evaluation_participation_rate,,False,engineered inside the pipeline; cannot be varied independently of its inputs (see SHAP)
+sem1_non_evaluation_rate,,False,engineered inside the pipeline; cannot be varied independently of its inputs (see SHAP)
+grade_diff_vs_admission,,False,engineered inside the pipeline; cannot be varied independently of its inputs (see SHAP)
+sem1_credited_share,,False,engineered inside the pipeline; cannot be varied independently of its inputs (see SHAP)
+sem1_load,,False,engineered inside the pipeline; cannot be varied independently of its inputs (see SHAP)
+sem1_any_approved,,False,engineered inside the pipeline; cannot be varied independently of its inputs (see SHAP)

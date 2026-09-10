@@ -1,0 +1,270 @@
+[
+  {
+    "case": "true_positive",
+    "available": true,
+    "record_id": "R83f132c1",
+    "score": 1.0,
+    "band": "Priority outreach",
+    "outcome_is_dropout": 1,
+    "top_contributions": [
+      {
+        "feature": "sem1_approval_rate",
+        "shap": 0.10068294941480375,
+        "value": 0.0
+      },
+      {
+        "feature": "Curricular units 1st sem (approved)",
+        "shap": 0.07981234648268057,
+        "value": 0.0
+      },
+      {
+        "feature": "Curricular units 1st sem (grade)",
+        "shap": 0.06091393870726104,
+        "value": 0.0
+      },
+      {
+        "feature": "grade_diff_vs_admission",
+        "shap": 0.05218766571777671,
+        "value": -100.9
+      },
+      {
+        "feature": "sem1_any_approved",
+        "shap": 0.04195209264457818,
+        "value": 0.0
+      }
+    ],
+    "adviser_phrases": [
+      {
+        "label": "First-semester completion rate",
+        "phrase": "completed a smaller share of enrolled first-semester units",
+        "direction": "raises support priority",
+        "strength": 0.10068294941480375
+      },
+      {
+        "label": "First-semester units passed",
+        "phrase": "passed fewer first-semester units",
+        "direction": "raises support priority",
+        "strength": 0.07981234648268057
+      },
+      {
+        "label": "First-semester grade average",
+        "phrase": "has a lower first-semester grade average",
+        "direction": "raises support priority",
+        "strength": 0.06091393870726104
+      },
+      {
+        "label": "Grade change since admission",
+        "phrase": "first-semester grades fell relative to the admission grade",
+        "direction": "raises support priority",
+        "strength": 0.05218766571777671
+      },
+      {
+        "label": "Passed at least one unit",
+        "phrase": "did not pass any first-semester unit",
+        "direction": "raises support priority",
+        "strength": 0.04195209264457818
+      }
+    ]
+  },
+  {
+    "case": "false_positive",
+    "available": true,
+    "record_id": "Ra8f29187",
+    "score": 1.0,
+    "band": "Priority outreach",
+    "outcome_is_dropout": 0,
+    "top_contributions": [
+      {
+        "feature": "sem1_approval_rate",
+        "shap": 0.12227827174273675,
+        "value": 0.0
+      },
+      {
+        "feature": "Curricular units 1st sem (approved)",
+        "shap": 0.09549439146095633,
+        "value": 0.0
+      },
+      {
+        "feature": "Curricular units 1st sem (grade)",
+        "shap": 0.07163491338581293,
+        "value": 0.0
+      },
+      {
+        "feature": "grade_diff_vs_admission",
+        "shap": 0.06445144638795239,
+        "value": -127.6
+      },
+      {
+        "feature": "sem1_any_approved",
+        "shap": 0.05188996522530296,
+        "value": 0.0
+      }
+    ],
+    "adviser_phrases": [
+      {
+        "label": "First-semester completion rate",
+        "phrase": "completed a smaller share of enrolled first-semester units",
+        "direction": "raises support priority",
+        "strength": 0.12227827174273675
+      },
+      {
+        "label": "First-semester units passed",
+        "phrase": "passed fewer first-semester units",
+        "direction": "raises support priority",
+        "strength": 0.09549439146095633
+      },
+      {
+        "label": "First-semester grade average",
+        "phrase": "has a lower first-semester grade average",
+        "direction": "raises support priority",
+        "strength": 0.07163491338581293
+      },
+      {
+        "label": "Grade change since admission",
+        "phrase": "first-semester grades fell relative to the admission grade",
+        "direction": "raises support priority",
+        "strength": 0.06445144638795239
+      },
+      {
+        "label": "Passed at least one unit",
+        "phrase": "did not pass any first-semester unit",
+        "direction": "raises support priority",
+        "strength": 0.05188996522530296
+      }
+    ]
+  },
+  {
+    "case": "false_negative",
+    "available": true,
+    "record_id": "Rcb2bb042",
+    "score": 0.9726666666666667,
+    "band": "Check-in suggested",
+    "outcome_is_dropout": 1,
+    "top_contributions": [
+      {
+        "feature": "sem1_approval_rate",
+        "shap": 0.12529595150281508,
+        "value": 0.0
+      },
+      {
+        "feature": "Curricular units 1st sem (approved)",
+        "shap": 0.0909104158723808,
+        "value": 0.0
+      },
+      {
+        "feature": "Curricular units 1st sem (grade)",
+        "shap": 0.06943212559171166,
+        "value": 0.0
+      },
+      {
+        "feature": "grade_diff_vs_admission",
+        "shap": 0.06402153660547674,
+        "value": -128.4
+      },
+      {
+        "feature": "sem1_any_approved",
+        "shap": 0.04854049102910861,
+        "value": 0.0
+      }
+    ],
+    "adviser_phrases": [
+      {
+        "label": "First-semester completion rate",
+        "phrase": "completed a smaller share of enrolled first-semester units",
+        "direction": "raises support priority",
+        "strength": 0.12529595150281508
+      },
+      {
+        "label": "First-semester units passed",
+        "phrase": "passed fewer first-semester units",
+        "direction": "raises support priority",
+        "strength": 0.0909104158723808
+      },
+      {
+        "label": "First-semester grade average",
+        "phrase": "has a lower first-semester grade average",
+        "direction": "raises support priority",
+        "strength": 0.06943212559171166
+      },
+      {
+        "label": "Grade change since admission",
+        "phrase": "first-semester grades fell relative to the admission grade",
+        "direction": "raises support priority",
+        "strength": 0.06402153660547674
+      },
+      {
+        "label": "Passed at least one unit",
+        "phrase": "did not pass any first-semester unit",
+        "direction": "raises support priority",
+        "strength": 0.04854049102910861
+      }
+    ]
+  },
+  {
+    "case": "true_negative",
+    "available": true,
+    "record_id": "R14a1324d",
+    "score": 0.0,
+    "band": "Standard support",
+    "outcome_is_dropout": 0,
+    "top_contributions": [
+      {
+        "feature": "sem1_approval_rate",
+        "shap": -0.08744751724574691,
+        "value": 0.875
+      },
+      {
+        "feature": "Curricular units 1st sem (approved)",
+        "shap": -0.07668456017025686,
+        "value": 7.0
+      },
+      {
+        "feature": "Course",
+        "shap": -0.042158896743752367,
+        "value": 9500.0
+      },
+      {
+        "feature": "Curricular units 1st sem (grade)",
+        "shap": -0.04039539759986849,
+        "value": 12.694285714285714
+      },
+      {
+        "feature": "grade_diff_vs_admission",
+        "shap": -0.03161253136189708,
+        "value": 6.642857142857139
+      }
+    ],
+    "adviser_phrases": [
+      {
+        "label": "First-semester completion rate",
+        "phrase": "completed a larger share of enrolled first-semester units",
+        "direction": "lowers support priority",
+        "strength": 0.08744751724574691
+      },
+      {
+        "label": "First-semester units passed",
+        "phrase": "passed more first-semester units",
+        "direction": "lowers support priority",
+        "strength": 0.07668456017025686
+      },
+      {
+        "label": "Programme of study",
+        "phrase": "is enrolled in a programme where past cohorts less often needed support",
+        "direction": "lowers support priority",
+        "strength": 0.042158896743752367
+      },
+      {
+        "label": "First-semester grade average",
+        "phrase": "has a higher first-semester grade average",
+        "direction": "lowers support priority",
+        "strength": 0.04039539759986849
+      },
+      {
+        "label": "Grade change since admission",
+        "phrase": "first-semester grades rose relative to the admission grade",
+        "direction": "lowers support priority",
+        "strength": 0.03161253136189708
+      }
+    ]
+  }
+]

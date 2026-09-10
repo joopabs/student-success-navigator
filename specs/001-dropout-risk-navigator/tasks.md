@@ -426,57 +426,57 @@ with mitigation experiment, limitations, and a rendered model card.
 figures, `group_metrics.json` with `n` and `reliable` per group, and `reports/model_card.md`
 with no placeholders; `pytest -q tests/unit/test_language_no_sensitive_reasons.py` passes.
 
-- [ ] T058 [US3] Implement `src/ssn/explain/shap_explain.py` and wire `explain` (part 1): choose `TreeExplainer` or `LinearExplainer` by estimator type with permutation-importance fallback (recorded in `reports/explainability/method.json`); if the final pipeline is calibrated, explain the fitted base estimator inside the wrapper and record this in `method.json`; compute global importances and local values on test features; map transformed names back to source/engineered names and sum SHAP values across the one-hot columns of each source feature so every factor appears once; write `shap_global_bar.png`, `shap_beeswarm.png`, `shap_values_test.npz` (record_id-indexed), `shap_global_importance.csv`, `shap_local_examples.md` (three anonymised examples)
+- [X] T058 [US3] Implement `src/ssn/explain/shap_explain.py` and wire `explain` (part 1): choose `TreeExplainer` or `LinearExplainer` by estimator type with permutation-importance fallback (recorded in `reports/explainability/method.json`); if the final pipeline is calibrated, explain the fitted base estimator inside the wrapper and record this in `method.json`; compute global importances and local values on test features; map transformed names back to source/engineered names and sum SHAP values across the one-hot columns of each source feature so every factor appears once; write `shap_global_bar.png`, `shap_beeswarm.png`, `shap_values_test.npz` (record_id-indexed), `shap_global_importance.csv`, `shap_local_examples.md` (three anonymised examples)
   - Type: code
   - Deps: T056
   - Accept: outputs written; method JSON states which explainer was used and why
   - Verify: `python -m ssn explain && ls reports/explainability/`
-- [ ] T059 [US3] Implement `src/ssn/explain/pdp_ice.py` (part 2 of `explain`): select continuous features with at least `explain.pdp_min_distinct_values` distinct values, write `pdp_ice_<feature>.png` for each and `reports/explainability/pdp_ice_selection.csv` listing included and excluded features with reasons
+- [X] T059 [US3] Implement `src/ssn/explain/pdp_ice.py` (part 2 of `explain`): select continuous features with at least `explain.pdp_min_distinct_values` distinct values, write `pdp_ice_<feature>.png` for each and `reports/explainability/pdp_ice_selection.csv` listing included and excluded features with reasons
   - Type: code
   - Deps: T058
   - Accept: selection CSV present; every excluded feature has a reason
   - Verify: `cat reports/explainability/pdp_ice_selection.csv`
-- [ ] T060 [US3] Complete `configs/language.yaml` with an entry for every allow-listed and engineered feature (`label`, `higher_phrase`, `lower_phrase`, `adviser_visible`), marking gender, age, age_band and any audited attribute `adviser_visible: false`; implement `ssn.explain.language.render_local(contributions)` that drops non-visible features and returns supportive phrases; write `tests/unit/test_language_no_sensitive_reasons.py`
+- [X] T060 [US3] Complete `configs/language.yaml` with an entry for every allow-listed and engineered feature (`label`, `higher_phrase`, `lower_phrase`, `adviser_visible`), marking gender, age, age_band and any audited attribute `adviser_visible: false`; implement `ssn.explain.language.render_local(contributions)` that drops non-visible features and returns supportive phrases; write `tests/unit/test_language_no_sensitive_reasons.py`
   - Type: config, code, tests
   - Deps: T058
   - Accept: `scan-language` reports zero missing feature entries; rendering never includes non-visible features
   - Verify: `pytest -q tests/unit/test_language_no_sensitive_reasons.py && python -m ssn scan-language --paths configs/language.yaml`
-- [ ] T061 [US4] Implement `src/ssn/fairness/audit.py` and wire `fairness audit`: score test cohort with the saved pipeline, join labels and sensitive columns from `data/evaluation/demo_cohort_labels.parquet`, group via T049, compute per-group and attribute-level metrics at the manifest threshold, group calibration for reliable groups; write `reports/fairness/group_metrics.csv`, `group_metrics.json`, `group_calibration.png`, `selection_rates.png`; refuse to run (exit 2) when gender `encoding_verified` is false
+- [X] T061 [US4] Implement `src/ssn/fairness/audit.py` and wire `fairness audit`: score test cohort with the saved pipeline, join labels and sensitive columns from `data/evaluation/demo_cohort_labels.parquet`, group via T049, compute per-group and attribute-level metrics at the manifest threshold, group calibration for reliable groups; write `reports/fairness/group_metrics.csv`, `group_metrics.json`, `group_calibration.png`, `selection_rates.png`; refuse to run (exit 2) when gender `encoding_verified` is false
   - Type: code
   - Deps: T049, T056
   - Accept: every group row has `n` and `reliable`; no `record_id` in outputs
   - Verify: `python -m ssn fairness audit && python -c "import json;g=json.load(open('reports/fairness/group_metrics.json'));print([(r['attribute'],r['group'],r['n'],r['reliable']) for r in g['groups']])"`
-- [ ] T062 [US4] Implement `src/ssn/fairness/mitigate.py` and wire `fairness mitigate`: compare baseline against (a) group-and-label reweighting refit on train and (b) group-specific thresholds equalising selection rate at fixed total K (evaluated on OOF, reported on test once); write `reports/fairness/mitigation_comparison.csv` with fairness and performance deltas and a note that (b) is not deployed
+- [X] T062 [US4] Implement `src/ssn/fairness/mitigate.py` and wire `fairness mitigate`: compare baseline against (a) group-and-label reweighting refit on train and (b) group-specific thresholds equalising selection rate at fixed total K (evaluated on OOF, reported on test once); write `reports/fairness/mitigation_comparison.csv` with fairness and performance deltas and a note that (b) is not deployed
   - Type: code
   - Deps: T061
   - Accept: table has baseline and at least one mitigation row with PR-AUC, Recall@K, DPD, DIR, EOD columns
   - Verify: `python -m ssn fairness mitigate && cat reports/fairness/mitigation_comparison.csv`
-- [ ] T063 [US3] Run `explain` on real artifacts; verify every figure renders and `shap_local_examples.md` uses neutral phrases via `render_local`
+- [X] T063 [US3] Run `explain` on real artifacts; verify every figure renders and `shap_local_examples.md` uses neutral phrases via `render_local`
   - Type: run
   - Deps: T059, T060
   - Accept: figures open; `scan-language` passes on `reports/explainability/`
   - Verify: `make explain && python -m ssn scan-language --paths reports/explainability`
-- [ ] T064 [US4] Run `fairness audit` and `fairness mitigate` on real artifacts; record PV-07 (group sizes, final `min_group_size`) and PV-12 (fairness values) by file reference in `data/README.md` and the report skeleton
+- [X] T064 [US4] Run `fairness audit` and `fairness mitigate` on real artifacts; record PV-07 (group sizes, final `min_group_size`) and PV-12 (fairness values) by file reference in `data/README.md` and the report skeleton
   - Type: run
   - Deps: T061, T062
   - Accept: outputs present; any group below `min_group_size` listed in the audit output with a warning
   - Verify: `make fairness && cat reports/fairness/group_metrics.csv`
-- [ ] T065 [US6] Implement `src/ssn/reporting/model_card.py` and wire `model-card`: render `reports/model_card.md` from `models/manifest.json`, `test_metrics.csv`, `threshold_and_bands.json`, `group_metrics.json`, `calibration_decision.json`, and a hand-written `reports/limitations.md` include; fail if any manifest placeholder remains or if the bare phrase "the model is fair" appears
+- [X] T065 [US6] Implement `src/ssn/reporting/model_card.py` and wire `model-card`: render `reports/model_card.md` from `models/manifest.json`, `test_metrics.csv`, `threshold_and_bands.json`, `group_metrics.json`, `calibration_decision.json`, and a hand-written `reports/limitations.md` include; fail if any manifest placeholder remains or if the bare phrase "the model is fair" appears
   - Type: code
   - Deps: T054, T061
   - Accept: model card contains every FR-068 field; command exits non-zero on placeholders
   - Verify: `python -m ssn model-card && grep -nE 'Intended use|Non-use|CC BY 4.0|Threshold|Limitations|Version' reports/model_card.md`
-- [ ] T066 [US4] Write `reports/limitations.md`: single-institution context, historic inequities, non-causal scores, imbalance, leakage risk and controls, overfitting controls, ambiguous-column decision, unresolved data-quality items, fairness-audit limitations (sample sizes, unverified encodings if any), residual risks; every quantitative statement references a file
+- [X] T066 [US4] Write `reports/limitations.md`: single-institution context, historic inequities, non-causal scores, imbalance, leakage risk and controls, overfitting controls, ambiguous-column decision, unresolved data-quality items, fairness-audit limitations (sample sizes, unverified encodings if any), residual risks; every quantitative statement references a file
   - Type: reports
   - Deps: T064
   - Accept: `scan-language` passes; no unreferenced numbers
   - Verify: `python -m ssn scan-language --paths reports/limitations.md`
-- [ ] T067 [US6] Run `model-card` on real artifacts and review the rendered card against FR-068
+- [X] T067 [US6] Run `model-card` on real artifacts and review the rendered card against FR-068
   - Type: run
   - Deps: T065, T066
   - Accept: card renders; `test_evaluations` note present; disclaimer present
   - Verify: `python -m ssn model-card && python -m ssn scan-language --paths reports/model_card.md`
-- [ ] T068 [P] [US3] Create `notebooks/05_explainability_fairness.ipynb` displaying SHAP figures, PDP/ICE selection, group metrics with warnings, mitigation table, and limitations; execute top-to-bottom
+- [X] T068 [P] [US3] Create `notebooks/05_explainability_fairness.ipynb` displaying SHAP figures, PDP/ICE selection, group metrics with warnings, mitigation table, and limitations; execute top-to-bottom
   - Type: notebook
   - Deps: T063, T064
   - Accept: executes; imports from `ssn`; no hand-typed metrics
