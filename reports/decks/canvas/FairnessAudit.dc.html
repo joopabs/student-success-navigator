@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #b7791f; } a:hover { color: #8a5a00; }
+  </style>
+</helmet>
+<div style="width: 1280px; height: 720px; background: #fafbfc; color: #1d2a3a; font-family: -apple-system, 'Segoe UI', Helvetica, 'Helvetica Neue', sans-serif; box-sizing: border-box; padding: 56px 72px 0; display: flex; flex-direction: column; position: relative; overflow: hidden;">
+
+  <div style="display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: #5b6b7b;">
+    <span>What the fairness audit found</span><span>08 / 10</span>
+  </div>
+  <div style="height: 2px; background: #1f3a5f; margin: 12px 0 26px;"></div>
+
+  <h1 style="font-family: 'Source Serif 4', Georgia, serif; font-size: 36px; line-height: 1.16; font-weight: 600; letter-spacing: -0.01em; color: #1f3a5f; margin: 0 0 24px; text-wrap: pretty;">Younger students who leave are under-reached</h1>
+
+  <table style="border-collapse: collapse; width: 100%; margin-bottom: 26px;">
+    <thead>
+      <tr>
+        <th style="text-align: left; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; color: #5b6b7b; padding: 0 14px 10px 0; border-bottom: 2px solid #1f3a5f; width: 34%;">Group comparison · held-out cohort</th>
+        <th style="text-align: left; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; color: #5b6b7b; padding: 0 14px 10px 0; border-bottom: 2px solid #1f3a5f; width: 25%;">Selection gap</th>
+        <th style="text-align: left; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; color: #5b6b7b; padding: 0 0 10px 0; border-bottom: 2px solid #1f3a5f; width: 41%;">Among students who did drop out, chance of being on the list</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="font-size: 17px; padding: 15px 14px 15px 0; border-bottom: 1px solid #d8dee6;">Women vs men</td>
+        <td style="font-size: 17px; font-variant-numeric: tabular-nums; padding: 15px 14px 15px 0; border-bottom: 1px solid #d8dee6;">5.0% vs 9.0%</td>
+        <td style="font-size: 17px; font-variant-numeric: tabular-nums; padding: 15px 0; border-bottom: 1px solid #d8dee6;">20% vs 19% <span style="color: #2f6f4f; font-size: 15px; font-weight: 600;">— near equal</span></td>
+      </tr>
+      <tr style="background: #fff7e6;">
+        <td style="font-size: 17px; font-weight: 700; padding: 15px 14px 15px 10px; border-bottom: 1px solid #d8dee6; border-left: 3px solid #e0a800;">Age 17–19 vs 35+</td>
+        <td style="font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; padding: 15px 14px 15px 0; border-bottom: 1px solid #d8dee6;">2.0% vs 24.7%</td>
+        <td style="font-size: 21px; font-weight: 700; color: #8a5a00; font-variant-numeric: tabular-nums; padding: 15px 0; border-bottom: 1px solid #d8dee6;">10% vs 50%</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="display: flex; gap: 36px; align-items: flex-start;">
+    <div style="width: 440px; flex-shrink: 0;">
+      <img src="selection_rates.png" alt="Group selection rate, TPR and FPR by gender and age band" style="width: 440px; box-sizing: border-box; display: block; border: 1px solid #d8dee6; background: #ffffff;">
+    </div>
+    <div style="flex-grow: 1; flex-basis: 0; display: flex; flex-direction: column; gap: 18px;">
+      <p style="font-size: 18px; line-height: 1.5; margin: 0; text-wrap: pretty;">The list reflects historical patterns in the data. Younger students who leave are under-reached.</p>
+      <div style="background: #ffffff; border: 1px solid #d8dee6; border-top: 3px solid #2f6f4f; padding: 18px 20px;">
+        <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: #2f6f4f; margin-bottom: 9px;">Recommended response</div>
+        <p style="font-size: 16px; line-height: 1.5; margin: 0; text-wrap: pretty;">An adviser-side rule — reserve part of the outreach list for first-years — rather than a change to the model.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="position: absolute; left: 72px; right: 72px; bottom: 30px; border-top: 1px solid #d8dee6; padding-top: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #5b6b7b;">
+    reports/fairness/group_metrics.csv · reports/fairness/selection_rates.png · full discussion in reports/bias_fairness_analysis.md
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

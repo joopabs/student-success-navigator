@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #b7791f; } a:hover { color: #8a5a00; }
+  </style>
+</helmet>
+<div style="width: 1280px; height: 720px; background: #fafbfc; color: #1d2a3a; font-family: -apple-system, 'Segoe UI', Helvetica, 'Helvetica Neue', sans-serif; box-sizing: border-box; padding: 56px 72px 0; display: flex; flex-direction: column; position: relative; overflow: hidden;">
+
+  <div style="display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: #5b6b7b;">
+    <span>Risks and governance</span><span>09 / 10</span>
+  </div>
+  <div style="height: 2px; background: #1f3a5f; margin: 12px 0 28px;"></div>
+
+  <h1 style="font-family: 'Source Serif 4', Georgia, serif; font-size: 36px; line-height: 1.16; font-weight: 600; letter-spacing: -0.01em; color: #1f3a5f; margin: 0 0 32px; text-wrap: pretty;">Risks, governance, and what a pilot would need</h1>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px;">
+
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <div style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: #a33; border-bottom: 2px solid #a33; padding-bottom: 9px;">The risks</div>
+      <div style="display: flex; flex-direction: column; gap: 11px;">
+        <div style="font-size: 15px; line-height: 1.45; border-bottom: 1px solid #e6eaef; padding-bottom: 11px; text-wrap: pretty;">Historical bias in the recorded outcomes</div>
+        <div style="font-size: 15px; line-height: 1.45; border-bottom: 1px solid #e6eaef; padding-bottom: 11px; text-wrap: pretty;">Proxy features — parental background, application route</div>
+        <div style="font-size: 15px; line-height: 1.45; border-bottom: 1px solid #e6eaef; padding-bottom: 11px; text-wrap: pretty;">Single-institution scope</div>
+        <div style="font-size: 15px; line-height: 1.45; border-bottom: 1px solid #e6eaef; padding-bottom: 11px; text-wrap: pretty;">Small subgroups</div>
+        <div style="font-size: 15px; line-height: 1.45; text-wrap: pretty;">Feedback loops, if the model were ever retrained on outreach data</div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <div style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: #2f6f4f; border-bottom: 2px solid #2f6f4f; padding-bottom: 9px;">Already in place</div>
+      <div style="display: flex; flex-direction: column; gap: 11px;">
+        <div style="font-size: 15px; line-height: 1.45; border-bottom: 1px solid #e6eaef; padding-bottom: 11px; text-wrap: pretty;">A written constitution and a model card</div>
+        <div style="font-size: 15px; line-height: 1.45; border-bottom: 1px solid #e6eaef; padding-bottom: 11px; text-wrap: pretty;">A published fairness audit and a limitations statement</div>
+        <div style="font-size: 15px; line-height: 1.45; border-bottom: 1px solid #e6eaef; padding-bottom: 11px; text-wrap: pretty;">A reproducible pipeline — a fresh-environment re-run gives zero deltas</div>
+        <div style="font-size: 15px; line-height: 1.45; border-bottom: 1px solid #e6eaef; padding-bottom: 11px; text-wrap: pretty;">CI on every change, and a version-checked artifact</div>
+        <div style="font-size: 15px; line-height: 1.45; text-wrap: pretty;">A local action log</div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <div style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: #1f3a5f; border-bottom: 2px solid #1f3a5f; padding-bottom: 9px;">What a pilot would need</div>
+      <div style="display: flex; flex-direction: column; gap: 11px;">
+        <div style="font-size: 15px; line-height: 1.45; border-bottom: 1px solid #e6eaef; padding-bottom: 11px; text-wrap: pretty;">Institutional approval</div>
+        <div style="font-size: 15px; line-height: 1.45; border-bottom: 1px solid #e6eaef; padding-bottom: 11px; text-wrap: pretty;">A local data agreement</div>
+        <div style="font-size: 15px; line-height: 1.45; border-bottom: 1px solid #e6eaef; padding-bottom: 11px; text-wrap: pretty;">Re-training and a fresh audit on local data</div>
+        <div style="font-size: 15px; line-height: 1.45; border-bottom: 1px solid #e6eaef; padding-bottom: 11px; text-wrap: pretty;">Adviser training</div>
+        <div style="font-size: 15px; line-height: 1.45; text-wrap: pretty;">A standing review cadence for the Equity Dashboard</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="position: absolute; left: 72px; right: 72px; bottom: 30px; border-top: 1px solid #d8dee6; padding-top: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #5b6b7b;">
+    reports/limitations.md · reports/model_card.md · .specify/memory/constitution.md
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html",            "x": 0,    "y": 0,    "w": 1280, "h": 720, "title": "01 · Title",             "print": "fixed" },
+    { "file": "Opportunity.dc.html",     "x": 1360, "y": 0,    "w": 1280, "h": 720, "title": "02 · The opportunity",   "print": "fixed" },
+    { "file": "Workflow.dc.html",        "x": 2720, "y": 0,    "w": 1280, "h": 720, "title": "03 · How it would be used",    "print": "fixed" },
+    { "file": "ScoreInputs.dc.html",     "x": 0,    "y": 840,  "w": 1280, "h": 720, "title": "04 · What the score is made of", "print": "fixed" },
+    { "file": "Performance.dc.html",     "x": 1360, "y": 840,  "w": 1280, "h": 720, "title": "05 · Measured performance",  "print": "fixed" },
+    { "file": "OutreachReach.dc.html",   "x": 2720, "y": 840,  "w": 1280, "h": 720, "title": "06 · Outreach reach",    "print": "fixed" },
+    { "file": "Safeguards.dc.html",      "x": 0,    "y": 1680, "w": 1280, "h": 720, "title": "07 · Safeguards",        "print": "fixed" },
+    { "file": "FairnessAudit.dc.html",   "x": 1360, "y": 1680, "w": 1280, "h": 720, "title": "08 · What the fairness audit found",    "print": "fixed" },
+    { "file": "RisksGovernance.dc.html", "x": 2720, "y": 1680, "w": 1280, "h": 720, "title": "09 · Risks and governance", "print": "fixed" },
+    { "file": "NextSteps.dc.html",       "x": 0,    "y": 2520, "w": 1280, "h": 720, "title": "10 · Next steps and the ask", "print": "fixed" }
+  ],
+  "annotations": [
+    { "id": "language-guardrails", "x": 1360, "y": 2520, "w": 460, "text": "Language guardrails — keep these if you edit the copy:\n\n· The tool suggests a short outreach list. It does not predict any student's future with certainty.\n· It does not replace advisers and can make no adverse decision.\n· It is not shown to cause better outcomes.\n· Every capacity, window and share-reached figure stays labelled illustrative (slide 06).\n· No cost, saving or return figure exists in this project — do not add one.\n\nEvery number on these slides comes from the file cited in the footer strip.\nSource: reports/decks/business_deck_outline.md" }
+  ],
+  "launch": { "view": "canvas" }
+}

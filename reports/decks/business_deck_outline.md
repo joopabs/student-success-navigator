@@ -81,10 +81,18 @@ with certainty, does not replace advisers, is not shown to cause better outcomes
 
 ---
 
-### Assembly checklist (fill in when the deck is built — T073)
-- [ ] Slide count between 8 and 12: ______  (this outline = 10)
-- [ ] Every capacity / window / share-reached figure labelled "illustrative"
-- [ ] No cost, saving, or return figure added
-- [ ] No claim of certainty, causation, adviser replacement, or adverse decision
-- [ ] Figures pasted from the paths above (no re-drawn numbers)
-- [ ] Exported file saved as `reports/decks/business_deck.pptx`; date and final slide count recorded here: ______
+### Assembly checklist (completed when the deck was built — T073)
+- [X] Slide count between 8 and 12: **10**  (this outline = 10)
+- [X] Every capacity / window / share-reached figure labelled "illustrative" — slide 6 carries a warning
+  badge, per-column `illustrative` sublabels on the window and contacted columns, `measured recall` /
+  `measured precision` on the other two, and "Illustrative assumption only" in the assumption card
+- [X] No cost, saving, or return figure added — slide 6 states the absence explicitly
+- [X] No claim of certainty, causation, adviser replacement, or adverse decision — verified by
+  `python -m ssn scan-language`, which returns clean over the deck source
+- [X] Figures pasted from the paths above (no re-drawn numbers): `shap_global_bar.png`,
+  `test_pr_curve.png`, `selection_rates.png`
+- [X] Exported file saved as `reports/decks/business_deck.pptx` — **10 slides, exported 2026-09-11**
+
+**Built from:** `reports/decks/canvas/build_pptx.py` (needs python-pptx, deliberately not a project
+dependency — see the module docstring). The same ten slides are also authored as an editable design
+canvas under `reports/decks/canvas/*.dc.html` with `canvas.json` as the layout.

@@ -519,7 +519,7 @@ PY`
   - Deps: T070
   - Accept: outline lists 8-12 slides; KPI cites its CSV path
   - Verify: `grep -c '^## Slide' reports/decks/business_deck_outline.md && python -m ssn scan-language --paths reports/decks/business_deck_outline.md`
-- [ ] T073 [US6] Author `reports/decks/business_deck.pptx` in PowerPoint or Canva from the outline and exported figures; record the final slide count and export date at the bottom of `business_deck_outline.md`
+- [X] T073 [US6] (built 2026-09-11 by `reports/decks/canvas/build_pptx.py`; the same ten slides are also authored as an editable design canvas under `reports/decks/canvas/*.dc.html`) Author `reports/decks/business_deck.pptx` in PowerPoint or Canva from the outline and exported figures; record the final slide count and export date at the bottom of `business_deck_outline.md`
   - Type: reports
   - Deps: T072
   - Accept: file present; recorded slide count between 8 and 12; no unlabelled ROI figures
