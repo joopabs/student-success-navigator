@@ -488,6 +488,17 @@ asserted anywhere because the data contain none.</p>
 <p><strong>Explanations.</strong> SHAP values describe the uncalibrated ensemble members' contributions, aggregated per source feature and
 averaged; they are not the calibrated probability and not causal. Engineered features cannot be varied independently for
 PDP, so they are explained through SHAP only.</p>
+<p><strong>Ranking resolution at the top of the list.</strong> The score saturates on the most clear-cut records: 21 of the 885 held-out
+records tie at exactly 1.00 and 42 sit at or above 0.99, so order inside that block is settled by the record-id
+tie-break rather than by the model. Every one of the 50 records in the default list passed zero first-semester units and
+has a first-semester grade average of zero, which makes their SHAP explanations effectively identical: all 50 show the
+same two leading factors, and only two distinct top-five sequences occur across them. Advisers should read the top block
+as an unordered set of comparably placed records, not as a strict order of priority. The model is still doing more than
+the bare rule would: 150 records in the cohort passed no units and 82% of those later left, while the model's top 50
+reaches 96%, so it is ranking within that group on secondary features (units enrolled, admission grade, application
+route). But SHAP attributes most of the magnitude to the zero-unit features, so the signal separating those 50 from the
+other 100 sits below the factors an adviser is shown; showing more factors per record would not surface it, because the
+useful contrast is between records and the per-record view does not present one.</p>
 <p><strong>Human oversight.</strong> The tool proposes a short outreach list; a qualified adviser reviews each record, may dismiss or
 override any suggestion, and records the decision locally. No automated or adverse decision is made or recommended.
 Advisers should keep independent referral routes, especially for first-year students where model recall is lowest, and
