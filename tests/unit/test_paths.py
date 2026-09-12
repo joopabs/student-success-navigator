@@ -14,7 +14,8 @@ from ssn.paths import rel_to_root
 
 
 def test_path_inside_root_is_reported_relative(repo_root: Path) -> None:
-    assert rel_to_root(repo_root / "reports" / "tables" / "x.csv", repo_root) == "reports/tables/x.csv"
+    target = repo_root / "reports" / "tables" / "x.csv"
+    assert rel_to_root(target, repo_root) == "reports/tables/x.csv"
 
 
 def test_path_outside_root_falls_back_to_absolute(repo_root: Path, tmp_path: Path) -> None:
