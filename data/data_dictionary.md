@@ -1,6 +1,6 @@
 # Data Dictionary
 
-**Dataset:** UCI 697, Predict Students' Dropout and Academic Success. **Generated:** 2026-09-09 17:30 UTC by
+**Dataset:** UCI 697, Predict Students' Dropout and Academic Success. **Generated:** 2026-09-12 16:21 UTC by
 `python -m ssn data profile`. Do not edit the generated tables; hand-written notes go in the notes block.
 
 **Unit of analysis:** one student enrollment record (UCI: "Each instance is a student").
@@ -55,7 +55,16 @@ Availability classes: `enrollment` (known at enrollment), `first_semester` (end 
 
 ## Engineered features
 
-_None yet (Milestone 3)._
+| Feature | Inputs | Adviser visible | Audit only | Rationale |
+|---|---|---|---|---|
+| sem1_approval_rate | Curricular units 1st sem (approved), Curricular units 1st sem (enrolled) | True | False | Share of enrolled first-semester units passed: the most direct early signal of academic progress. |
+| sem1_evaluation_participation_rate | Curricular units 1st sem (evaluations), Curricular units 1st sem (enrolled) | True | False | Evaluations sat per enrolled unit: engagement with assessment, distinct from passing. |
+| sem1_non_evaluation_rate | Curricular units 1st sem (without evaluations), Curricular units 1st sem (enrolled) | True | False | Share of enrolled units with no evaluation at all: a disengagement or withdrawal signal. |
+| grade_diff_vs_admission | Curricular units 1st sem (grade), Admission grade | True | False | First-semester grade (0-20 scale, rescaled to 0-200) minus admission grade (0-200): change in performance relative to entry level. |
+| sem1_credited_share | Curricular units 1st sem (credited), Curricular units 1st sem (enrolled) | True | False | Share of enrolled units credited from prior study: workload actually taken is lower. |
+| sem1_load | Curricular units 1st sem (enrolled) | True | False | Number of first-semester units enrolled: workload proxy (kept explicit for interpretability). |
+| sem1_any_approved | Curricular units 1st sem (approved) | True | False | Whether at least one unit was passed: separates zero-progress students from the rest. |
+| age_band | Age at enrollment | False | True | EDA and fairness grouping only; derived from a sensitive column, never a model input. Bands in configs/base.yaml fairness.age_bands (PV-06). |
 
 ## Encoding verification
 

@@ -102,7 +102,8 @@ python -m ssn app --config /tmp/mismatch.yaml      # blocking page, no scores
 | 2026-09-10 | Headless start with real artifacts; six routes and `/_dash-layout` return HTTP 200 | see console log in this commit's PR / task notes |
 | 2026-09-10 | Queue → open record → tick acknowledgement → Save: 3 interactions (callback-level test `test_queue_to_action_interactions.py`) | pass |
 | 2026-09-10 | Version-mismatch config serves the blocking page (`test_version_check.py`) | pass |
-| 2026-09-10 | `docker build -t ssn:demo .` (80 s, 372 MB image); container serves `/`, `/queue`, `/score`, `/equity`, `/model-card`, `/_dash-layout` with HTTP 200; `data/raw`, `data/processed`, `data/evaluation`, `tests/`, `notebooks/` absent inside the image | pass |
+| 2026-09-12 | `docker build -t ssn:verify .` (62 s, **1.68 GB** image); container serves `/`, `/queue`, `/score`, `/equity`, `/model-card`, `/_dash-layout` with HTTP 200 three seconds after start; `data/raw`, `data/processed`, `data/evaluation`, `tests/`, `notebooks/`, `.git` absent inside the image; `data/local/actions.sqlite` is present but is an empty schema created by the build's `config validate`, not the host's file (different SHA-256, zero rows) | pass |
+| 2026-09-10 | Same build recorded as 372 MB. That figure could not be reproduced and appears to be an error: `requirements.txt` and the `Dockerfile` are unchanged since, and `site-packages` alone measures 966 MB inside the image (llvmlite 169 MB, pyarrow 143 MB, scipy 122 MB, pandas 79 MB) before the 124 MB model | superseded |
 | 2026-09-11 | Demo media `reports/decks/demo.gif` (8 frames: six pages, acknowledgement modal, blocking page) generated in process by `scripts/render_demo_gif.py`; outcome-label assertion clean on every record-bearing frame | pass |
 
 ## 9. Optional container

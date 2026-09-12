@@ -1,8 +1,12 @@
 # Reproducibility
 
-**Checked:** 2026-09-09 19:43 UTC by `python -m ssn reproduce-check`.
-**Run A:** `reports` · **Run B:** `/private/tmp/claude-502/-Users-jpabular-Development-Learning-Python-student-success-navigator/f4a8c750-a926-4ef0-bc4f-70008e2c28c9/scratchpad/ssn-run2/reports` · **Tolerance (max absolute delta):** 0.005
+**Checked:** 2026-09-12 16:27 UTC by `python -m ssn reproduce-check`.
+**Run A:** `reports` · **Run B:** `.runB/reports` · **Tolerance (max absolute delta):** 0.005
 **Result:** PASS — largest observed delta 0
+
+Run B is a temporary tree created for the check and removed afterwards; recreate it by pointing every
+`paths.*` key in a copy of `configs/base.yaml` at a scratch directory **inside the repository root** and
+re-running the pipeline stages against that config.
 
 Both runs use the single seed in `configs/base.yaml`, config-driven commands, and `n_jobs=1` for the final fit.
 Residual nondeterminism, if any, comes from parallel RandomizedSearchCV scheduling (results are seeded) and BLAS.
