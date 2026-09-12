@@ -12,6 +12,7 @@ from ssn.data import profile as P
 from ssn.data import schema as S
 from ssn.data.download import acquire, sha256_of
 from ssn.features import allowlist as al
+from ssn.paths import rel_to_root
 
 log = logging.getLogger(__name__)
 
@@ -56,14 +57,14 @@ def cmd_profile(args: argparse.Namespace) -> int:
     prof = P.run_profile(df, cfg, allow)
     tables_dir = cfg.path_for("reports_dir") / "tables"
     written = P.write_outputs(prof, tables_dir, cfg.root / "configs" / "ranges.json")
-    dict_path = cfg.root / "data" / "data_dictionary.md"
+    dict_path = cfg.path_for("data_dictionary")
     overview_path = cfg.path_for("reports_dir") / "data_overview.md"
     T.render_data_dictionary(cfg, allow, prof, report, dict_path)
     T.render_data_overview(
         cfg, allow, prof, report, overview_path, sha256_of(cfg.path_for("raw_csv"))
     )
     for p in [*written, dict_path, overview_path]:
-        print(f"wrote {p.relative_to(cfg.root)}")
+        print(f"wrote {rel_to_root(p, cfg.root)}")
     if report.errors:
         print("NOTE: schema validation reported errors; see validate_report.json")
     return EXIT_OK
@@ -110,7 +111,7 @@ def cmd_split(args: argparse.Namespace) -> int:
     paths = SP.write_outputs(out, cfg)
     print(out.summary.to_string(index=False))
     for k, p in paths.items():
-        print(f"wrote {k}: {p.relative_to(cfg.root)}")
+        print(f"wrote {k}: {rel_to_root(p, cfg.root)}")
     return EXIT_OK
 
 
@@ -129,5 +130,5 @@ def cmd_eda(args: argparse.Namespace) -> int:
     raw = S.load_raw(cfg.path_for("raw_csv"))  # analysis-only second-semester plots
     written = F.run_eda(train, raw, cfg, allow)
     for k, p in written.items():
-        print(f"wrote {k}: {p.relative_to(cfg.root)}")
+        print(f"wrote {k}: {rel_to_root(p, cfg.root)}")
     return EXIT_OK

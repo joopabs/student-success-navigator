@@ -11,6 +11,7 @@ from ssn.cli import EXIT_OK, register
 from ssn.config import load
 from ssn.features import allowlist as al
 from ssn.features.preprocess import project_for_model
+from ssn.paths import rel_to_root
 
 log = logging.getLogger(__name__)
 IS_DROPOUT = "is_dropout"
@@ -44,7 +45,7 @@ def cmd_select(args: argparse.Namespace) -> int:
     print(cv_table.round(4).to_string(index=False))
     print(decision.to_json())
     for p in written:
-        print(f"wrote {p.relative_to(cfg.root)}")
+        print(f"wrote {rel_to_root(p, cfg.root)}")
     return EXIT_OK
 
 
@@ -65,7 +66,7 @@ def cmd_pca(args: argparse.Namespace) -> int:
     )
     print(pd.read_csv(out["compare"]).round(4).to_string(index=False))
     for k, p in out.items():
-        print(f"wrote {k}: {p.relative_to(cfg.root)}")
+        print(f"wrote {k}: {rel_to_root(p, cfg.root)}")
     return EXIT_OK
 
 

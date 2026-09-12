@@ -6,6 +6,7 @@ import argparse
 
 from ssn.cli import EXIT_OK, register
 from ssn.config import load
+from ssn.paths import rel_to_root
 
 
 @register(None, "model-card")
@@ -23,7 +24,7 @@ def cmd_model_card(args: argparse.Namespace) -> int:
         inputs["explain_method"],
         inputs["out_path"],
     )
-    print(f"wrote {inputs['out_path'].relative_to(cfg.root)} ({len(text.splitlines())} lines)")
+    print(f"wrote {rel_to_root(inputs['out_path'], cfg.root)} ({len(text.splitlines())} lines)")
     return EXIT_OK
 
 
@@ -34,5 +35,5 @@ def cmd_rubric_map(args: argparse.Namespace) -> int:
     cfg = load(args.config, set_seeds=False)
     out = cfg.path_for("reports_dir") / "rubric_map.md"
     _, missing = RM.render(cfg.root, out)
-    print(f"wrote {out.relative_to(cfg.root)}; pending evidence: {missing or 'none'}")
+    print(f"wrote {rel_to_root(out, cfg.root)}; pending evidence: {missing or 'none'}")
     return EXIT_OK

@@ -1,6 +1,6 @@
 # Data Dictionary
 
-**Dataset:** UCI 697, Predict Students' Dropout and Academic Success. **Generated:** 2026-09-12 16:21 UTC by
+**Dataset:** UCI 697, Predict Students' Dropout and Academic Success. **Generated:** 2026-09-12 16:58 UTC by
 `python -m ssn data profile`. Do not edit the generated tables; hand-written notes go in the notes block.
 
 **Unit of analysis:** one student enrollment record (UCI: "Each instance is a student").

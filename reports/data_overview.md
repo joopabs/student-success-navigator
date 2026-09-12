@@ -1,6 +1,6 @@
 # Data Overview
 
-**Generated:** 2026-09-09 17:30 UTC by `python -m ssn data profile`. Every number below is computed from
+**Generated:** 2026-09-12 16:58 UTC by `python -m ssn data profile`. Every number below is computed from
 `data/raw/data.csv` (sha256 `3ef126de5cefff26eb11fbb4237f1a1401cb64b488e2f1d598c23cedeb4c45ae`). Hand-written commentary lives in the notes block.
 
 ## 1. Source and citation

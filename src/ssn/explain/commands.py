@@ -5,7 +5,6 @@ from __future__ import annotations
 import argparse
 import json
 import logging
-from pathlib import Path
 
 import pandas as pd
 
@@ -13,6 +12,7 @@ from ssn.cli import EXIT_OK, register
 from ssn.config import load
 from ssn.features import allowlist as al
 from ssn.features.preprocess import project_for_model
+from ssn.paths import rel_to_root
 
 log = logging.getLogger(__name__)
 
@@ -73,10 +73,10 @@ def cmd_explain(args: argparse.Namespace) -> int:
     feats = sel[sel["included"]]["feature"].tolist()
     written += P.plot_pdp_ice(final, X, feats, out_dir, cfg.seed)
 
-    manifest["explainability_files"] = sorted(str(p.relative_to(cfg.root)) for p in written)
+    manifest["explainability_files"] = sorted(rel_to_root(p, cfg.root) for p in written)
     (models_dir / MANIFEST_FILE).write_text(json.dumps(manifest, indent=2, default=str) + "\n")
     print(imp.head(15).round(4).to_string(index=False))
     print(f"\nmethod={res.method} members={res.members} pdp_features={len(feats)}")
     for p in written:
-        print(f"wrote {Path(p).relative_to(cfg.root)}")
+        print(f"wrote {rel_to_root(p, cfg.root)}")
     return EXIT_OK
