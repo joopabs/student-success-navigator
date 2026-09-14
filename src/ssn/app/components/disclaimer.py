@@ -44,5 +44,12 @@ def nav() -> html.Nav:
         ("Model Card", "/model-card"),
     ]
     return html.Nav(
-        [html.A(name, href=href, className="navlink") for name, href in links], className="nav"
+        [
+            html.Span("Student Success Navigator", className="brand"),
+            html.Div(
+                [html.A(name, href=href, className="navlink") for name, href in links],
+                className="navlinks",
+            ),
+        ],
+        className="nav",
     )
