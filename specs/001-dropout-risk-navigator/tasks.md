@@ -509,11 +509,16 @@ PY`
   - Deps: T069
   - Accept: sections present; `scan-language` passes; no `[PENDING`
   - Verify: `python -m ssn scan-language --paths reports/final_report.md && ! grep -n 'PENDING' reports/final_report.md`
-- [X] T071 [US6] Create `notebooks/90_technical_deck.ipynb` with slide-type cell metadata (8-12 `slide` cells: problem, data, leakage controls, EDA, features, model comparison, threshold and capacity, test results, explainability, fairness, limitations, reproducibility) loading figures and tables from `reports/`; export with nbconvert and check slide count
+- [X] T071 [US6] (correction 2026-09-13: the verify command below counted 24 and would fail on a correct deck. `<section(?![^>]*data-parent)` excludes nothing, because nbconvert's reveal output never emits `data-parent`; reveal nests one `<section>` inside each top-level slide, so every slide is counted twice. The deck has 12 top-level slides, matching `docs/SUBMISSION.md` and the rubric map. Verify replaced with a nesting-aware count.) Create `notebooks/90_technical_deck.ipynb` with slide-type cell metadata (8-12 `slide` cells: problem, data, leakage controls, EDA, features, model comparison, threshold and capacity, test results, explainability, fairness, limitations, reproducibility) loading figures and tables from `reports/`; export with nbconvert and check slide count
   - Type: notebook, reports
   - Deps: T070
   - Accept: `reports/decks/technical_deck.slides.html` has 8-12 top-level sections
-  - Verify: `jupyter nbconvert notebooks/90_technical_deck.ipynb --to slides --output-dir reports/decks --output technical_deck && python -c "import re;h=open('reports/decks/technical_deck.slides.html').read();n=len(re.findall(r'<section(?![^>]*data-parent)',h));print(n);assert 8<=n<=12"`
+  - Verify: `jupyter nbconvert notebooks/90_technical_deck.ipynb --to slides --output-dir reports/decks --output technical_deck && python -c "import re;h=open('reports/decks/technical_deck.slides.html').read();d=t=0
+for m in re.finditer(r'<section\b|</section>',h):
+    if m.group(0).startswith('</'): d-=1
+    else:
+        t+=d==0; d+=1
+print(t); assert 8<=t<=12"`
 - [X] T072 [US6] Generate `reports/decks/business_deck_outline.md`: per-slide outline (8-12 slides: problem and stakeholders, what the tool does and does not do, illustrative KPI read from `reports/tables/test_recall_precision_at_k.csv` and phrased as the share of eventual dropout cases reached within the illustrative outreach window (per-week capacity times window weeks), risks and safeguards, fairness summary, limitations, rollout strategy, ask) with every figure path and number to paste, all labelled illustrative
   - Type: reports
   - Deps: T070
