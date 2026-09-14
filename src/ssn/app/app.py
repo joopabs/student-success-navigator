@@ -82,9 +82,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);f
    dropping out of the table layout and overlapping the next column. */
 .band-cell{white-space:nowrap;padding-right:1.25rem}
 .band-priority,.band-check-in,.band-standard{display:inline-block;font-size:.73rem;font-weight:700;letter-spacing:.02em;padding:.28rem .7rem;border-radius:999px;white-space:nowrap}
-.band-priority{background:var(--navy);color:#fff}
-.band-check-in{background:var(--white);color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--navy)}
-.band-standard{background:var(--panel);color:var(--muted)}
+.band-priority{background:#fbeaea;color:#9a2d2d;box-shadow:inset 0 0 0 1px #edc9c9}
+.band-check-in{background:#fdf0d9;color:#8a5a00;box-shadow:inset 0 0 0 1px #eed9ab}
+.band-standard{background:#e8f2ec;color:#2f6f4f;box-shadow:inset 0 0 0 1px #c9e0d3}
 
 /* Controls */
 .btn{font:inherit;font-size:.875rem;font-weight:600;padding:.5rem 1.05rem;border:1px solid var(--navy);background:var(--white);color:var(--navy);border-radius:8px;cursor:pointer;transition:background .15s ease,box-shadow .15s ease}

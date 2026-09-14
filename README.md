@@ -103,6 +103,7 @@ docs/           deployment, MLOps, GenAI, reproducibility notes
 models/         final pipeline (Git-ignored) and manifest.json (committed)
 notebooks/      profiling, EDA, selection/PCA, model comparison, explainability/fairness, deck
 reports/        final report, model card, rubric map; figures/ tables/ explainability/ fairness/ decks/
+scripts/        report export (md -> html -> pdf) and demo-GIF generation; not part of the pipeline
 src/ssn/        data/ features/ modeling/ explain/ fairness/ reporting/ app/
 tests/          unit/ integration/ app/
 specs/          Spec Kit artifacts: spec, plan, research, data model, contracts, tasks
