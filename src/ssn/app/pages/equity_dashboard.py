@@ -37,9 +37,12 @@ def _tbl(rows, attribute, op):
             else:
                 cells.append(html.Td(str(v)))
         body.append(html.Tr(cells))
-    return html.Table(
-        [html.Thead(html.Tr([html.Th(h) for h in HEAD])), html.Tbody(body)], className="table"
-    )
+    return html.Div(
+               html.Table(
+            [html.Thead(html.Tr([html.Th(h) for h in HEAD])), html.Tbody(body)], className="table"
+        ),
+               className="card",
+           )
 
 
 def layout(state) -> html.Div:
@@ -47,7 +50,7 @@ def layout(state) -> html.Div:
     if not eq:
         return html.Div(
             [
-                html.H2("Equity Dashboard"),
+                html.Div([html.H2("Equity Dashboard")], className="page-head"),
                 banner(state),
                 html.P("Fairness audit not yet run (`python -m ssn fairness audit`)."),
             ]
@@ -75,15 +78,21 @@ def layout(state) -> html.Div:
     figs = [html.Img(src=src, style={"maxWidth": "100%"}) for src in eq["figures"].values() if src]
     return html.Div(
         [
-            html.H2("Equity Dashboard"),
-            banner(state),
-            html.P(
-                f"Aggregate fairness metrics of the deployed model on the held-out cohort (n = {eq['n']}), precomputed by "
-                f"`python -m ssn fairness audit`. Gender encoding {eq['gender_encoding']} verified against the source "
-                f"documentation: {eq['gender_encoding_verified']}. Groups with fewer than {eq['min_group_size']} records are "
-                "flagged and should be read as indicative only. Nothing here is computed in the app, and none of these "
-                "attributes is a model input or an adviser-facing reason."
+            html.Div(
+                [
+                    html.H2("Equity Dashboard"),
+                    html.P(
+                        f"Aggregate fairness metrics of the deployed model on the held-out cohort (n = {eq['n']}), "
+                        f"precomputed by `python -m ssn fairness audit`. Gender encoding {eq['gender_encoding']} "
+                        f"verified against the source documentation: {eq['gender_encoding_verified']}. Groups with "
+                        f"fewer than {eq['min_group_size']} records are flagged and should be read as indicative "
+                        "only. Nothing here is computed in the app, and none of these attributes is a model input "
+                        "or an adviser-facing reason."
+                    ),
+                ],
+                className="page-head",
             ),
+            banner(state),
             *sections,
             html.H3("Figures"),
             *figs,
@@ -96,29 +105,13 @@ def layout(state) -> html.Div:
                 "Metrics inside a tolerance do not establish fairness. Full analysis: reports/bias_fairness_analysis.md."
             ),
             html.H3("Mitigations tried (training data only; reported, not deployed unless marked)"),
-            html.Table(
-                [
-                    html.Thead(
-                        html.Tr(
-                            [
-                                html.Th(c)
-                                for c in [
-                                    "variant",
-                                    "deployable",
-                                    "pr_auc",
-                                    "recall_at_k",
-                                    "gender_dp_difference",
-                                    "gender_eo_difference",
-                                    "age_band_eo_difference",
-                                ]
-                            ]
-                        )
-                    ),
-                    html.Tbody(
-                        [
+            html.Div(
+                html.Table(
+                    [
+                        html.Thead(
                             html.Tr(
                                 [
-                                    html.Td(f"{r[c]:.4f}" if isinstance(r[c], float) else str(r[c]))
+                                    html.Th(c)
                                     for c in [
                                         "variant",
                                         "deployable",
@@ -130,11 +123,30 @@ def layout(state) -> html.Div:
                                     ]
                                 ]
                             )
-                            for r in eq["mitigation"]
-                        ]
-                    ),
-                ],
-                className="table",
+                        ),
+                        html.Tbody(
+                            [
+                                html.Tr(
+                                    [
+                                        html.Td(f"{r[c]:.4f}" if isinstance(r[c], float) else str(r[c]))
+                                        for c in [
+                                            "variant",
+                                            "deployable",
+                                            "pr_auc",
+                                            "recall_at_k",
+                                            "gender_dp_difference",
+                                            "gender_eo_difference",
+                                            "age_band_eo_difference",
+                                        ]
+                                    ]
+                                )
+                                for r in eq["mitigation"]
+                            ]
+                        ),
+                    ],
+                    className="table",
+                ),
+                className="card",
             ),
             html.H3("Limitations"),
             html.P(

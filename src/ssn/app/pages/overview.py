@@ -14,13 +14,18 @@ def layout(state) -> html.Div:
     ]
     return html.Div(
         [
-            html.H2("Student Success Navigator"),
-            banner(state),
-            html.P(
-                "Purpose: help academic advisers prioritise voluntary, supportive outreach after the first semester by "
-                "ranking a de-identified cohort with a support-priority score built only from enrollment-time and "
-                "first-semester information."
+            html.Div(
+                [
+                    html.H2("Student Success Navigator"),
+                    html.P(
+                        "Purpose: help academic advisers prioritise voluntary, supportive outreach after the first "
+                        "semester by ranking a de-identified cohort with a support-priority score built only from "
+                        "enrollment-time and first-semester information."
+                    ),
+                ],
+                className="page-head",
             ),
+            banner(state),
             html.H3("Intended use and non-use"),
             html.Ul(
                 [
@@ -34,54 +39,57 @@ def layout(state) -> html.Div:
                 ]
             ),
             html.H3("Model and evaluated metrics (measured; held-out cohort evaluated once)"),
-            html.Table(
-                [
-                    html.Tbody(
-                        [
-                            html.Tr([html.Td("Model version"), html.Td(m["model_version"])]),
-                            html.Tr(
-                                [
-                                    html.Td("Estimator"),
-                                    html.Td(
-                                        m["estimator"]["class"].split(".")[-1]
-                                        + (
-                                            " + isotonic calibration"
-                                            if m["calibration"]["applied"]
-                                            else ""
-                                        )
-                                    ),
-                                ]
-                            ),
-                            html.Tr(
-                                [
-                                    html.Td("Held-out PR-AUC"),
-                                    html.Td(
-                                        f"{ts['pr_auc']:.3f} (cross-validation {cv['pr_auc']:.3f} ± {cv['pr_auc_std_cv']:.3f})"
-                                    ),
-                                ]
-                            ),
-                            html.Tr([html.Td("Held-out ROC-AUC"), html.Td(f"{ts['roc_auc']:.3f}")]),
-                            html.Tr(
-                                [
-                                    html.Td(
-                                        f"Precision@K (K = {ts.get('k_applied_to_test', state.k_default)})"
-                                    ),
-                                    html.Td(f"{ts['precision_at_k']:.2f}"),
-                                ]
-                            ),
-                            html.Tr(
-                                [html.Td("Calibration error (ECE)"), html.Td(f"{ts['ece']:.3f}")]
-                            ),
-                            html.Tr(
-                                [
-                                    html.Td("Held-out evaluations"),
-                                    html.Td(str(m["test_evaluations"])),
-                                ]
-                            ),
-                        ]
-                    )
-                ],
-                className="table",
+            html.Div(
+                html.Table(
+                    [
+                        html.Tbody(
+                            [
+                                html.Tr([html.Td("Model version"), html.Td(m["model_version"])]),
+                                html.Tr(
+                                    [
+                                        html.Td("Estimator"),
+                                        html.Td(
+                                            m["estimator"]["class"].split(".")[-1]
+                                            + (
+                                                " + isotonic calibration"
+                                                if m["calibration"]["applied"]
+                                                else ""
+                                            )
+                                        ),
+                                    ]
+                                ),
+                                html.Tr(
+                                    [
+                                        html.Td("Held-out PR-AUC"),
+                                        html.Td(
+                                            f"{ts['pr_auc']:.3f} (cross-validation {cv['pr_auc']:.3f} ± {cv['pr_auc_std_cv']:.3f})"
+                                        ),
+                                    ]
+                                ),
+                                html.Tr([html.Td("Held-out ROC-AUC"), html.Td(f"{ts['roc_auc']:.3f}")]),
+                                html.Tr(
+                                    [
+                                        html.Td(
+                                            f"Precision@K (K = {ts.get('k_applied_to_test', state.k_default)})"
+                                        ),
+                                        html.Td(f"{ts['precision_at_k']:.2f}"),
+                                    ]
+                                ),
+                                html.Tr(
+                                    [html.Td("Calibration error (ECE)"), html.Td(f"{ts['ece']:.3f}")]
+                                ),
+                                html.Tr(
+                                    [
+                                        html.Td("Held-out evaluations"),
+                                        html.Td(str(m["test_evaluations"])),
+                                    ]
+                                ),
+                            ]
+                        )
+                    ],
+                    className="table",
+                ),
+                className="card",
             ),
             html.H3("Cohort and capacity"),
             html.P(
@@ -90,12 +98,15 @@ def layout(state) -> html.Div:
                 f"(other windows: {', '.join(str(k) for k in state.k_options)})."
             ),
             html.H3("Support bands (score ranges fixed in the model manifest)"),
-            html.Table(
-                [
-                    html.Thead(html.Tr([html.Th("Band"), html.Th("Score range")])),
-                    html.Tbody(band_rows),
-                ],
-                className="table",
+            html.Div(
+                html.Table(
+                    [
+                        html.Thead(html.Tr([html.Th("Band"), html.Th("Score range")])),
+                        html.Tbody(band_rows),
+                    ],
+                    className="table",
+                ),
+                className="card",
             ),
             html.P(m["measured_vs_illustrative"], className="muted"),
         ]

@@ -20,7 +20,9 @@ def layout(state, record_id: str) -> html.Div:
     ece = m["test_summary"].get("ece")
     return html.Div(
         [
-            html.H2(f"Student Review · record {record_id}"),
+            html.Div(
+                [html.H2(f"Student Review · record {record_id}")], className="page-head"
+            ),
             banner(state),
             html.Div(
                 [

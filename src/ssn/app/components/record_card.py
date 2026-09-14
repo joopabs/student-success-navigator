@@ -64,10 +64,13 @@ def feature_table(state, record_id: str) -> html.Table:
         rows.append(
             html.Tr([html.Td(f.label), html.Td(shown), html.Td(f.availability.replace("_", " "))])
         )
-    return html.Table(
-        [
-            html.Thead(html.Tr([html.Th("Input"), html.Th("Value"), html.Th("Available at")])),
-            html.Tbody(rows),
-        ],
-        className="table",
-    )
+    return html.Div(
+               html.Table(
+            [
+                html.Thead(html.Tr([html.Th("Input"), html.Th("Value"), html.Th("Available at")])),
+                html.Tbody(rows),
+            ],
+            className="table",
+        ),
+               className="card",
+           )

@@ -47,17 +47,24 @@ def layout(state) -> html.Div:
                     [html.Div([html.Label(f.label), _input(f)], className="field") for f in fields],
                     className="grid",
                 ),
-            ]
+            ],
+            className="card pad",
         )
 
     return html.Div(
         [
-            html.H2("New Record Scoring (hypothetical)"),
-            banner(state),
-            html.P(
-                "Enter a hypothetical first-semester situation. Only the final model's inputs are accepted: enrollment-time "
-                "details and first-semester results. There are no second-semester, outcome, or sensitive-attribute fields."
+            html.Div(
+                [
+                    html.H2("New Record Scoring (hypothetical)"),
+                    html.P(
+                        "Enter a hypothetical first-semester situation. Only the final model's inputs are accepted: "
+                        "enrollment-time details and first-semester results. There are no second-semester, outcome, "
+                        "or sensitive-attribute fields."
+                    ),
+                ],
+                className="page-head",
             ),
+            banner(state),
             section("Known at enrollment", groups.get("enrollment", [])),
             section("Known by the end of the first semester", groups.get("first_semester", [])),
             html.Button(

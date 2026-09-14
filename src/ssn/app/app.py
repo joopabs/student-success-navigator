@@ -127,6 +127,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);f
 .chip b{font-family:var(--display);font-size:1.05rem;color:var(--navy);font-variant-numeric:tabular-nums}
 .card{background:var(--white);border:1px solid var(--rule);border-radius:12px;box-shadow:var(--lift);overflow:hidden;margin:1.25rem 0}
 .card>.table{margin:0}
+.card.pad{padding:1.25rem 1.35rem}
 .card .table th{padding:.85rem 1rem;background:var(--panel);border-bottom:1px solid var(--rule)}
 .card .table td{padding:.7rem 1rem;border-bottom:1px solid var(--pale)}
 .card .table tbody tr:last-child td{border-bottom:none}

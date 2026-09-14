@@ -30,7 +30,7 @@ restore the previous `models/manifest.json` and pipeline file (or re-run `make f
 def layout(state) -> html.Div:
     return html.Div(
         [
-            html.H2("Model Card"),
+            html.Div([html.H2("Model Card")], className="page-head"),
             banner(state),
             dcc.Markdown(state.model_card_md, className="markdown"),
             dcc.Markdown(GOVERNANCE, className="markdown"),
