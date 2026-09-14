@@ -77,7 +77,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);f
 .table tbody tr:hover td{background:#f1f5f9}
 .table td a{font-family:var(--mono);font-size:.86rem;font-weight:600}
 
-/* Support bands: ordered by prominence, never by alarm. A student is not a hazard. */
+/* Support bands: ordered by prominence, never by alarm. A student is not a hazard.
+   The pill must sit on a span inside the cell - a td cannot be inline-block without
+   dropping out of the table layout and overlapping the next column. */
+.band-cell{white-space:nowrap;padding-right:1.25rem}
 .band-priority,.band-check-in,.band-standard{display:inline-block;font-size:.73rem;font-weight:700;letter-spacing:.02em;padding:.28rem .7rem;border-radius:999px;white-space:nowrap}
 .band-priority{background:var(--navy);color:#fff}
 .band-check-in{background:var(--white);color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--navy)}

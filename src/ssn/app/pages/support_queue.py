@@ -49,7 +49,10 @@ def table(state, k: int) -> html.Div:
                     html.Td(int(r["rank"])),
                     html.Td(html.A(rid, href=f"/review/{rid}")),
                     html.Td(f"{r['score']:.2f}"),
-                    html.Td(r["band"], className=f"band-{r['band'].split()[0].lower()}"),
+                    html.Td(
+                        html.Span(r["band"], className=f"band-{r['band'].split()[0].lower()}"),
+                        className="band-cell",
+                    ),
                     html.Td(top_factors_text(state, rid)),
                     html.Td(
                         html.Button(
