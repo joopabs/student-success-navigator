@@ -56,7 +56,7 @@ def cmd_profile(args: argparse.Namespace) -> int:
     report = S.validate(df, cfg, allow)
     prof = P.run_profile(df, cfg, allow)
     tables_dir = cfg.path_for("reports_dir") / "tables"
-    written = P.write_outputs(prof, tables_dir, cfg.root / "configs" / "ranges.json")
+    written = P.write_outputs(prof, tables_dir, cfg.path_for("ranges_json"))
     dict_path = cfg.path_for("data_dictionary")
     overview_path = cfg.path_for("reports_dir") / "data_overview.md"
     T.render_data_dictionary(cfg, allow, prof, report, dict_path)

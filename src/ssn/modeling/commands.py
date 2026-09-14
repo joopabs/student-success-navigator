@@ -234,7 +234,7 @@ def cmd_fit_final(args: argparse.Namespace) -> int:
         .loc[decision["chosen_candidate"]]
         .to_dict()
     )
-    ranges_path = cfg.root / "configs" / "ranges.json"
+    ranges_path = cfg.path_for("ranges_json")
     ranges = json.loads(ranges_path.read_text()) if ranges_path.is_file() else None
     manifest = PS.fit_and_persist(
         train,

@@ -19,6 +19,7 @@ paths:
   evaluation_dir: data/evaluation   # evaluator-only
   local_dir: data/local             # Git-ignored runtime state
   data_dictionary: data/data_dictionary.md
+  ranges_json: configs/ranges.json   # written by data profile, read by fit-final
   models_dir: models
   reports_dir: reports
   features_yaml: configs/features.yaml

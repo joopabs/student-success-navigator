@@ -33,6 +33,12 @@ def test_accepts_str_and_path(repo_root: Path) -> None:
     assert rel_to_root(str(target), repo_root) == rel_to_root(target, repo_root)
 
 
-def test_data_dictionary_is_config_driven(base_config_dict: dict) -> None:
-    """The dictionary is an output; it must follow `paths`, not a hardcoded repo location."""
-    assert "data_dictionary" in base_config_dict["paths"]
+def test_pipeline_outputs_are_config_driven(base_config_dict: dict) -> None:
+    """Anything the pipeline writes must follow `paths`, not a hardcoded repo location.
+
+    Both of these were hardcoded to `cfg.root / ...`, so an isolated second run (the one
+    `reproduce-check` compares against) still wrote into the repository.
+    """
+    paths = base_config_dict["paths"]
+    assert "data_dictionary" in paths
+    assert "ranges_json" in paths
