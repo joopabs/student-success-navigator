@@ -117,6 +117,24 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);f
 .markdown ul,.markdown ol{padding-left:1.25rem}
 .markdown li{margin:.3rem 0}
 
+/* Page furniture: intro block, control toolbar, card surface, table cell roles */
+.page-head p{margin:0 0 .2rem;color:var(--muted);font-size:.94rem;max-width:72ch}
+.toolbar{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;background:var(--white);border:1px solid var(--rule);border-radius:12px;padding:.9rem 1.15rem;margin:1.25rem 0;box-shadow:var(--lift)}
+.toolbar .field{min-width:260px}
+.toolbar .field label{margin-bottom:.3rem}
+.chips{display:flex;gap:.5rem;flex-wrap:wrap;margin-left:auto}
+.chip{display:inline-flex;align-items:baseline;gap:.45rem;background:var(--panel);border-radius:8px;padding:.4rem .75rem;font-size:.78rem;color:var(--muted);font-weight:600}
+.chip b{font-family:var(--display);font-size:1.05rem;color:var(--navy);font-variant-numeric:tabular-nums}
+.card{background:var(--white);border:1px solid var(--rule);border-radius:12px;box-shadow:var(--lift);overflow:hidden;margin:1.25rem 0}
+.card>.table{margin:0}
+.card .table th{padding:.85rem 1rem;background:var(--panel);border-bottom:1px solid var(--rule)}
+.card .table td{padding:.7rem 1rem;border-bottom:1px solid var(--pale)}
+.card .table tbody tr:last-child td{border-bottom:none}
+.rank{color:var(--muted);font-variant-numeric:tabular-nums;font-size:.82rem}
+.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.factors{max-width:52ch;color:var(--muted);font-size:.86rem;line-height:1.45;text-wrap:pretty}
+.action-cell{white-space:nowrap;text-align:right;width:1%}
+
 /* Utilities */
 .muted{color:var(--muted);font-size:.86rem}
 .warn{color:var(--alert);font-weight:600}

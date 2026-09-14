@@ -34,7 +34,7 @@ def table(state, k: int) -> html.Div:
         [
             html.Th("#"),
             html.Th("Record"),
-            html.Th("Score"),
+            html.Th("Score", className="num"),
             html.Th("Band"),
             html.Th("Main factors (neutral)"),
             html.Th(""),
@@ -46,21 +46,22 @@ def table(state, k: int) -> html.Div:
         body.append(
             html.Tr(
                 [
-                    html.Td(int(r["rank"])),
+                    html.Td(int(r["rank"]), className="rank"),
                     html.Td(html.A(rid, href=f"/review/{rid}")),
-                    html.Td(f"{r['score']:.2f}"),
+                    html.Td(f"{r['score']:.2f}", className="num"),
                     html.Td(
                         html.Span(r["band"], className=f"band-{r['band'].split()[0].lower()}"),
                         className="band-cell",
                     ),
-                    html.Td(top_factors_text(state, rid)),
+                    html.Td(html.Div(top_factors_text(state, rid), className="factors")),
                     html.Td(
                         html.Button(
                             "Record support action",
                             id={"type": "open-ack", "record": rid},
                             n_clicks=0,
                             className="btn small",
-                        )
+                        ),
+                        className="action-cell",
                     ),
                 ]
             )
@@ -69,7 +70,10 @@ def table(state, k: int) -> html.Div:
         [
             html.Div(notice, className="note") if notice else html.Div(),
             _retrospective(state, k),
-            html.Table([html.Thead(header), html.Tbody(body)], className="table"),
+            html.Div(
+                html.Table([html.Thead(header), html.Tbody(body)], className="table"),
+                className="card",
+            ),
         ]
     )
 
@@ -78,35 +82,48 @@ def layout(state) -> html.Div:
     counts = band_counts(state.ranked, state.bundle.bands)
     return html.Div(
         [
-            html.H2("Support Queue"),
-            banner(state),
-            html.P(
-                "Students ranked by support-priority score (highest first; ties by record id). Choose the list size that "
-                "matches the illustrative outreach capacity. Every row links to a review page; recording an action "
-                "requires your acknowledgement."
-            ),
             html.Div(
                 [
-                    html.Label("Capacity K (illustrative)"),
-                    dcc.Dropdown(
-                        id="queue-k",
-                        options=[
-                            {
-                                "label": f"{k} students ({k // state.per_week} weeks × {state.per_week}/week)",
-                                "value": k,
-                            }
-                            for k in state.k_options
-                        ],
-                        value=state.k_default,
-                        clearable=False,
-                        style={"width": "360px"},
+                    html.H2("Support Queue"),
+                    html.P(
+                        "Students ranked by support-priority score (highest first; ties by record id). Every row "
+                        "links to a review page; recording an action requires your acknowledgement."
                     ),
-                ]
+                ],
+                className="page-head",
             ),
-            html.P(
-                "Band counts in the whole cohort: "
-                + " · ".join(f"{name}: {n}" for name, n in counts.items()),
-                className="muted",
+            banner(state),
+            html.Div(
+                [
+                    html.Div(
+                        [
+                            html.Label("Outreach list size (illustrative)"),
+                            dcc.Dropdown(
+                                id="queue-k",
+                                options=[
+                                    {
+                                        "label": f"{k} students ({k // state.per_week} weeks × {state.per_week}/week)",
+                                        "value": k,
+                                    }
+                                    for k in state.k_options
+                                ],
+                                value=state.k_default,
+                                clearable=False,
+                                style={"width": "320px"},
+                            ),
+                        ],
+                        className="field",
+                    ),
+                    html.Div(
+                        [
+                            html.Span([f"{name} ", html.B(str(n))], className="chip")
+                            for name, n in counts.items()
+                        ],
+                        className="chips",
+                        title="Band counts in the whole cohort",
+                    ),
+                ],
+                className="toolbar",
             ),
             html.Div(id="queue-table", children=table(state, state.k_default)),
         ]
