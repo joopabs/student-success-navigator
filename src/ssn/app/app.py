@@ -28,14 +28,18 @@ log = logging.getLogger(__name__)
 
 CSS = """
 /* Design system shared with the business deck (reports/decks/canvas) and the report PDF:
-   same palette, same Georgia display face, same reserved meaning for amber (assumptions). */
+   same palette and the same reserved meaning for amber (assumptions). The app uses a single
+   sans family; the deck and report keep serif headings, which suits print rather than a UI. */
 :root{
   --ink:#1d2a3a; --navy:#1f3a5f; --navy-deep:#16273f; --muted:#5b6b7b;
   --rule:#d8dee6; --pale:#e6eaef; --panel:#eef1f5; --paper:#fafbfc; --white:#fff;
   --amber:#b7791f; --amber-bg:#fff7e6; --amber-line:#e0a800; --amber-ink:#7d5210;
   --green:#2f6f4f; --blue:#4c72b0; --alert:#a33;
-  --display:Georgia,"Iowan Old Style","Times New Roman",serif;
+  /* One family throughout. Titles are distinguished by weight and tracking, not by a second
+     face - a serif/sans pairing read as inconsistent in the UI. The deck and report keep
+     their serif headings; the shared palette is what ties the three together. */
   --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --display:var(--sans);
   --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   --lift:0 1px 2px rgba(29,42,58,.05),0 10px 28px -14px rgba(29,42,58,.22);
 }
@@ -44,7 +48,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);f
 
 /* Header */
 .nav{display:flex;align-items:stretch;flex-wrap:wrap;gap:1.75rem;padding:0 2rem;background:var(--navy);border-bottom:3px solid var(--amber-line)}
-.brand{display:flex;align-items:center;font-family:var(--display);font-size:1.12rem;font-weight:600;letter-spacing:-.01em;color:#fff;padding:1.05rem 0}
+.brand{display:flex;align-items:center;font-family:var(--display);font-size:1.1rem;font-weight:700;letter-spacing:-.02em;color:#fff;padding:1.05rem 0}
 .navlinks{display:flex;flex-wrap:wrap;gap:.15rem}
 .navlink{display:flex;align-items:center;color:#b9c7d9;text-decoration:none;font-weight:600;font-size:.85rem;padding:0 .85rem;border-bottom:3px solid transparent;margin-bottom:-3px;transition:color .15s ease,border-color .15s ease}
 .navlink:hover{color:#fff;border-bottom-color:var(--amber-line)}
@@ -52,8 +56,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);f
 /* Page shell and type scale */
 .wrap{max-width:1180px;margin:0 auto;padding:2.5rem 2rem 1rem}
 .wrap>h2:first-child,.wrap>div>h2:first-child{margin-top:0}
-.wrap h2{font-family:var(--display);font-size:2.05rem;line-height:1.16;letter-spacing:-.015em;font-weight:600;color:var(--navy);margin:0 0 .6rem}
-.wrap h3{font-family:var(--display);font-size:1.32rem;font-weight:600;color:var(--navy);margin:2.25rem 0 .7rem}
+.wrap h2{font-family:var(--display);font-size:1.95rem;line-height:1.18;letter-spacing:-.028em;font-weight:700;color:var(--navy);margin:0 0 .6rem}
+.wrap h3{font-family:var(--display);font-size:1.22rem;font-weight:700;letter-spacing:-.015em;color:var(--navy);margin:2.25rem 0 .7rem}
 .wrap h4{font-size:.95rem;font-weight:700;color:var(--navy);margin:1.5rem 0 .4rem}
 .wrap p{margin:.6rem 0}
 .wrap a{color:var(--blue);text-underline-offset:2px;text-decoration-color:rgba(76,114,176,.45)}
@@ -66,7 +70,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);f
 /* Stat cards */
 .kpis{display:flex;gap:1rem;flex-wrap:wrap;margin:1.5rem 0}
 .kpi{flex:1;min-width:190px;background:var(--white);border:1px solid var(--rule);border-radius:12px;padding:1.15rem 1.35rem;box-shadow:var(--lift)}
-.kpi h1{font-family:var(--display);font-size:2.45rem;line-height:1;font-weight:600;color:var(--navy);margin:.2rem 0 .25rem;font-variant-numeric:tabular-nums}
+.kpi h1{font-family:var(--display);font-size:2.3rem;line-height:1;font-weight:700;letter-spacing:-.02em;color:var(--navy);margin:.2rem 0 .25rem;font-variant-numeric:tabular-nums}
 .kpi .muted{font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;font-weight:700}
 
 /* Tables: hairline rows, not a grid */
@@ -102,12 +106,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);f
 .modal{position:fixed;inset:0;background:rgba(16,26,40,.55);display:flex;align-items:center;justify-content:center;padding:1.5rem;z-index:50}
 .modal.hidden{display:none}
 .modal-body{background:var(--white);padding:1.8rem 2rem;border-radius:14px;max-width:660px;width:100%;max-height:88vh;overflow:auto;box-shadow:0 26px 64px -22px rgba(16,26,40,.5)}
-.modal-body h3{font-family:var(--display);font-size:1.4rem;color:var(--navy);margin:0 0 .5rem}
+.modal-body h3{font-family:var(--display);font-size:1.3rem;font-weight:700;letter-spacing:-.015em;color:var(--navy);margin:0 0 .5rem}
 
 /* Model Card page: dcc.Markdown had no styling at all before. */
 .markdown{font-size:.94rem;line-height:1.65}
-.markdown h1{font-family:var(--display);font-size:1.8rem;font-weight:600;color:var(--navy);margin:0 0 .6rem}
-.markdown h2{font-family:var(--display);font-size:1.3rem;font-weight:600;color:var(--navy);margin:2rem 0 .6rem;padding-bottom:.35rem;border-bottom:1px solid var(--rule)}
+.markdown h1{font-family:var(--display);font-size:1.7rem;font-weight:700;letter-spacing:-.02em;color:var(--navy);margin:0 0 .6rem}
+.markdown h2{font-family:var(--display);font-size:1.22rem;font-weight:700;letter-spacing:-.015em;color:var(--navy);margin:2rem 0 .6rem;padding-bottom:.35rem;border-bottom:1px solid var(--rule)}
 .markdown h3{font-size:1rem;font-weight:700;color:var(--navy);margin:1.4rem 0 .35rem}
 .markdown table{border-collapse:collapse;width:100%;font-size:.84rem;margin:1rem 0;font-variant-numeric:tabular-nums}
 .markdown th{text-align:left;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--navy);padding:0 .85rem .5rem 0}
@@ -124,7 +128,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);f
 .toolbar .field label{margin-bottom:.3rem}
 .chips{display:flex;gap:.5rem;flex-wrap:wrap;margin-left:auto}
 .chip{display:inline-flex;align-items:baseline;gap:.45rem;background:var(--panel);border-radius:8px;padding:.4rem .75rem;font-size:.78rem;color:var(--muted);font-weight:600}
-.chip b{font-family:var(--display);font-size:1.05rem;color:var(--navy);font-variant-numeric:tabular-nums}
+.chip b{font-family:var(--display);font-size:1rem;font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums}
 .card{background:var(--white);border:1px solid var(--rule);border-radius:12px;box-shadow:var(--lift);overflow:hidden;margin:1.25rem 0}
 .card:has(>.table){overflow-x:auto}
 .card>.table{margin:0}
