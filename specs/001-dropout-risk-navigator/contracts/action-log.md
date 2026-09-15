@@ -23,8 +23,13 @@ Rules:
 
 - No student identifiers, names, or contact details are ever stored; `record_id` is synthetic.
 - No column for outcome labels exists; the app has no access to them.
-- Rows are never read by any training or evaluation command (`grep` test over `src/ssn` outside
-  `src/ssn/app/services/actions.py` and the `actions export` command).
+- Rows are never read by any training or evaluation command. Enforced by a scan over `src/ssn`
+  (`tests/app/test_actions_log.py::test_action_log_is_never_referenced_outside_the_app`): no module
+  outside `src/ssn/app/` may reference the log at all. The store itself is
+  `src/ssn/app/services/action_log.py`.
+- Adviser-facing reads are allowed and stay inside the app: `latest_by_record()` supplies the
+  Support Queue's handled/remaining status, and `rows_for()` supplies the per-record history on
+  Student Review. Both read only what the adviser recorded; neither is a model input (FR-065).
 - `actions export` writes `data/local/actions_export.csv` for local review only.
 - Duplicate acknowledgements for the same `record_id` create additional rows; history is
   preserved.

@@ -40,7 +40,7 @@ an `illustrative: true` flag that the code refuses to run without. No cost or re
 contain none.
 
 **Governance.** The project is governed by a written constitution (12 principles, 10 quality gates) and a Spec Kit
-specification, plan, research log, contracts, and 92-task checklist under `specs/001-dropout-risk-navigator/`.
+specification, plan, research log, contracts, and task checklist under `specs/001-dropout-risk-navigator/`.
 
 ## 2. Data collection and understanding
 

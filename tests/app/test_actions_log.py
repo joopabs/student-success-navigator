@@ -11,6 +11,24 @@ from ssn.app.services.action_log import ActionLog
 SRC = Path("src/ssn/app/services/action_log.py").read_text()
 
 
+def test_action_log_is_never_referenced_outside_the_app():
+    """The contract's core guarantee, enforced rather than asserted.
+
+    Adviser decisions must be unreachable from training and evaluation code, otherwise retraining
+    on outreach data would let the model re-learn its own past selections. The app reads the log
+    for adviser-facing status; nothing under src/ssn outside the app may touch it at all.
+    """
+    offenders = []
+    for path in sorted(Path("src/ssn").rglob("*.py")):
+        if "app" in path.parts or "__pycache__" in path.parts:
+            continue
+        text = path.read_text()
+        for token in ("action_log", "ActionLog", "actions.sqlite", "support_actions"):
+            if token in text:
+                offenders.append(f"{path}:{token}")
+    assert not offenders, offenders
+
+
 def test_module_contains_only_create_and_insert_sql():
     upper = SRC.upper()
     for forbidden in ("UPDATE ", "DELETE ", "DROP ", "ALTER "):

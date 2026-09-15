@@ -762,3 +762,8 @@ and documentation while long-running commands (tuning, SHAP) execute.
 - Stop at any checkpoint to validate the phase independently using quickstart.md.
 - If a verification command fails, fix the task before starting the next one; do not carry
   failing gates forward.
+- [X] T093 [US2] (added 2026-09-16 after speckit-analyze found the capability shipped without a requirement behind it) Read recorded support actions back into the application per FR-065a: `ActionLog.latest_by_record()` and `rows_for()`; Support Queue Status column with handled/remaining counts and a "hide handled" filter; per-record history on Student Review; enforce that no module outside `src/ssn/app/` reads the store
+  - Type: app, tests
+  - Deps: T080, T081, T082
+  - Accept: FR-065a satisfied; log remains append-only; training and evaluation never read it
+  - Verify: `pytest -q tests/app/test_action_tracking.py tests/app/test_actions_log.py`

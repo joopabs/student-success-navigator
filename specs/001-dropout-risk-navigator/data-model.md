@@ -155,7 +155,7 @@ calibration wrapper if chosen).
 
 ### SupportActionLogEntry (data/local/actions.sqlite)
 
-See contracts/action-log.md. Append-only.
+See contracts/action-log.md. Append-only. Read back by the application for adviser-facing status only (latest decision per record, and per-record history); never read outside `src/ssn/app/`.
 
 ### ModelCard (reports/model_card.md)
 

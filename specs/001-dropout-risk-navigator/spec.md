@@ -462,6 +462,13 @@ maps to the rubric criteria it evidences.
 - **FR-065**: Action records MUST be appended to a local, version-control-excluded store, MUST
   include timestamp, synthetic record ID, action, acknowledgement flag, and model version, and
   MUST NOT be used as model input.
+- **FR-065a**: The adviser's own recorded decisions MUST be readable back in the application so a
+  list can be worked without contacting the same student twice: the Support Queue MUST show the most
+  recent decision per record together with handled and remaining counts, and MUST offer a filter that
+  hides records already handled; the Student Review page MUST show that record's full action history.
+  These reads are adviser-facing only and MUST NOT be model inputs (FR-065), and no module outside
+  the application may read the store.
+
 - **FR-066**: The New Record Scoring page MUST accept only allow-listed fields, validate each
   against documented ranges, label the result hypothetical, and refuse scoring with field-specific
   messages when validation fails.
@@ -617,7 +624,7 @@ data documentation or final report.
 This feature is done when all of the following hold:
 
 - Constitution quality gates G1 through G10 pass with linked evidence.
-- All functional requirements FR-001 to FR-071 are satisfied; FR-072 to FR-074 are satisfied for
+- All functional requirements FR-001 to FR-071 (including FR-065a) are satisfied; FR-072 to FR-074 are satisfied for
   any optional step attempted, or the step is recorded as not attempted.
 - All success criteria SC-001 to SC-012 are verified.
 - All profiling and validation tasks PV-01 to PV-13 have recorded results.

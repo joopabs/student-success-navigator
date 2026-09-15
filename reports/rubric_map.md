@@ -1,6 +1,6 @@
 # Rubric Evidence Map
 
-**Generated:** 2026-09-10 19:02 UTC by `python -m ssn rubric-map`. Criteria and points from
+**Generated:** 2026-09-15 17:02 UTC by `python -m ssn rubric-map`. Criteria and points from
 `CAPSTONE_BRIEF.md` section 5 (total 100, bonus included). Links are relative to `reports/`; an item marked
 (pending) does not exist yet in the repository.
 
@@ -72,7 +72,7 @@ carries no record data.
 
 ### Status
 
-All 92 tasks are complete and every gate above passes. The repository is public, the submission package
+All 93 tasks are complete and every gate above passes. The repository is public, the submission package
 is built by `make submission` (run it after the final commit — it archives `HEAD`), and the Definition of
 Done in the constitution is met in full.
 <!-- END NOTES -->
