@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dash import Input, Output, dcc, html
 
+from ssn.app.components.ack_modal import ACTION_LABELS, DECISION_STATUS
 from ssn.app.components.disclaimer import banner
 from ssn.app.components.record_card import top_factors_text
 from ssn.app.services.prioritization import band_counts, top_k
@@ -28,8 +29,32 @@ def _retrospective(state, k: int) -> html.Div:
     )
 
 
-def table(state, k: int) -> html.Div:
+def _status(entry: dict | None) -> html.Td:
+    """What an adviser has already done with this record. Never an outcome, never a prediction."""
+    if not entry:
+        return html.Td("Not yet handled", className="muted status-cell")
+    return html.Td(
+        [
+            html.Span(
+                DECISION_STATUS.get(entry["decision"], entry["decision"]),
+                className=f"status status-{entry['decision']}",
+            ),
+            html.Div(
+                f"{ACTION_LABELS.get(entry['action'], entry['action'])} · {entry['logged_at_utc'][:10]}",
+                className="muted status-detail",
+            ),
+        ],
+        className="status-cell",
+    )
+
+
+def table(state, k: int, hide_handled: bool = False) -> html.Div:
     rows, notice = top_k(state.ranked, k)
+    latest = state.action_log.latest_by_record()
+    on_list = len(rows)
+    handled = sum(1 for rid in rows["record_id"].astype(str) if rid in latest)
+    if hide_handled:
+        rows = rows[~rows["record_id"].astype(str).isin(latest)]
     header = html.Tr(
         [
             html.Th("#"),
@@ -37,6 +62,7 @@ def table(state, k: int) -> html.Div:
             html.Th("Score", className="num"),
             html.Th("Band"),
             html.Th("Main factors (neutral)"),
+            html.Th("Status"),
             html.Th(""),
         ]
     )
@@ -54,9 +80,10 @@ def table(state, k: int) -> html.Div:
                         className="band-cell",
                     ),
                     html.Td(html.Div(top_factors_text(state, rid), className="factors")),
+                    _status(latest.get(str(rid))),
                     html.Td(
                         html.Button(
-                            "Record support action",
+                            "Record action",
                             id={"type": "open-ack", "record": rid},
                             n_clicks=0,
                             className="btn small",
@@ -70,6 +97,14 @@ def table(state, k: int) -> html.Div:
         [
             html.Div(notice, className="note") if notice else html.Div(),
             _retrospective(state, k),
+            html.Div(
+                [
+                    html.Span(["Handled ", html.B(str(handled))], className="chip"),
+                    html.Span(["Remaining ", html.B(str(on_list - handled))], className="chip"),
+                    html.Span(["On this list ", html.B(str(on_list))], className="chip"),
+                ],
+                className="chips coverage",
+            ),
             html.Div(
                 html.Table([html.Thead(header), html.Tbody(body)], className="table"),
                 className="card",
@@ -115,6 +150,14 @@ def layout(state) -> html.Div:
                         className="field",
                     ),
                     html.Div(
+                        dcc.Checklist(
+                            id="queue-hide",
+                            options=[{"label": " Hide records already handled", "value": "hide"}],
+                            value=[],
+                        ),
+                        className="field toggle",
+                    ),
+                    html.Div(
                         [
                             html.Span([f"{name} ", html.B(str(n))], className="chip")
                             for name, n in counts.items()
@@ -131,6 +174,12 @@ def layout(state) -> html.Div:
 
 
 def register_callbacks(app, state) -> None:
-    @app.callback(Output("queue-table", "children"), Input("queue-k", "value"))
-    def update(k):
-        return table(state, int(k or state.k_default))
+    @app.callback(
+        Output("queue-table", "children"),
+        Input("queue-k", "value"),
+        Input("queue-hide", "value"),
+        Input("ack-toast", "children"),
+    )
+    def update(k, hide, _saved):
+        """Re-renders on list size, on the filter, and whenever an action is saved."""
+        return table(state, int(k or state.k_default), hide_handled=bool(hide))

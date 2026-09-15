@@ -20,6 +20,7 @@ ACTION_LABELS = {
     "resource_share": "Share support resources",
     "no_action": "No action at this time",
 }
+DECISION_STATUS = {"record": "Action recorded", "dismiss": "Dismissed", "override": "Overridden"}
 DECISION_LABELS = {
     "record": "Record the suggested support action",
     "dismiss": "Dismiss the suggestion",

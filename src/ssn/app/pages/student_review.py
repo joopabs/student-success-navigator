@@ -2,8 +2,35 @@ from __future__ import annotations
 
 from dash import html
 
+from ssn.app.components.ack_modal import ACTION_LABELS, DECISION_STATUS
 from ssn.app.components.disclaimer import banner
 from ssn.app.components.record_card import factor_list, feature_table
+
+
+def _history(state, record_id: str) -> list:
+    """Actions an adviser has already recorded against this record, most recent first."""
+    rows = state.action_log.rows_for(record_id)
+    if not rows:
+        return []
+    items = [
+        html.Li(
+            [
+                html.Strong(DECISION_STATUS.get(r["decision"], r["decision"])),
+                f" · {ACTION_LABELS.get(r['action'], r['action'])} · {r['logged_at_utc']}",
+                html.Div(r["reason"], className="muted") if r["reason"] else html.Div(),
+            ]
+        )
+        for r in rows
+    ]
+    return [
+        html.H3("Actions already recorded for this record"),
+        html.Ul(items, className="factors"),
+        html.P(
+            "Kept locally on this machine. Never read by training or evaluation, so recording an "
+            "action cannot influence the model.",
+            className="muted",
+        ),
+    ]
 
 
 def layout(state, record_id: str) -> html.Div:
@@ -60,6 +87,7 @@ def layout(state, record_id: str) -> html.Div:
                 ],
                 className="note",
             ),
+            *_history(state, record_id),
             html.H3("Inputs used (enrollment-time and first-semester only)"),
             feature_table(state, record_id),
             html.Button(

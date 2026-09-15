@@ -390,8 +390,11 @@ tests and the adviser-language scan on every push. Reproduction steps: `README.m
 
 - **Step 8, deployment and MLOps (attempted).** Local deployment: the Student Success Navigator Dash app
   (`python -m ssn app`; `docs/DEPLOYMENT.md`) loads the persisted pipeline without retraining and serves six pages
-  with an acknowledgement-gated local action log; 30 tests cover privacy, ranking, validation, version checks, and
-  the acknowledgement flow. MLOps: `docs/MLOPS.md` (pinned environment, config-driven runs, manifest versioning and
+  with an acknowledgement-gated local action log; recorded decisions are read back into the Support Queue as
+  handled/remaining status and as a per-record history on Student Review, so an adviser can work a list without
+  contacting anyone twice. The log is never read by training or evaluation, so recording an action cannot
+  influence the model. 35 tests cover privacy, ranking, validation, version checks, the acknowledgement flow,
+  and the action-tracking read path. MLOps: `docs/MLOPS.md` (pinned environment, config-driven runs, manifest versioning and
   rollback, CI on every push, monitoring plan with baselines read from the fairness and threshold files) and a
   `Dockerfile` that copies only runtime inputs (`tests/unit/test_dockerignore.py`). Demo media:
   `reports/decks/demo.gif` (8 frames — the six adviser pages, the acknowledgement modal and the

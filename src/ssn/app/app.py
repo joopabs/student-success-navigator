@@ -126,6 +126,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);f
 .chip{display:inline-flex;align-items:baseline;gap:.45rem;background:var(--panel);border-radius:8px;padding:.4rem .75rem;font-size:.78rem;color:var(--muted);font-weight:600}
 .chip b{font-family:var(--display);font-size:1.05rem;color:var(--navy);font-variant-numeric:tabular-nums}
 .card{background:var(--white);border:1px solid var(--rule);border-radius:12px;box-shadow:var(--lift);overflow:hidden;margin:1.25rem 0}
+.card:has(>.table){overflow-x:auto}
 .card>.table{margin:0}
 .card.pad{padding:1.25rem 1.35rem}
 .card .table th{padding:.85rem 1rem;background:var(--panel);border-bottom:1px solid var(--rule)}
@@ -133,8 +134,19 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);f
 .card .table tbody tr:last-child td{border-bottom:none}
 .rank{color:var(--muted);font-variant-numeric:tabular-nums;font-size:.82rem}
 .num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
-.factors{max-width:52ch;color:var(--muted);font-size:.86rem;line-height:1.45;text-wrap:pretty}
+.factors{min-width:22ch;max-width:34ch;color:var(--muted);font-size:.86rem;line-height:1.45;text-wrap:pretty}
 .action-cell{white-space:nowrap;text-align:right;width:1%}
+
+/* Support-action status: what an adviser has already done with a record */
+.status{display:inline-block;font-size:.72rem;font-weight:700;padding:.22rem .6rem;border-radius:999px;white-space:nowrap}
+.status-record{background:#e8f2ec;color:#2f6f4f;box-shadow:inset 0 0 0 1px #c9e0d3}
+.status-dismiss{background:var(--panel);color:var(--muted);box-shadow:inset 0 0 0 1px var(--rule)}
+.status-override{background:#fdf0d9;color:#8a5a00;box-shadow:inset 0 0 0 1px #eed9ab}
+.status-cell{white-space:normal;min-width:15ch;max-width:24ch}
+.status-detail{font-size:.74rem;margin-top:.3rem}
+.chips.coverage{margin-left:0;margin-bottom:.9rem}
+.toolbar .toggle{min-width:auto;display:flex;align-items:center;font-size:.86rem;color:var(--muted)}
+.toolbar .toggle label{display:flex;align-items:center;gap:.4rem;margin:0;text-transform:none;letter-spacing:0;font-size:.86rem;font-weight:600}
 
 /* Utilities */
 .muted{color:var(--muted);font-size:.86rem}

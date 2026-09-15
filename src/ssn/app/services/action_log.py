@@ -108,6 +108,37 @@ class ActionLog:
             con.row_factory = sqlite3.Row
             return [dict(r) for r in con.execute("SELECT * FROM support_actions ORDER BY id")]
 
+    def latest_by_record(self) -> dict[str, dict[str, Any]]:
+        """Most recent entry per record_id, for adviser-facing status only.
+
+        The app reads this so an adviser can see what has already been handled and avoid
+        contacting the same student twice. Training and evaluation code never reads the log,
+        so recording an action cannot influence the model.
+        """
+        if not self.path.is_file():
+            return {}
+        with sqlite3.connect(self.path) as con:
+            con.row_factory = sqlite3.Row
+            rows = con.execute(
+                "SELECT * FROM support_actions WHERE id IN "
+                "(SELECT MAX(id) FROM support_actions GROUP BY record_id)"
+            )
+            return {str(r["record_id"]): dict(r) for r in rows}
+
+    def rows_for(self, record_id: str) -> list[dict[str, Any]]:
+        """Full history for one record, most recent first."""
+        if not self.path.is_file():
+            return []
+        with sqlite3.connect(self.path) as con:
+            con.row_factory = sqlite3.Row
+            return [
+                dict(r)
+                for r in con.execute(
+                    "SELECT * FROM support_actions WHERE record_id = ? ORDER BY id DESC",
+                    (record_id,),
+                )
+            ]
+
     def export_csv(self, out: Path) -> Path:
         rows = self.rows()
         out.parent.mkdir(parents=True, exist_ok=True)
