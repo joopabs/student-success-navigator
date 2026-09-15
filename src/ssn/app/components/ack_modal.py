@@ -97,6 +97,12 @@ def register_callbacks(app, state) -> None:
     def toggle(open_clicks, cancel, save, selected, ack, decision, action, reason):
         trig = ctx.triggered_id
         if isinstance(trig, dict) and trig.get("type") == "open-ack":
+            # Re-rendering the queue destroys and recreates every "open-ack" button, and Dash fires
+            # this pattern-matching callback for the new components with n_clicks 0 or None. Without
+            # this guard the modal reopens by itself every time the table refreshes - which it now
+            # does on every saved action, on a list-size change, and on the handled filter.
+            if not (ctx.triggered and ctx.triggered[0].get("value")):
+                return no_update, no_update, no_update, no_update, no_update
             rid = trig["record"]
             row = state.ranked_row(rid)
             summary = (

@@ -78,3 +78,44 @@ def test_tracking_surfaces_never_show_outcome_labels(fixture_state, handled):
         text = render_json(route(fixture_state, path))
         for token in OUTCOME_TOKENS:
             assert token not in text, (path, token)
+
+
+def _toggle(app, triggered_id, value, *args):
+    """Drive the modal callback with an explicit triggering value (1 = click, 0 = re-render)."""
+    import json
+
+    from dash._callback_context import context_value
+    from dash._utils import AttributeDict
+
+    key = (
+        "..ack-modal.className...ack-selected.data...ack-record-summary.children"
+        "...ack-check.value...ack-toast.children.."
+    )
+    cb = app.callback_map[key]["callback"].__wrapped__
+    context_value.set(
+        AttributeDict(
+            triggered_inputs=[{"prop_id": json.dumps(triggered_id) + ".n_clicks", "value": value}]
+        )
+    )
+    return cb(*args)
+
+
+def test_rerendering_the_queue_does_not_reopen_the_modal(fixture_state):
+    """Regression: the queue re-renders on save, on list size and on the filter.
+
+    Each re-render recreates the open-ack buttons, and Dash fires the pattern-matching callback for
+    the new components with n_clicks 0. That must not be mistaken for a click.
+    """
+    from ssn.app.app import create_app
+
+    app = create_app(fixture_state.cfg, state=fixture_state)
+    rid = str(fixture_state.ranked.iloc[0]["record_id"])
+    trig = {"type": "open-ack", "record": rid}
+
+    reopened = _toggle(app, trig, 0, [0], 0, 0, None, [], "record", "outreach_email", None)
+    assert all(type(o).__name__ == "NoUpdate" for o in reopened), (
+        "a re-render must leave every modal output untouched"
+    )
+
+    clicked = _toggle(app, trig, 1, [1], 0, 0, None, [], "record", "outreach_email", None)
+    assert clicked[0] == "modal" and clicked[1] == rid, "a real click must still open it"
