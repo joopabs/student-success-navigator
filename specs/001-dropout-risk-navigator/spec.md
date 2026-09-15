@@ -472,6 +472,14 @@ maps to the rubric criteria it evidences.
 - **FR-066**: The New Record Scoring page MUST accept only allow-listed fields, validate each
   against documented ranges, label the result hypothetical, and refuse scoring with field-specific
   messages when validation fails.
+- **FR-066a**: The New Record Scoring page MUST explain each numeric input to a reader unfamiliar
+  with the dataset: what the field is, which way a higher value points, the accepted range, the range
+  observed in the training split, and the training median. Explanations MUST be sourced from
+  configuration — the column description carried on the allow-list and the adviser phrasing in
+  `configs/language.yaml`, the same phrasing the Student Review explanations use — and MUST NOT be
+  authored in the page, so the app cannot assert a definition the data does not support. Coded fields
+  are exempt: their options are displayed decoded.
+
 - **FR-067**: The Equity Dashboard MUST present the group-level metrics in FR-046 for the held-out
   evaluation with sample sizes and subgroup-size warnings.
 - **FR-068**: The Model Card page MUST show intended use, non-use, data source and citation,
@@ -624,7 +632,7 @@ data documentation or final report.
 This feature is done when all of the following hold:
 
 - Constitution quality gates G1 through G10 pass with linked evidence.
-- All functional requirements FR-001 to FR-071 (including FR-065a) are satisfied; FR-072 to FR-074 are satisfied for
+- All functional requirements FR-001 to FR-071 (including FR-065a and FR-066a) are satisfied; FR-072 to FR-074 are satisfied for
   any optional step attempted, or the step is recorded as not attempted.
 - All success criteria SC-001 to SC-012 are verified.
 - All profiling and validation tasks PV-01 to PV-13 have recorded results.

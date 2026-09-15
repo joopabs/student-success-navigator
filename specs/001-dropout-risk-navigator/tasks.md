@@ -767,3 +767,8 @@ and documentation while long-running commands (tuning, SHAP) execute.
   - Deps: T080, T081, T082
   - Accept: FR-065a satisfied; log remains append-only; training and evaluation never read it
   - Verify: `pytest -q tests/app/test_action_tracking.py tests/app/test_actions_log.py`
+- [X] T094 [US5] (added 2026-09-16; the third capability found shipped without a requirement) Explain the New Record Scoring inputs per FR-066a: per-field definition from the allow-list description, direction from `configs/language.yaml` higher_phrase, accepted range, observed training range and training median; coded fields exempt
+  - Type: app, tests
+  - Deps: T083
+  - Accept: FR-066a satisfied; every fragment shown traces to configuration, none authored in the page
+  - Verify: `pytest -q tests/app/test_field_explanations.py`
