@@ -68,7 +68,15 @@ def layout(state) -> html.Div:
                 html.Div(
                     [
                         html.Div(
-                            [html.Label(f.label), _input(f), _hint(state, f)],
+                            [
+                                    html.Label(
+                                        f.label,
+                                        title=f.description or None,
+                                        className="has-tip" if f.description else "",
+                                    ),
+                                    _input(f),
+                                    _hint(state, f),
+                                ],
                             className="field",
                         )
                         for f in fields
@@ -87,7 +95,8 @@ def layout(state) -> html.Div:
                     html.P(
                         "Enter a hypothetical first-semester situation. Only the final model's inputs are accepted: "
                         "enrollment-time details and first-semester results. There are no second-semester, outcome, "
-                        "or sensitive-attribute fields."
+                        "or sensitive-attribute fields. Hover a field name for the source dataset's own "
+                        "description of it; the note under each box gives the accepted range and a typical value."
                     ),
                 ],
                 className="page-head",

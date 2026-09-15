@@ -20,6 +20,14 @@ class FieldSpec:
     lo: float | None
     hi: float | None
     availability: str
+    # UCI's own wording for the column, carried through for the form tooltip.
+    description: str = ""
+
+
+def describe(meta: dict[str, Any], limit: int = 170) -> str:
+    """UCI's wording for a column, trimmed so a long code list stays a readable tooltip."""
+    text = " ".join((meta.get("description") or "").split())
+    return text if len(text) <= limit else text[: limit - 1].rstrip(" ,;") + "…"
 
 
 def build_fields(
@@ -33,7 +41,16 @@ def build_fields(
         if col["dtype"] in {"categorical", "binary"} and meta.get("codes"):
             options = [(int(k), str(v)) for k, v in meta["codes"].items()]
             fields.append(
-                FieldSpec(name, label, col["dtype"], options, None, None, col["availability"])
+                FieldSpec(
+                    name,
+                    label,
+                    col["dtype"],
+                    options,
+                    None,
+                    None,
+                    col["availability"],
+                    describe(meta),
+                )
             )
         else:
             lo, hi = None, None
@@ -41,7 +58,9 @@ def build_fields(
                 lo, hi = col["documented_range"]
             elif "observed_range_raw" in col:
                 lo, hi = col["observed_range_raw"]["min"], col["observed_range_raw"]["max"]
-            fields.append(FieldSpec(name, label, "numeric", None, lo, hi, col["availability"]))
+            fields.append(
+                FieldSpec(name, label, "numeric", None, lo, hi, col["availability"], describe(meta))
+            )
     # first-semester fields after enrollment-time fields, for a natural form flow
     return sorted(fields, key=lambda f: (f.availability != "enrollment", f.label))
 

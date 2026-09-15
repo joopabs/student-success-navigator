@@ -98,6 +98,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);f
 .btn.small{font-size:.78rem;padding:.34rem .7rem}
 .btn:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
 .field label{display:block;font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;font-weight:700;color:var(--muted);margin-bottom:.3rem}
+.field label.has-tip{border-bottom:1px dotted var(--rule);cursor:help}
+.field label.has-tip:hover{color:var(--navy);border-bottom-color:var(--navy)}
 .field-hint{font-size:.72rem;color:var(--muted);margin-top:.3rem;line-height:1.35;font-variant-numeric:tabular-nums}
 .field input,.field select{font:inherit;font-size:.9rem;width:100%;padding:.5rem .7rem;border:1px solid var(--rule);border-radius:8px;background:var(--white);color:var(--ink)}
 .field input:focus,.field select:focus{outline:3px solid rgba(76,114,176,.28);outline-offset:0;border-color:var(--blue)}
