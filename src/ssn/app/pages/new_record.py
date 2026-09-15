@@ -14,6 +14,28 @@ from ssn.app.services.validation import validate
 from ssn.modeling.threshold import assign_band
 
 
+def _hint(state, f) -> html.Div:
+    """What a real value for this field looks like.
+
+    The input accepts the documented scale, which for something like Admission grade is 0-200 and
+    says nothing about where real values sit. Show the range actually seen in training and the
+    training median, so the number being typed has a frame of reference.
+    """
+    if f.options:
+        return html.Div()
+    parts = []
+    if f.lo is not None and f.hi is not None:
+        parts.append(f"accepts {f.lo:g}-{f.hi:g}")
+    seen = (state.observed_ranges or {}).get(f.name)
+    if seen and (f.lo, f.hi) != (seen["min"], seen["max"]):
+        # only worth saying when real values occupy a narrower band than the scale allows
+        parts.append(f"training data {seen['min']:g}-{seen['max']:g}")
+    typical = (state.reference or {}).get(f.name)
+    if typical is not None:
+        parts.append(f"typical {typical:.4g}")
+    return html.Div(" · ".join(parts), className="field-hint") if parts else html.Div()
+
+
 def _input(f):
     if f.options:
         return dcc.Dropdown(
@@ -44,7 +66,13 @@ def layout(state) -> html.Div:
             [
                 html.H4(title),
                 html.Div(
-                    [html.Div([html.Label(f.label), _input(f)], className="field") for f in fields],
+                    [
+                        html.Div(
+                            [html.Label(f.label), _input(f), _hint(state, f)],
+                            className="field",
+                        )
+                        for f in fields
+                    ],
                     className="grid",
                 ),
             ],

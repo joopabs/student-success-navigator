@@ -6,6 +6,7 @@ serves no scores when the artifact fails verification (version or checksum): a b
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -53,6 +54,9 @@ class AppState:
     non_use: str
     blocked_reason: str | None = None
     extra: dict[str, Any] = field(default_factory=dict)
+    # Observed min/max per column from the training split (configs/ranges.json). The form accepts
+    # the documented scale; these say where real values actually sit.
+    observed_ranges: dict[str, dict[str, float]] = field(default_factory=dict)
 
     @property
     def blocked(self) -> bool:
@@ -140,6 +144,8 @@ def load_state(cfg: Config) -> AppState:
     shap = PrecomputedShap.load(shap_path) if shap_path.is_file() else None
     c = _common(cfg)
     fields = build_fields(bundle.schema, bundle.allow, c["rules"])
+    ranges_path = cfg.path_for("ranges_json")
+    observed = json.loads(ranges_path.read_text()) if ranges_path.is_file() else {}
     return AppState(
         cfg=cfg,
         bundle=bundle,
@@ -147,6 +153,7 @@ def load_state(cfg: Config) -> AppState:
         ranked=ranked,
         shap=shap,
         fields=fields,
+        observed_ranges=observed,
         non_use=str(bundle.manifest.get("non_use", "")),
         **c,
     )
