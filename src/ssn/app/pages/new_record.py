@@ -14,13 +14,31 @@ from ssn.app.services.validation import validate
 from ssn.modeling.threshold import assign_band
 
 
-def _hint(state, f) -> html.Div:
-    """What a real value for this field looks like.
+def _meaning(state, f) -> str:
+    """What this field is, and what entering a higher value means.
 
-    The input accepts the documented scale, which for something like Admission grade is 0-200 and
-    says nothing about where real values sit. Show the range actually seen in training and the
-    training median, so the number being typed has a frame of reference.
+    Both halves are sourced, not written here: the definition is the source dataset's own wording
+    carried on the allow-list, and the direction is the adviser phrasing in configs/language.yaml -
+    the same wording the Student Review explanations use, so the form and the explanations agree.
+
+    Coded fields are skipped: their dropdown already shows decoded labels, their descriptions are
+    raw code lists, and "higher" is not meaningful for a category code.
     """
+    if f.options:
+        return ""
+    parts = []
+    described = " ".join((f.description or "").split())
+    # skip a description that only restates the label
+    if described and described.lower().rstrip(".").replace(f.label.lower(), "").strip(" ()0123456789-–"):
+        parts.append(described.rstrip(".") + ".")
+    phrase = (state.rules.features.get(f.name) or {}).get("higher_phrase")
+    if phrase:
+        parts.append(f"Higher: {phrase}.")
+    return " ".join(parts)
+
+
+def _hint(state, f) -> html.Div:
+    """Accepted range, the range actually seen in training, and the training median."""
     if f.options:
         return html.Div()
     parts = []
@@ -69,12 +87,11 @@ def layout(state) -> html.Div:
                     [
                         html.Div(
                             [
-                                    html.Label(
-                                        f.label,
-                                        title=f.description or None,
-                                        className="has-tip" if f.description else "",
-                                    ),
+                                    html.Label(f.label),
                                     _input(f),
+                                    html.Div(_meaning(state, f), className="field-meaning")
+                                    if _meaning(state, f)
+                                    else html.Div(),
                                     _hint(state, f),
                                 ],
                             className="field",
@@ -95,8 +112,8 @@ def layout(state) -> html.Div:
                     html.P(
                         "Enter a hypothetical first-semester situation. Only the final model's inputs are accepted: "
                         "enrollment-time details and first-semester results. There are no second-semester, outcome, "
-                        "or sensitive-attribute fields. Hover a field name for the source dataset's own "
-                        "description of it; the note under each box gives the accepted range and a typical value."
+                        "or sensitive-attribute fields. Under each box: what the field means, which way a higher "
+                        "value points, and the range and typical value seen in the training data."
                     ),
                 ],
                 className="page-head",
