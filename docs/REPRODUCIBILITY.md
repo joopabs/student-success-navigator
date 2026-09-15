@@ -1,15 +1,13 @@
 # Reproducibility
 
-**Checked:** 2026-09-12 16:27 UTC by `python -m ssn reproduce-check`.
-**Run A:** `reports` · **Run B:** `.runB/reports` · **Tolerance (max absolute delta):** 0.005
+**Checked:** 2026-09-15 05:55 UTC by `python -m ssn reproduce-check`.
+**Run A:** `reports` · **Run B:** `/private/tmp/claude-502/-Users-jpabular-Development-Learning-Python-student-success-navigator/0b0c709c-630c-4ada-8048-dad8dd06d677/scratchpad/repro2/reports` · **Tolerance (max absolute delta):** 0.005
 **Result:** PASS — largest observed delta 0
-
-Run B is a temporary tree created for the check and removed afterwards; recreate it by pointing every
-`paths.*` key in a copy of `configs/base.yaml` at a scratch directory **inside the repository root** and
-re-running the pipeline stages against that config.
 
 Both runs use the single seed in `configs/base.yaml`, config-driven commands, and `n_jobs=1` for the final fit.
 Residual nondeterminism, if any, comes from parallel RandomizedSearchCV scheduling (results are seeded) and BLAS.
+
+Run B is a scratch tree created for the check, not a directory kept in the repository. Recreate one by copying `configs/base.yaml`, pointing every `paths.*` key at a scratch directory, and running the pipeline stages against that config; every pipeline output is config-driven, so the run leaves the repository untouched.
 
 ## Largest delta per file
 

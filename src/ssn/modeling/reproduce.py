@@ -119,6 +119,11 @@ def write_report(
         "Residual nondeterminism, if any, comes from parallel RandomizedSearchCV scheduling "
         "(results are seeded) and BLAS.",
         "",
+        "Run B is a scratch tree created for the check, not a directory kept in the repository. "
+        "Recreate one by copying `configs/base.yaml`, pointing every `paths.*` key at a scratch "
+        "directory, and running the pipeline stages against that config; every pipeline output is "
+        "config-driven, so the run leaves the repository untouched.",
+        "",
         "## Largest delta per file",
         "",
         "| file | max abs delta |",
