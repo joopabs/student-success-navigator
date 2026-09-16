@@ -84,7 +84,7 @@ submission:
 	else \
 		echo "note: reports/final_report.pdf not found (print reports/final_report.html to PDF)"; \
 	fi
-	cp reports/decks/technical_deck.slides.html submission/$(NAME)_$(ASSIGNMENT)_Technical_Deck.html
+	@test -f reports/decks/technical_deck.pptx && cp reports/decks/technical_deck.pptx submission/$(NAME)_$(ASSIGNMENT)_Technical_Deck.pptx || echo "note: reports/decks/technical_deck.pptx not found (build with reports/decks/canvas/build_technical_pptx.py)"
 	@test -f reports/decks/business_deck.pptx && cp reports/decks/business_deck.pptx submission/$(NAME)_$(ASSIGNMENT)_Business_Deck.pptx || echo "note: reports/decks/business_deck.pptx not found (assemble from the outline)"
 	git archive --format=zip -o submission/$(NAME)_$(ASSIGNMENT)_Code.zip HEAD
 	@echo "GitHub repository: https://github.com/joopabs/student-success-navigator" > submission/$(NAME)_$(ASSIGNMENT)_Links.txt

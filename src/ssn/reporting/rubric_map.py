@@ -81,6 +81,7 @@ CRITERIA: list[tuple[str, int, list[str]]] = [
         "Step 6: Final Presentation & Communication",
         10,
         [
+            "reports/decks/technical_deck.pptx",
             "reports/decks/technical_deck.slides.html",
             "notebooks/90_technical_deck.ipynb",
             "reports/decks/business_deck_outline.md",

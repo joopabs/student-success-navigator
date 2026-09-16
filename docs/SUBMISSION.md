@@ -10,7 +10,7 @@ upload → Submit Assignment.
 |---|---|---|
 | `Julius_Pabular_Pillar5_Capstone_Project_Report.pdf` | `reports/final_report.pdf`, rendered from the HTML by `scripts/html_to_pdf.py` (xhtml2pdf; pandoc not installed) | packaged |
 | `Julius_Pabular_Pillar5_Capstone_Project_Report.html` | `reports/final_report.html` | packaged |
-| `Julius_Pabular_Pillar5_Capstone_Project_Technical_Deck.html` | `reports/decks/technical_deck.slides.html` (12 slides) | packaged |
+| `Julius_Pabular_Pillar5_Capstone_Project_Technical_Deck.pptx` | `reports/decks/technical_deck.pptx` (12 slides), built by `reports/decks/canvas/build_technical_pptx.py` from `notebooks/90_technical_deck.ipynb` | packaged |
 | `Julius_Pabular_Pillar5_Capstone_Project_Business_Deck.pptx` | `reports/decks/business_deck.pptx` (10 slides) | packaged |
 | `Julius_Pabular_Pillar5_Capstone_Project_Code.zip` | `git archive HEAD` (code, configs, reports, tests; no data or model binaries) | packaged |
 | `Julius_Pabular_Pillar5_Capstone_Project_Links.txt` | GitHub repository URL | packaged |
@@ -18,6 +18,12 @@ upload → Submit Assignment.
 The target prefers `reports/final_report.pdf` when it exists and otherwise falls back to a `.doc` produced by
 macOS `textutil`; both are approved formats. Regenerate the PDF with `scripts/html_to_pdf.py` after editing
 the report.
+
+The technical deck ships as `.pptx`, not as the reveal.js export. Section 8 of the brief allows only
+`.pdf`, `.doc`, `.pptx` and `.ppt` for responses, and the HTML export scales tall figures to the
+viewport and clips them. `reports/decks/technical_deck.slides.html` stays in the repository (and so in
+the code archive) as the notebook-derived artefact; it is no longer uploaded. Rebuild the deck with
+`reports/decks/canvas/build_technical_pptx.py` after editing `notebooks/90_technical_deck.ipynb`.
 
 ## Pre-publication gate (quickstart section 11)
 
