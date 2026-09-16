@@ -58,9 +58,11 @@ across gender and age band, reliable groups only), native SHAP support, maintain
 **Chosen: `random_forest__sel-none`.** random_forest__sel-none is within one CV standard deviation of the best OOF PR-AUC and ranks first under the documented lexicographic rule (Recall@K, then ECE, then demographic-parity gap, then Brier, then fit time). See selection_matrix_ranked.csv. In plain terms: the three model families are statistically
 indistinguishable on PR-AUC, so the rule falls through to the ranking metric (tied at three decimals with gradient
 boosting) and then to calibration error, where the random forest is clearly better (ECE 0.054 vs
-0.076). Logistic regression, the PR-AUC leader, ranks third because of its calibration error
-(0.094) and larger demographic-parity gap. The k = 30 selection variants all rank below their
-all-feature counterparts.
+0.076). Logistic regression, the PR-AUC leader, ranks third because it loses at the *first*
+tie-break, not on calibration: its Recall@K rounds to 0.171 against 0.172 for both tree models.
+Within that 0.171 tier it still places first, ahead of `random_forest__sel-decided` on Brier
+(0.134 vs 0.136) after ECE and the demographic-parity gap tie at two decimals. The k = 30
+selection variants all rank below their all-feature counterparts.
 
 ## 3. Calibration (research R-10)
 
