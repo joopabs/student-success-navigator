@@ -53,3 +53,9 @@ models/candidates/
 
 # Packaged submission copies (regenerate with `make submission`)
 submission/
+
+# Coverage artifacts (CI reports to stdout; nothing is committed)
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/

@@ -41,9 +41,11 @@ jobs:
       - name: Config and allow-list validate
         run: python -m ssn config validate
 
-      - name: Tests
+      - name: Tests and coverage ratchet
         # Tests marked `needs_data` skip when data/raw is absent (it is Git-ignored).
-        run: pytest -q
+        # The gate sits just under the measured 67% so it catches a regression, not noise.
+        # Coverage is collected in the same run; a second pytest pass would only cost time.
+        run: pytest -q --cov=ssn --cov-report=term-missing --cov-fail-under=65
 
       - name: Adviser-facing language scan
         run: python -m ssn scan-language --paths README.md data docs reports src/ssn/app
