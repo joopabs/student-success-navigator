@@ -122,18 +122,20 @@ def para(tf, text, size, color=INK, bold=False, font=BODY, first=False,
 
 
 def rich(p, text, size, color=INK, font=BODY):
-    """Add runs for one paragraph, honouring **bold** and `mono` spans from the notebook."""
-    for piece in re.split(r"(\*\*[^*]+\*\*|`[^`]+`)", text):
+    """Add runs for one paragraph, honouring **bold**, *italic* and `mono` spans."""
+    for piece in re.split(r"(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`)", text):
         if not piece:
             continue
         bold = piece.startswith("**")
         mono = piece.startswith("`")
-        body = piece[2:-2] if bold else piece[1:-1] if mono else piece
+        ital = not bold and piece.startswith("*")
+        body = piece[2:-2] if bold else piece[1:-1] if (mono or ital) else piece
         run = p.add_run()
         run.text = body
         f = run.font
         f.size = pt(size - 1 if mono else size)
         f.bold = bold
+        f.italic = ital
         f.name = MONO if mono else font
         f.color.rgb = NAVY if bold else color
     return p
